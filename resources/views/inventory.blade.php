@@ -3,41 +3,36 @@
 @section('content')
     <div class="jumbotron" style="margin-top: -50px;">
         <div class="container">
-            <h2>Overview</h2>
+            <h2>Inventory</h2>
             <div class="row">
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
-                        <canvas id="myPieChart" width="400" height="400"></canvas>
-                        <p>Top Clients</p>
+                        <canvas id="myDonutChart" width="400" height="400"></canvas>
+                        <p>Items</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
-                        <canvas id="myPieChart2" width="400" height="400"></canvas>
-                        <p>Top Products</p>
+                        <canvas id="turnOverChart" width="400" height="400" style="padding-right: 10px"></canvas>
+                        <p>Turnover</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
                         <canvas id="myPieChart3" width="400" height="400"></canvas>
-                        <p>Relative Expenses</p>
+                        <p>Relative number of products</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-xs-12 text-center" style="margin-bottom: 50px;">
-                <canvas id="myLineChart" width="400" height="400"></canvas>
-            </div>
-            <div class="col-md-6 col-xs-12 text-center" style="margin-bottom: 50px;">
-                <canvas id="myGaugeChart" width="400" height="400"></canvas>
-            </div>
+        <div class="row text-center">
+            <h1>KPI TABLE</h1>
         </div>
     </div>
 @endsection
 
 @section('custom_js')
-    <script src="{{ asset('js/overview.js') }}"></script>
+    <script src="{{ asset('js/inventory.js') }}"></script>
 @endsection

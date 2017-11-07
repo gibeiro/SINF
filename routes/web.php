@@ -19,5 +19,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/overview', function(){
-    return view('Overview');
+    return view('overview');
+});
+Route::get('/inventory', function(){
+    return view('inventory');
+});
+Route::get('/accounts', function(){
+    return view('accountsPayable');
+});
+Route::get('/product', function(){
+    return view('product');
 });

@@ -60,69 +60,47 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 49);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 43:
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(50);
 
 
 /***/ }),
 
-/***/ 44:
+/***/ 50:
 /***/ (function(module, exports) {
 
 var ctx = document.getElementById('myPieChart').getContext('2d');
 var myPieChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Red', 'Yellow', 'Blue', 'Green'],
+        labels: ['Items in hand', 'To be recieved'],
         datasets: [{
-            data: [20, 50, 20, 10],
+            data: [70, 30],
             backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
         }]
+    },
+    options: {
+        centertext: '100'
     }
 });
 
 ctx = document.getElementById('myPieChart2').getContext('2d');
 var myPieChart2 = new Chart(ctx, {
-    type: 'pie',
+    type: 'bar',
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: ['Red', 'Yellow', 'Blue', 'Green'],
         datasets: [{
             data: [20, 50, 20, 10],
             backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
-        }]
-    }
-});
-
-ctx = document.getElementById('myPieChart3');
-var myPieChart3 = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Red', 'Yellow', 'Blue', 'Green'],
-        datasets: [{
-            data: [20, 50, 20, 10],
-            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
-        }]
-    }
-});
-
-ctx = document.getElementById('myLineChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Income Expenses",
-            data: [10, 20, 30, 20, 40, 50, 60]
         }]
     },
     options: {
@@ -149,38 +127,102 @@ var myLineChart = new Chart(ctx, {
     }
 });
 
-ctx = document.getElementById('myGaugeChart').getContext('2d');
-var randomScalingFactor = function randomScalingFactor() {
-    return Math.round(Math.random() * 100);
-};
-var config = {
+ctx = document.getElementById('myPieChart3').getContext('2d');
+var myPieChart3 = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: ['Red', 'Yellow', 'Blue', 'Green'],
+        datasets: [{
+            data: [20, 50, 20, 10],
+            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
+        }]
+    }
+});
+
+ctx = document.getElementById('myPieChart4').getContext('2d');
+var myPieChart4 = new Chart(ctx, {
     type: 'doughnut',
     data: {
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: ['Cost', 'Price'],
         datasets: [{
-            data: [60, 100 - 60],
-            backgroundColor: ['rgba(255,100,100,0.8)']
-        }],
-        labels: ["revenue"]
+            data: [1.00, 2.25],
+            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)']
+        }]
+    },
+    options: {
+        centertext: '2.25'
+    }
+});
+
+ctx = document.getElementById('myLineChart').getContext('2d');
+var myLineChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Income Expenses",
+            data: [10, 20, 30, 20, 40, 50, 60]
+        }]
     },
     options: {
         responsive: true,
-        legend: {
-            position: 'top'
-        },
         title: {
             display: true,
-            text: 'Revenue'
+            text: 'Sales Volume'
         },
-        animation: {
-            animateScale: false,
-            animateRotate: true
+        tooltips: {
+            mode: 'index',
+            intersect: false
         },
-        rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI,
-        gaugetext: "60%"
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
     }
-};
-var myGaugeChart = new Chart(ctx, config);
+});
+
+ctx = document.getElementById('myLineChart2').getContext('2d');
+var myLineChart2 = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Income Expenses",
+            data: [10, 20, 30, 20, 40, 50, 60]
+        }]
+    },
+    options: {
+        responsive: true,
+        title: {
+            display: true,
+            text: 'Profit Over Time'
+        },
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
 
 Chart.pluginService.register({
     beforeDraw: function beforeDraw(chart) {
@@ -194,14 +236,15 @@ Chart.pluginService.register({
             ctx.font = fontSize + "em sans-serif";
             ctx.textBaseline = "middle";
 
-            var text = chart.options.centertext,
+            var text = chart.options.gaugetext,
                 // "75%",
             textX = Math.round((width - ctx.measureText(text).width) / 2),
                 textY = height / 2 - (chart.titleBlock.height - 155);
 
             ctx.fillText(text, textX, textY);
             ctx.save();
-        } else if (chart.options.centertext) {
+        }
+        if (chart.options.centertext) {
             var width = chart.chart.width,
                 height = chart.chart.height,
                 ctx = chart.chart.ctx;
