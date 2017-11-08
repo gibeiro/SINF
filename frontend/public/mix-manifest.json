@@ -4,5 +4,6 @@
     "/js/product.js": "/js/product.js",
     "/js/overview.js": "/js/overview.js",
     "/js/inventory.js": "/js/inventory.js",
+    "/js/index.js": "/js/index.js",
     "/js/accounts.js": "/js/accounts.js"
 }
