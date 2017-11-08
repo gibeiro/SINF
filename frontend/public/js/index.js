@@ -77,17 +77,20 @@ module.exports = __webpack_require__(52);
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-    /*$.ajax({
+    $.ajax({
         type: 'GET',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         url: 'http://localhost:49822/api/clientes',
-        success: function (data) {
+        datatype: 'application/json',
+        success: function success(data) {
             console.log(data);
         }
-    });*/
-
-    $.get('http://localhost:49822/api/clientes', function (data) {
-        console.log(data);
     });
+
+    /*$.get('http://localhost:49822/api/clientes',
+               function(data) {
+                   console.log(data);
+               });*/
 });
 
 /***/ })
