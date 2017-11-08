@@ -30,3 +30,6 @@ Route::get('/accounts', function(){
 Route::get('/product', function(){
     return view('product');
 });
+Route::get('/teste', function(){
+    return view('testePrimavera');
+});
