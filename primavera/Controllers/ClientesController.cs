@@ -20,7 +20,6 @@ namespace FirstREST.Controllers
                 return Lib_Primavera.PriIntegration.ListaClientes();
         }
 
-
         // GET api/cliente/5    
         public Cliente Get(string id)
         {
