@@ -14,11 +14,11 @@ namespace FirstREST.Lib_Primavera
     {
 
         //Clientes que geram mais faturãcao
-        public static List<Model.Cliente> TopClientes(int n)
+        public static List<Model.Custom.TopClientes> TopClientes(int? n = 10)
         {
             StdBELista objList;
 
-            List<Model.Cliente> listClientes = new List<Model.Cliente>();
+            List<Model.Custom.TopClientes> listClientes = new List<Model.Custom.TopClientes>();
 
             if (
                 PriEngine.InitializeCompany(
@@ -30,19 +30,15 @@ namespace FirstREST.Lib_Primavera
             {
 
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT TOP " + n + " CabecDoc.Entidade, SUM(CabecDoc.TotalMerc) AS Facturacao" +
-                    "FROM LinhasDoc, CabecDoc" +
-                    "WHERE LinhasDoc.IdCabecDoc = CabecDoc.Id" +
-                    "GROUP BY CabecDoc.Entidade" +
-                    "ORDER BY Facturacao DESC"
+                    "SELECT TOP "+ n +" CabecDoc.Entidade, SUM(CabecDoc.TotalMerc) AS Faturacao FROM LinhasDoc, CabecDoc WHERE LinhasDoc.IdCabecDoc = CabecDoc.Id GROUP BY CabecDoc.Entidade ORDER BY Faturacao DESC"
                     );
 
                 while (!objList.NoFim() || n-- == 0)
                 {
-                    listClientes.Add(new Model.Cliente
+                    listClientes.Add(new Model.Custom.TopClientes
                     {
-                        NomeCliente = objList.Valor("Entidade"),
-                        Faturacao = objList.Valor("Facturacao")
+                        CodCliente = objList.Valor("Entidade"),
+                        Faturacao = objList.Valor("Faturacao")
                     });
                     objList.Seguinte();
 

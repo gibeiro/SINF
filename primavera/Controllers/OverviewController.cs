@@ -32,7 +32,7 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Clients")]
         [Route("api/overview/clients/top/{n?}")]
-        public List<Lib_Primavera.Model.Cliente> TopClients(int? n = 10)
+        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(int? n = 10)
         {
             return Lib_Primavera.PriIntegration.TopClientes(n);
         }
