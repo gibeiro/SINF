@@ -28,12 +28,13 @@ namespace FirstREST.Controllers
             return "Expenses";
         }
 
-        // GET: api/overview/clients
+        // GET: api/overview/clients/top
         [HttpGet]
         [ActionName("Clients")]
-        public string Clients()
+        [Route("api/overview/clients/top/{n?}")]
+        public List<Lib_Primavera.Model.Cliente> TopClients(int? n = 10)
         {
-            return "Clients";
+            return Lib_Primavera.PriIntegration.TopClientes(n);
         }
 
         // GET: api/overview/products

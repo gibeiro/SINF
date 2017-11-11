@@ -7,6 +7,8 @@ namespace FirstREST.Lib_Primavera.Model
 {
     public class Cliente
     {
+        public string Faturacao;
+
         public string Morada;
 
         /* Exemplo para POST e GET com valores específicos
