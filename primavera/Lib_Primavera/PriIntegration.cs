@@ -235,7 +235,46 @@ namespace FirstREST.Lib_Primavera
 
         }
 
-       
+        //Clientes que geram mais lucro
+        public static List<Model.Cliente> TopClientes(int n)
+        {
+            StdBELista objList;
+
+            List<Model.Cliente> listClientes = new List<Model.Cliente>();
+
+            if (
+                PriEngine.InitializeCompany(
+                    FirstREST.Properties.Settings.Default.Company.Trim(),
+                    FirstREST.Properties.Settings.Default.User.Trim(),
+                    FirstREST.Properties.Settings.Default.Password.Trim()
+                ) == true
+               )
+            {
+
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT CabecDoc.Entidade, SUM(CabecDoc.TotalMerc) AS Facturacao" +
+                    "FROM LinhasDoc, CabecDoc" +
+                    "WHERE LinhasDoc.IdCabecDoc = CabecDoc.Id" +
+                    "GROUP BY CabecDoc.Entidade" +
+                    "ORDER BY Facturacao DESC"
+                    );
+
+                while (!objList.NoFim() || n-- == 0)
+                {
+                    listClientes.Add(new Model.Cliente
+                    {
+                       
+                    });
+                    objList.Seguinte();
+
+                }
+
+                return listClientes;
+            }
+            else
+                return null;
+
+        }
 
         #endregion Cliente;   // -----------------------------  END   CLIENTE    -----------------------
 
