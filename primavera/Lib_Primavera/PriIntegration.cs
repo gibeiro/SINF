@@ -56,24 +56,26 @@ namespace FirstREST.Lib_Primavera
         }
 
         //Artigos que geram mais lucro
-        public static List<Model.Artigo> TopArtigos()
+        public static List<Model.LinhaDocVenda> TopArtigos()
         {
             StdBELista objList;
 
-            List<Model.Artigo> listArtigos = new List<Model.Artigo>();
+            List<Model.LinhaDocVenda> listArtigos = new List<Model.LinhaDocVenda>();
 
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
 
-                objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC");
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC"
+                    );
 
                 while (!objList.NoFim())
                 {
-                    listArtigos.Add(new Model.Artigo
+                    listArtigos.Add(new Model.LinhaDocVenda
                     {
                         CodArtigo = objList.Valor("Artigo"),
                         DescArtigo = objList.Valor("Descricao"),
-                        Preco = objList.Valor("Price")
+                        TotalLiquido = objList.Valor("Price")
                     });
                     objList.Seguinte();
 
@@ -83,7 +85,6 @@ namespace FirstREST.Lib_Primavera
             }
             else
                 return null;
-
         }
 
 
@@ -313,37 +314,7 @@ namespace FirstREST.Lib_Primavera
 
 
         #region Artigo
-        /*
-        public static Lib_Primavera.Model.Artigo GetArtigo(string codArtigo)
-        {
-            
-            GcpBEArtigo objArtigo = new GcpBEArtigo();
-            Model.Artigo myArt = new Model.Artigo();
-
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-
-                if (PriEngine.Engine.Comercial.Artigos.Existe(codArtigo) == false)
-                {
-                    return null;
-                }
-                else
-                {
-                    objArtigo = PriEngine.Engine.Comercial.Artigos.Edita(codArtigo);
-                    myArt.CodArtigo = objArtigo.get_Artigo();
-                    myArt.DescArtigo = objArtigo.get_Descricao();
-                    myArt.STKAtual = objArtigo.get_StkActual(); 
-                    return myArt;
-                }
-                
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-        */
+       
 
         public static Lib_Primavera.Model.Artigo GetArtigo(string codArtigo)
         {
@@ -419,44 +390,8 @@ namespace FirstREST.Lib_Primavera
 
             }
 
-<<<<<<< HEAD
-        }        
-=======
-        }
-        //Artigos que geram mais lucro
-        public static List<Model.LinhaDocVenda> TopArtigos()
-        {
-            StdBELista objList;
-
-            List<Model.LinhaDocVenda> listArtigos = new List<Model.LinhaDocVenda>();
-
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-
-                objList = PriEngine.Engine.Consulta(
-                    "SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC"
-                    );
-
-                while (!objList.NoFim())
-                {
-                    listArtigos.Add(new Model.LinhaDocVenda
-                    {
-                        CodArtigo = objList.Valor("Artigo"),
-                        DescArtigo = objList.Valor("Descricao"),
-                        TotalLiquido = objList.Valor("Price")
-                    });
-                    objList.Seguinte();
-
-                }
-
-                return listArtigos;
-            }
-            else
-                return null;
 
         }
->>>>>>> c9ca420c51c1276a461a75bd2b1a19365cf2b532
-
         #endregion Artigo
 
  
