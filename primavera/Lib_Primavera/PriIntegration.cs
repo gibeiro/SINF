@@ -347,6 +347,36 @@ namespace FirstREST.Lib_Primavera
             }
 
         }
+        //Artigos que geram mais lucro
+        public static List<Model.Artigo> TopArtigos()
+        {
+            StdBELista objList;
+
+            List<Model.Artigo> listArtigos = new List<Model.Artigo>();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+
+                objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao,PrecUnit,Quantidade ORDER BY Price DESC");
+
+                while (!objList.NoFim())
+                {
+                    listArtigos.Add(new Model.Artigo
+                    {
+                        CodArtigo = objList.Valor("Artigo"),
+                        DescArtigo = objList.Valor("Descricao"),
+                        Preco = objList.Valor("Price")
+                    });
+                    objList.Seguinte();
+
+                }
+
+                return listArtigos;
+            }
+            else
+                return null;
+
+        }
 
         #endregion Artigo
 
