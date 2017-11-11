@@ -41,9 +41,10 @@ namespace FirstREST.Controllers
         // GET: api/overview/products
         [HttpGet]
         [ActionName("Products")]
-        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products()
+        [Route("api/overview/products/{n?}")]
+        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products(int? n = 10)
         {
-            return Lib_Primavera.PriIntegration.TopArtigos();
+            return Lib_Primavera.PriIntegration.TopArtigos(n);
         }
 
         // GET: api/overview/revenue
