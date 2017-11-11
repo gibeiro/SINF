@@ -357,7 +357,7 @@ namespace FirstREST.Lib_Primavera
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
 
-                objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao,PrecUnit,Quantidade ORDER BY Price DESC");
+                objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC");
 
                 while (!objList.NoFim())
                 {
