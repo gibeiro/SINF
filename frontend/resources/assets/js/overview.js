@@ -1,48 +1,133 @@
-var ctx = document.getElementById('myPieChart').getContext('2d');
-var myPieChart = new Chart(ctx,{
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Red',
-            'Yellow',
-            'Blue',
-            'Green'
-        ],
-        datasets: [{
-            data: [20, 50, 20,10],
-            backgroundColor: [
+/**
+ * Get top clients
+ */
+$(document).ready(function () {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/clients/5',
+        datatype: 'application/json',
+        success: function (data) {
+            var list = $('#top_clients');
+            colors = [
                 'rgba(240,100,100,0.7)',
                 'rgba(240,240,100,0.7)',
                 'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    }
+                'rgba(100,240,100,0.7)',
+                'rgba(100,240,240,0.7)'
+            ];
+
+            $.each(data, function(index, element){
+                if(index > 4) return;
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.CodCliente + "</li>");
+            });
+
+            top_clients_chart(data);
+        }
+    });
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/products/5',
+        datatype: 'application/json',
+        success: function (data) {
+            var list = $('#top_products');
+            colors = [
+                'rgba(240,100,100,0.7)',
+                'rgba(240,240,100,0.7)',
+                'rgba(100,100,240,0.7)',
+                'rgba(100,240,100,0.7)',
+                'rgba(100,240,240,0.7)'
+            ];
+
+            $.each(data, function(index, element){
+                if(index > 4) return;
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.DescArtigo + "</li>");
+            });
+
+            top_products_chart(data);
+        }
+    });
 });
 
-ctx = document.getElementById('myPieChart2').getContext('2d');
-var myPieChart2 = new Chart(ctx,{
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Red',
-            'Yellow',
-            'Blue',
-            'Green'
-        ],
-        datasets: [{
-            data: [20, 50, 20,10],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)',
-                'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    }
-});
+
+function top_clients_chart(clients){
+    var labels= [];
+    var data = [];
+    colors = [
+        'rgba(240,100,100,0.7)',
+        'rgba(240,240,100,0.7)',
+        'rgba(100,100,240,0.7)',
+        'rgba(100,240,100,0.7)',
+        'rgba(100,240,240,0.7)'
+    ];
+    $.each(clients, function(index, element){
+        if(index > 4) return;
+        labels.push(element.CodCliente);
+        data.push(element.Faturacao.toFixed(0));
+    });
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+    var myPieChart = new Chart(ctx,{
+        type: 'pie',
+        data: {
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: false,
+                position: 'bottom',
+            },
+            title: {
+                display: false
+            }
+        }
+    });
+
+}
+
+function top_products_chart(top_products) {
+    var labels = [];
+    var data = [];
+    colors = [
+        'rgba(240,100,100,0.7)',
+        'rgba(240,240,100,0.7)',
+        'rgba(100,100,240,0.7)',
+        'rgba(100,240,100,0.7)',
+        'rgba(100,240,240,0.7)'
+    ];
+    $.each(top_products, function (index, element) {
+        if (index > 4) return;
+        labels.push(element.DescArtigo);
+        data.push(element.Faturacao.toFixed(0));
+    });
+    ctx = document.getElementById('myPieChart2').getContext('2d');
+    var myPieChart2 = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: false,
+                position: 'bottom',
+            },
+            title: {
+                display: false
+            }
+        }
+    });
+}
 
 ctx = document.getElementById('myPieChart3');
 var myPieChart3 = new Chart(ctx,{
@@ -66,6 +151,7 @@ var myPieChart3 = new Chart(ctx,{
         }]
     }
 });
+
 
 
 ctx = document.getElementById('myLineChart').getContext('2d');
