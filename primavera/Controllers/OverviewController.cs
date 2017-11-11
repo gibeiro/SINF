@@ -32,18 +32,18 @@ namespace FirstREST.Controllers
         // GET: api/overview/clients/top
         [HttpGet]
         [ActionName("Clients")]
-        [Route("api/overview/clients/{n?}")]
-        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(int? n = 10)
+        [Route("api/overview/clients")]
+        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(string n = "5")
         {
-            return Lib_Primavera.PriIntegration.TopClientes(n);
+            return Lib_Primavera.PriIntegration.TopClientes(Convert.ToInt32(n));
         }
 
         // GET: api/overview/products
         [HttpGet]
         [ActionName("Products")]
-        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products()
+        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products(string n = "5")
         {
-            return Lib_Primavera.PriIntegration.TopArtigos();
+            return Lib_Primavera.PriIntegration.TopArtigos(Convert.ToInt32(n));
         }
 
         // GET: api/overview/revenue

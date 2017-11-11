@@ -14,7 +14,7 @@ namespace FirstREST.Lib_Primavera
     {
 
         //Clientes que geram mais faturãcao
-        public static List<Model.Custom.TopClientes> TopClientes(int? n = 10)
+        public static List<Model.Custom.TopClientes> TopClientes(int n)
         {
             StdBELista objList;
 
@@ -52,7 +52,7 @@ namespace FirstREST.Lib_Primavera
         }
 
         //Artigos que geram mais lucro
-        public static List<Model.Custom.TopArtigos> TopArtigos()
+        public static List<Model.Custom.TopArtigos> TopArtigos(int n)
         {
             StdBELista objList;
 
@@ -62,7 +62,7 @@ namespace FirstREST.Lib_Primavera
             {
 
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC"
+                    "SELECT TOP " + n + " LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC"
                     );
 
                 while (!objList.NoFim())
