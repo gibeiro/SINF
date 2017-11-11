@@ -15,9 +15,10 @@ namespace FirstREST.Controllers
         // GET: api/overview/growth
         [HttpGet]
         [ActionName("Growth")]
-        public string Growth()
+        [Route("api/overview/growth/{y?}")]
+        public List<Lib_Primavera.Model.Custom.Growth> Growth(int? y = 2016)
         {
-            return "Growth";
+            return Lib_Primavera.PriIntegration.GrowthYear(y);
         }
 
         // GET: api/overview/expenses
@@ -31,7 +32,7 @@ namespace FirstREST.Controllers
         // GET: api/overview/clients/top
         [HttpGet]
         [ActionName("Clients")]
-        [Route("api/overview/clients/top/{n?}")]
+        [Route("api/overview/clients/{n?}")]
         public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(int? n = 10)
         {
             return Lib_Primavera.PriIntegration.TopClientes(n);

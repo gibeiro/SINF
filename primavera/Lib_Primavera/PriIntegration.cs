@@ -83,7 +83,50 @@ namespace FirstREST.Lib_Primavera
                 return null;
         }
 
+        private static Model.Custom.Growth GrowthMonth(int year, int month)
+        {
+            StdBELista objList;
 
+            Model.Custom.Growth Growths = new Model.Custom.Growth();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+                DateTime date = new DateTime(year,month,1);
+                string startdate = "'" + date.Year.ToString() + "/" + date.Month.ToString() + "/1'";
+                date.AddMonths(1);
+                string finishdate = "'" + date.Year.ToString() + "/" + date.Month.ToString() + "/1'";
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Earn, SUM(LinhasDoc.PCM * LinhasDoc.Quantidade) AS Cost FROM LinhasDoc WHERE LinhasDoc.Data >= " + startdate + " AND LinhasDoc.Data < " + finishdate
+                    );
+
+                while (!objList.NoFim())
+                {
+                    Growths = new Model.Custom.Growth
+                    {
+                        Earn = objList.Valor("Earn"),
+                        Cost = objList.Valor("Cost"),
+                        Profit = objList.Valor("Earn") - objList.Valor("Cost")
+                    };
+                    objList.Seguinte();
+
+                }
+
+                return Growths;
+            }
+            else
+                return null;
+        }
+
+        public static List<Model.Custom.Growth> GrowthYear(int? year = 2016)
+        {
+            List<Model.Custom.Growth> growths = new List<Model.Custom.Growth>();
+            int yearToCall = (int)year;
+            for (int i = 1; i <= 12; i++)
+            {
+                growths.Add(GrowthMonth(yearToCall, i));
+            }
+            return growths;
+        }
 
         # region Cliente
 

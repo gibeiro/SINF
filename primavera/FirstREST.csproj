@@ -484,6 +484,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Lib_Primavera\Model\CabecDoc.cs" />
+    <Compile Include="Lib_Primavera\Model\Custom\Growth.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopClientes.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopArtigos.cs" />
     <Compile Include="Lib_Primavera\Model\Fornecedor.cs" />
