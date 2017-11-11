@@ -4,11 +4,22 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using FirstREST.Lib_Primavera.Model;
 
 namespace FirstREST.Controllers
 {
     public class ProductController : ApiController
     {
+
+        public class ProductPrice
+        {
+            public double UnitPrice
+            {
+                get;
+                set;
+            }
+        }
+
         // GET: api/product/stock?id=<id>
         [HttpGet]
         [ActionName("Stock")]
@@ -22,9 +33,20 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Price")]
         [Route("product/price/{id?}")]
-        public string Price(int? id = null)
+        public ProductPrice Price(string id = null)
         {
-            return "Price: id: " + id;
+            Lib_Primavera.Model.Artigo artigo = Lib_Primavera.PriIntegration.GetArtigo(id);
+            if (artigo == null)
+            {
+                throw new HttpResponseException(
+                  Request.CreateResponse(HttpStatusCode.NotFound));
+            }
+            else
+            {
+                ProductPrice pp = new ProductPrice();
+                pp.UnitPrice = artigo.Preco;
+                return pp;
+            }
         }
 
         // GET: api/product/volume?id=<id>
