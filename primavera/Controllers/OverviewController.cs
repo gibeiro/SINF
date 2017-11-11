@@ -39,7 +39,7 @@ namespace FirstREST.Controllers
         // GET: api/overview/products
         [HttpGet]
         [ActionName("Products")]
-        public IEnumerable<Lib_Primavera.Model.Artigo> Products()
+        public IEnumerable<Lib_Primavera.Model.LinhaDocVenda> Products()
         {
             return Lib_Primavera.PriIntegration.TopArtigos();
         }
