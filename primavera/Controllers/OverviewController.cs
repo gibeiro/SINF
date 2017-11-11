@@ -16,9 +16,9 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Growth")]
         [Route("api/overview/growth/{y?}")]
-        public List<Lib_Primavera.Model.Custom.Growth> Growth(int? y = 2016)
+        public List<Lib_Primavera.Model.Custom.Growth> Growth(string y = "2016")
         {
-            return Lib_Primavera.PriIntegration.GrowthYear(y);
+            return Lib_Primavera.PriIntegration.GrowthYear(Convert.ToInt32(y));
         }
 
         // GET: api/overview/expenses

@@ -91,25 +91,20 @@ namespace FirstREST.Lib_Primavera
 
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
-                DateTime date = new DateTime(year,month,1);
-                string startdate = "'" + date.Year.ToString() + "/" + date.Month.ToString() + "/1'";
-                date.AddMonths(1);
-                string finishdate = "'" + date.Year.ToString() + "/" + date.Month.ToString() + "/1'";
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Earn, SUM(LinhasDoc.PCM * LinhasDoc.Quantidade) AS Cost FROM LinhasDoc WHERE LinhasDoc.Data >= " + startdate + " AND LinhasDoc.Data < " + finishdate
-                    );
+                    "SELECT ISNULL(SUM(T.PrecUnit * T.Quantidade),0) AS TEarn, ISNULL(SUM(T.PCM * T.Quantidade),0) AS TCost FROM (SELECT PrecUnit,Quantidade,PCM FROM LinhasDoc WHERE YEAR(LinhasDoc.Data) = " + year + " AND MONTH(LinhasDoc.Data) = " + month + ") T");
 
-                while (!objList.NoFim())
-                {
+                
+                    Console.WriteLine(objList.Valor("TEarn"));
                     Growths = new Model.Custom.Growth
                     {
-                        Earn = objList.Valor("Earn"),
-                        Cost = objList.Valor("Cost"),
-                        Profit = objList.Valor("Earn") - objList.Valor("Cost")
+                        Earn = objList.Valor("TEarn"),
+                        Cost = objList.Valor("TCost"),
+                        Profit = objList.Valor("TEarn") - objList.Valor("TCost")
                     };
                     objList.Seguinte();
 
-                }
+                
 
                 return Growths;
             }
@@ -117,13 +112,12 @@ namespace FirstREST.Lib_Primavera
                 return null;
         }
 
-        public static List<Model.Custom.Growth> GrowthYear(int? year = 2016)
+        public static List<Model.Custom.Growth> GrowthYear(int year)
         {
             List<Model.Custom.Growth> growths = new List<Model.Custom.Growth>();
-            int yearToCall = (int)year;
             for (int i = 1; i <= 12; i++)
             {
-                growths.Add(GrowthMonth(yearToCall, i));
+                growths.Add(GrowthMonth(year, i));
             }
             return growths;
         }
