@@ -56,11 +56,11 @@ namespace FirstREST.Lib_Primavera
         }
 
         //Artigos que geram mais lucro
-        public static List<Model.LinhaDocVenda> TopArtigos()
+        public static List<Model.Custom.TopArtigos> TopArtigos()
         {
             StdBELista objList;
 
-            List<Model.LinhaDocVenda> listArtigos = new List<Model.LinhaDocVenda>();
+            List<Model.Custom.TopArtigos> listArtigos = new List<Model.Custom.TopArtigos>();
 
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
@@ -71,11 +71,11 @@ namespace FirstREST.Lib_Primavera
 
                 while (!objList.NoFim())
                 {
-                    listArtigos.Add(new Model.LinhaDocVenda
+                    listArtigos.Add(new Model.Custom.TopArtigos
                     {
                         CodArtigo = objList.Valor("Artigo"),
                         DescArtigo = objList.Valor("Descricao"),
-                        TotalLiquido = objList.Valor("Price")
+                        Faturacao = objList.Valor("Price")
                     });
                     objList.Seguinte();
 
