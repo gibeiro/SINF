@@ -79,18 +79,16 @@ module.exports = __webpack_require__(52);
 $(document).ready(function () {
     $.ajax({
         type: 'GET',
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        url: 'http://localhost:49822/api/clientes',
+        url: 'http://localhost:49822/api/overview/products',
         datatype: 'application/json',
         success: function success(data) {
-            console.log(data);
+            var table = $('#top_clients');
+
+            $.each(data, function (index, element) {
+                console.log(data);
+            });
         }
     });
-
-    /*$.get('http://localhost:49822/api/clientes',
-               function(data) {
-                   console.log(data);
-               });*/
 });
 
 /***/ })
