@@ -79,7 +79,7 @@ module.exports = __webpack_require__(52);
 $(document).ready(function () {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/products',
+        url: 'http://localhost:49822/api/overview/growth',
         datatype: 'application/json',
         success: function success(data) {
             var table = $('#top_clients');

@@ -76,10 +76,11 @@ module.exports = __webpack_require__(44);
 /***/ 44:
 /***/ (function(module, exports) {
 
-/**
- * Get top clients
- */
+var GROWTH;
 $(document).ready(function () {
+    /**
+     * Get top clients
+     */
     $.ajax({
         type: 'GET',
         url: 'http://localhost:49822/api/overview/clients/5',
@@ -96,7 +97,9 @@ $(document).ready(function () {
             top_clients_chart(data);
         }
     });
-
+    /**
+     * Get top products
+     */
     $.ajax({
         type: 'GET',
         url: 'http://localhost:49822/api/overview/products/5',
@@ -111,6 +114,26 @@ $(document).ready(function () {
             });
 
             top_products_chart(data);
+        }
+    });
+    /**
+     * Get cost earns and profit
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/growth?y=2016',
+        datatype: 'application/json',
+        success: function success(data) {
+            window.GROWTH = data;
+            growth_chart(data);
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:49822/api/overview/growth?y=2015',
+                datatype: 'application/json',
+                success: function success(data) {
+                    revenue_chart(window.GROWTH, data);
+                }
+            });
         }
     });
 });
@@ -194,72 +217,127 @@ var myPieChart3 = new Chart(ctx, {
     }
 });
 
-ctx = document.getElementById('myLineChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Income Expenses",
-            data: [10, 20, 30, 20, 40, 50, 60]
-        }]
-    },
-    options: {
-        responsive: true,
-        title: {
-            display: true,
-            text: 'Income Expenses'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
+function growth_chart(data) {
+    var labels = [];
 
-ctx = document.getElementById('myGaugeChart').getContext('2d');
-var randomScalingFactor = function randomScalingFactor() {
-    return Math.round(Math.random() * 100);
-};
-var config = {
-    type: 'doughnut',
-    data: {
-        datasets: [{
-            data: [60, 100 - 60],
-            backgroundColor: ['rgba(255,100,100,0.8)']
-        }],
-        labels: ["revenue"]
-    },
-    options: {
-        responsive: true,
-        legend: {
-            position: 'top'
+    var data_cost = [];
+    var data_earn = [];
+    var data_profit = [];
+    var colors = ['rgba(240,100,100,0.4)', 'rgba(240,240,100,0.4)', 'rgba(100,100,240,0.4)', 'rgba(100,240,100,0.4)', 'rgba(100,240,240,0.4)'];
+    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    $.each(data, function (index, element) {
+        labels.push(LABELS[index]);
+        data_cost.push(element.Cost.toFixed(0));
+        data_earn.push(element.Earn.toFixed(0));
+        data_profit.push(element.Profit.toFixed(0));
+    });
+    ctx = document.getElementById('myLineChart').getContext('2d');
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Profit",
+                data: data_profit,
+                backgroundColor: colors[2]
+            }, {
+                label: "Costs",
+                data: data_cost,
+                backgroundColor: colors[0]
+            }, {
+                label: "Earnings",
+                data: data_earn,
+                backgroundColor: colors[1]
+            }]
         },
-        title: {
-            display: true,
-            text: 'Revenue'
-        },
-        animation: {
-            animateScale: false,
-            animateRotate: true
-        },
-        rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI,
-        gaugetext: "60%"
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Growth Over Time'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
+function revenue_chart(growth, growth_prev) {
+    ctx = document.getElementById('myGaugeChart').getContext('2d');
+    rev = 0;
+    rev_prev = 0;
+    rev_dif = 0;
+    $.each(growth, function (index, element) {
+        rev += element.Earn;
+    });
+    $.each(growth_prev, function (index, element) {
+        rev_prev += element.Earn;
+    });
+    rev = Math.round(rev);
+    rev_prev = Math.round(rev_prev);
+    rev_prev_dif = 0;
+    if (rev < rev_prev) {
+        rev_dif = rev_prev - rev;
+    } else {
+        rev_prev_dif = rev - rev_prev;
     }
-};
-var myGaugeChart = new Chart(ctx, config);
+    percentage = Math.round(rev * 100 / rev_prev);
+    console.log(percentage);
+    var config = {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                labels: ['Earnings', 'To Go'],
+                data: [rev, rev_dif],
+                backgroundColor: ['rgba(100,100,255,0.8)', 'rgba(255,100,100,0.8)']
+            }, {
+                labels: ['Last Year Earnings', 'Growth'],
+                data: [rev_prev, rev_prev_dif],
+                backgroundColor: ['rgba(150,150,150,0.2)', 'rgba(100,255,100,0.8)']
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: 'Revenue'
+            },
+            animation: {
+                animateScale: false,
+                animateRotate: true
+            },
+            tooltips: {
+                callbacks: {
+                    label: function label(tooltipItem, data) {
+                        var dataset = data.datasets[tooltipItem.datasetIndex];
+                        var index = tooltipItem.index;
+                        return dataset.labels[index] + ': ' + dataset.data[index];
+                    }
+                }
+            },
+            rotation: 1 * Math.PI,
+            circumference: 1 * Math.PI,
+            gaugetext: percentage + "%"
+        }
+    };
+    var myGaugeChart = new Chart(ctx, config);
+}
 
 Chart.pluginService.register({
     beforeDraw: function beforeDraw(chart) {
@@ -273,7 +351,7 @@ Chart.pluginService.register({
             ctx.font = fontSize + "em sans-serif";
             ctx.textBaseline = "middle";
 
-            var text = chart.options.centertext,
+            var text = chart.options.gaugetext,
                 // "75%",
             textX = Math.round((width - ctx.measureText(text).width) / 2),
                 textY = height / 2 - (chart.titleBlock.height - 155);

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title','Dashund Overview'))
 
 @section('content')
     <div class="jumbotron" style="margin-top: -50px;">
@@ -7,7 +8,7 @@
             <div class="row">
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
-                        <canvas id="myPieChart" width="400" height="400"></canvas>
+                        <canvas id="myPieChart" width="90%" style="padding: 8%;"></canvas>
                         <h3>Top Clients</h3>
                         <ol id="top_clients" style="margin:0; padding-left: 50px; padding-right: 50px;">
                         </ol>
@@ -15,7 +16,7 @@
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
-                        <canvas id="myPieChart2" width="400" height="400"></canvas>
+                        <canvas id="myPieChart2" width="400" height="400" style="padding: 8%;"></canvas>
                         <h3>Top Products</h3>
                         <ol id="top_products" style="margin:0; padding-left: 50px; padding-right: 50px;">
                         </ol>
