@@ -15,9 +15,9 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Volume")]
         [Route("product/volume/{id?}")]
-        public List<Lib_Primavera.Model.Custom.SalesVol> Volume(string cod = null,string y = "2016")
+        public List<Lib_Primavera.Model.Custom.SalesVol> Volume(string id = null,string y = "2016")
         {
-            return Lib_Primavera.PriIntegration.SalesVolYear(cod, Int32.Parse(y));
+            return Lib_Primavera.PriIntegration.SalesVolYear(id, Int32.Parse(y));
         }
 
         // GET: api/product/list
