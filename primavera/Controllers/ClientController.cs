@@ -40,12 +40,22 @@ namespace FirstREST.Controllers
             }
         }
 
+        // GET: api/client/list
+        [HttpGet]
+        [ActionName("List")]
+        [Route("client/list")]
+        public List<Cliente> List()
+        {
+            return Lib_Primavera.PriIntegration.ListaClientes();
+        }
+
+        // GET: api/client/volume?id=<id>
         [HttpGet]
         [ActionName("Volume")]
         [Route("client/volume/{id?}")]
-        public List<Lib_Primavera.Model.CabecDoc> Volume(string cod = null)
+        public List<Lib_Primavera.Model.CabecDoc> Volume(string id = null)
         {
-            return Lib_Primavera.PriIntegration.getClientPurchases(cod);
+            return Lib_Primavera.PriIntegration.getClientPurchases(id);
         }
     }
 }
