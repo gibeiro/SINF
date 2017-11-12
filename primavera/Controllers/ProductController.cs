@@ -44,7 +44,7 @@ namespace FirstREST.Controllers
             else
             {
                 ProductPrice pp = new ProductPrice();
-                pp.UnitPrice = artigo.Preco;
+                pp.UnitPrice = artigo.PCM;
                 return pp;
             }
         }

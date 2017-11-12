@@ -13,8 +13,8 @@ namespace FirstREST.Controllers
 
         // client's top products
         [HttpGet]
-        [ActionName("Info")]
-        [Route("client/products/{id?}/{n?}")]
+        [ActionName("Products")]
+        [Route("client/products/{id?}")]
         public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> TopProducts(string id = null, string n = "5")
         {
             if (id == null) { return null; }

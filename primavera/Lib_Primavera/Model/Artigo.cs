@@ -19,13 +19,19 @@ namespace FirstREST.Lib_Primavera.Model
             set;
         }
 
-        public double Preco
+        public double PCM
         {
             get;
             set;
         }
 
         public double STKAtual
+        {
+            get;
+            set;
+        }
+
+        public double STKReposicao
         {
             get;
             set;

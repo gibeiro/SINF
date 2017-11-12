@@ -216,7 +216,7 @@ namespace FirstREST.Lib_Primavera
                         {
                             CodArtigo = objList.Valor("Artigo"),
                             DescArtigo = objList.Valor("Descricao"),
-                            Preco = objList.Valor("PrecUnit")
+                            PCM = objList.Valor("PrecUnit")
                         });
                         objList.Seguinte();
 
@@ -472,14 +472,16 @@ namespace FirstREST.Lib_Primavera
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
 
-                objList = PriEngine.Engine.Comercial.Artigos.LstArtigos();
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT Artigo.Artigo, Artigo.Descricao, Artigo.STKActual, Artigo.SKTReposicao"
+                );
 
                 while (!objList.NoFim())
                 {
                     art = new Model.Artigo();
                     art.CodArtigo = objList.Valor("artigo");
                     art.DescArtigo = objList.Valor("descricao");
-  //                  art.STKAtual = objList.Valor("stkatual");
+                    art.STKAtual = objList.Valor("stkatual");
                   
                     
                     listArts.Add(art);
@@ -494,9 +496,9 @@ namespace FirstREST.Lib_Primavera
                 return null;
 
             }
-
-
         }
+        
+        
         #endregion Artigo
 
  
