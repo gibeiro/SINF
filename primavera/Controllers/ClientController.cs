@@ -34,7 +34,7 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("List")]
         [Route("client/list")]
-        public Cliente List()
+        public List<Cliente> List()
         {
             return Lib_Primavera.PriIntegration.ListaClientes();
         }
@@ -45,7 +45,7 @@ namespace FirstREST.Controllers
         [Route("client/volume/{id?}")]
         public List<Lib_Primavera.Model.CabecDoc> Volume(string id = null)
         {
-            return Lib_Primavera.PriIntegration.getClientPurchases(cod);
+            return Lib_Primavera.PriIntegration.getClientPurchases(id);
         }
     }
 }
