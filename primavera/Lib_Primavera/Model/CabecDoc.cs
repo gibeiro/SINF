@@ -25,25 +25,13 @@ namespace FirstREST.Lib_Primavera.Model
             set;
         }
 
-        public string NumDoc
+        public double TotalMerc
         {
             get;
             set;
         }
 
-        public string NumContribuinte
-        {
-            get;
-            set;
-        }
-
-        public string TotalMerc
-        {
-            get;
-            set;
-        }
-
-        public string TotalIVA
+        public double TotalIva
         {
             get;
             set;

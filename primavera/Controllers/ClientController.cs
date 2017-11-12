@@ -34,9 +34,9 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Volume")]
         [Route("client/volume/{id?}")]
-        public string Volume(int? id = null)
+        public List<Lib_Primavera.Model.CabecDoc> Volume(string cod = null)
         {
-            return "Volume: id: " + id;
+            return Lib_Primavera.PriIntegration.getClientPurchases(cod);
         }
     }
 }

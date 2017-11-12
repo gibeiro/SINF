@@ -12,7 +12,7 @@ namespace FirstREST.Lib_Primavera
 {
     public class PriIntegration
     {
-
+        #region Overview
         //Clientes que geram mais faturãcao
         public static List<Model.Custom.TopClientes> TopClientes(int n)
         {
@@ -112,6 +112,8 @@ namespace FirstREST.Lib_Primavera
                 return null;
         }
 
+        
+
         public static List<Model.Custom.Growth> GrowthYear(int year)
         {
             List<Model.Custom.Growth> growths = new List<Model.Custom.Growth>();
@@ -121,6 +123,40 @@ namespace FirstREST.Lib_Primavera
             }
             return growths;
         }
+
+        #endregion Overview
+
+        #region ViewCliente;
+        //COMPRAS DE UM CERTO CLIENTE
+        public static List<Model.CabecDoc> getClientPurchases(string codcliente)
+        {
+            StdBELista objList;
+
+            List<Model.CabecDoc> vendas = new List<Model.CabecDoc>();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+                objList = PriEngine.Engine.Consulta(
+                   "SELECT CabecDoc.id,CabecDoc.Data,CabecDoc.TotalMerc, CabecDoc.TotalIva FROM CabecDoc WHERE CabecDoc.Entidade = '" + codcliente + "' ORDER BY CabecDoc.Data DESC"
+                );
+                while (!objList.NoFim())
+                {
+                    vendas.Add(new Model.CabecDoc
+                    {
+                        Entidade = codcliente,
+                        id = objList.Valor("id"),
+                        Data = objList.Valor("Data"),
+                        TotalMerc = objList.Valor("TotalMerc"),
+                        TotalIva = objList.Valor("TotalIva")
+                    });
+                    objList.Seguinte();
+
+                }
+            }
+            return vendas;
+        }
+
+        #endregion ViewCliente;
 
         # region Cliente
 
