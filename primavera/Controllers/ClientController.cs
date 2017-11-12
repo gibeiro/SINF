@@ -46,7 +46,7 @@ namespace FirstREST.Controllers
         [Route("client/list")]
         public List<Cliente> List()
         {
-            return Lib_Primavera.PriIntegration.ListaClientes();
+            return Lib_Primavera.SaftParser.getClientes();
         }
 
         // GET: api/client/volume?id=<id>

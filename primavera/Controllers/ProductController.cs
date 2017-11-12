@@ -25,9 +25,9 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("List")]
         [Route("product/list")]
-        public XmlNodeList Get()
+        public List<Lib_Primavera.Model.Artigo> Get()
         {
-            return Lib_Primavera.SaftParser.getArtigos();
+            return Lib_Primavera.PriIntegration.ListaArtigos();
         }
 
         /*
