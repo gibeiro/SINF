@@ -192,6 +192,40 @@ namespace FirstREST.Lib_Primavera
 
         #region ViewProducts
 
+        public static List<Model.Artigo> ListaArtigos()
+        {
+
+            StdBELista objList;
+
+            Model.Artigo art = new Model.Artigo();
+            List<Model.Artigo> listArts = new List<Model.Artigo>();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT Artigo.Artigo, Artigo.Descricao FROM Artigo"
+                );
+
+                while (!objList.NoFim())
+                {
+                    art = new Model.Artigo();
+                    art.CodArtigo = objList.Valor("artigo");
+                    art.DescArtigo = objList.Valor("descricao");
+                    listArts.Add(art);
+                    objList.Seguinte();
+                }
+
+                return listArts;
+
+            }
+            else
+            {
+                return null;
+
+            }
+        }
+
         public static Lib_Primavera.Model.Artigo GetArtigo(string codArtigo)
         {
 
@@ -208,7 +242,7 @@ namespace FirstREST.Lib_Primavera
                 else
                 {
 
-                    objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, LinhasDoc.PrecUnit, LinhasDoc.Quantidade FROM LinhasDoc WHERE LinhasDoc.Artigo='" + codArtigo + "'GROUP BY Artigo,Descricao,PrecUnit,Quantidade");
+                    objList = PriEngine.Engine.Consulta("SELECT Artigo.Artigo,Artigo.Descricao,Artigo.STKActual,Artigo.STKReposicao,Artigo.PCMedio,ArtigoMoeda.PVP1 FROM Artigo,ArtigoMoeda WHERE Artigo.Artigo = '" + codArtigo + "' AND Artigo.Artigo = ArtigoMoeda.Artigo");
 
                     while (!objList.NoFim())
                     {
@@ -216,7 +250,10 @@ namespace FirstREST.Lib_Primavera
                         {
                             CodArtigo = objList.Valor("Artigo"),
                             DescArtigo = objList.Valor("Descricao"),
-                            PCM = objList.Valor("PrecUnit")
+                            STKAtual = objList.Valor("STKActual"),
+                            STKReposicao = objList.Valor("STKReposicao"),
+                            PCM = objList.Valor("PCMedio"),
+                            PVP = objList.Valor("PVP1")
                         });
                         objList.Seguinte();
 
@@ -230,6 +267,44 @@ namespace FirstREST.Lib_Primavera
             {
                 return null;
             }
+        }
+
+        private static Model.Custom.SalesVol SalesVolMonth(string cod, int year, int month)
+        {
+            StdBELista objList;
+
+            Model.Custom.SalesVol SalesVol = new Model.Custom.SalesVol();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT ISNULL(SUM(T.Quantidade),0) as NSold ,ISNULL(SUM(T.PrecUnit * T.Quantidade),0) AS TEarn, ISNULL(SUM(T.PCM * T.Quantidade),0) AS TCost FROM (SELECT PrecUnit,Quantidade,PCM FROM LinhasDoc WHERE LinhasDoc.Artigo = '" + cod + "' AND YEAR(LinhasDoc.Data) = " + year + " AND MONTH(LinhasDoc.Data) = " + month + ") T");
+
+                SalesVol = new Model.Custom.SalesVol
+                {
+                    Sales = objList.Valor("NSold"),
+                    Profit = objList.Valor("TEarn") - objList.Valor("TCost")
+                };
+                objList.Seguinte();
+
+
+
+                return SalesVol;
+            }
+            else
+                return null;
+        }
+
+
+
+        public static List<Model.Custom.SalesVol> SalesVolYear(string cod,int year)
+        {
+            List<Model.Custom.SalesVol> salesvol = new List<Model.Custom.SalesVol>();
+            for (int i = 1; i <= 12; i++)
+            {
+                salesvol.Add(SalesVolMonth(cod,year, i));
+            }
+            return salesvol;
         }
 
         #endregion
@@ -456,51 +531,6 @@ namespace FirstREST.Lib_Primavera
         }        
 
         #endregion Cliente;   // -----------------------------  END   CLIENTE    -----------------------
-
-
-        #region Artigo
-       
-
-        public static List<Model.Artigo> ListaArtigos()
-        {
-                        
-            StdBELista objList;
-
-            Model.Artigo art = new Model.Artigo();
-            List<Model.Artigo> listArts = new List<Model.Artigo>();
-
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-
-                objList = PriEngine.Engine.Consulta(
-                    "SELECT Artigo.Artigo, Artigo.Descricao, Artigo.STKActual, Artigo.SKTReposicao"
-                );
-
-                while (!objList.NoFim())
-                {
-                    art = new Model.Artigo();
-                    art.CodArtigo = objList.Valor("artigo");
-                    art.DescArtigo = objList.Valor("descricao");
-                    art.STKAtual = objList.Valor("stkatual");
-                  
-                    
-                    listArts.Add(art);
-                    objList.Seguinte();
-                }
-
-                return listArts;
-
-            }
-            else
-            {
-                return null;
-
-            }
-        }
-        
-        
-        #endregion Artigo
-
  
         #region DocCompra
         
@@ -620,7 +650,6 @@ namespace FirstREST.Lib_Primavera
 
 
         #endregion DocCompra
-
 
         #region DocsVenda
 

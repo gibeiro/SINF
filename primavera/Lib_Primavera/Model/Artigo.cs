@@ -25,6 +25,12 @@ namespace FirstREST.Lib_Primavera.Model
             set;
         }
 
+        public double PVP
+        {
+            get;
+            set;
+        }
+
         public double STKAtual
         {
             get;

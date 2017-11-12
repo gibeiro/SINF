@@ -11,60 +11,31 @@ namespace FirstREST.Controllers
     public class ProductController : ApiController
     {
 
-        public class ProductPrice
-        {
-            public double UnitPrice
-            {
-                get;
-                set;
-            }
-        }
-
-        // GET: api/product/stock?id=<id>
-        [HttpGet]
-        [ActionName("Stock")]
-        [Route("product/stock/{id?}")]
-        public string Stock(int? id = null)
-        {
-            return "Stock: id: " + id;
-        }
-
-        // GET: api/product/price?id=<id>
-        [HttpGet]
-        [ActionName("Price")]
-        [Route("product/price/{id?}")]
-        public ProductPrice Price(string id = null)
-        {
-            Lib_Primavera.Model.Artigo artigo = Lib_Primavera.PriIntegration.GetArtigo(id);
-            if (artigo == null)
-            {
-                throw new HttpResponseException(
-                  Request.CreateResponse(HttpStatusCode.NotFound));
-            }
-            else
-            {
-                ProductPrice pp = new ProductPrice();
-                pp.UnitPrice = artigo.PCM;
-                return pp;
-            }
-        }
-
         // GET: api/product/volume?id=<id>
         [HttpGet]
         [ActionName("Volume")]
         [Route("product/volume/{id?}")]
-        public string Volume(int? id = null)
+        public List<Lib_Primavera.Model.Custom.SalesVol> Volume(string cod = null,string y = "2016")
         {
-            return "Volume: id: " + id;
+            return Lib_Primavera.PriIntegration.SalesVolYear(cod, Int32.Parse(y));
         }
 
-        // GET: api/product/cost?id=<id>
+        // GET: api/product/list
         [HttpGet]
-        [ActionName("Cost")]
-        [Route("product/cost/{id?}")]
-        public string Cost(int? id = null)
+        [ActionName("List")]
+        [Route("product/list")]
+        public List<Lib_Primavera.Model.Artigo> Get()
         {
-            return "Cost: id: " + id;
+            return Lib_Primavera.PriIntegration.ListaArtigos();
+        }
+
+        // GET: api/product/get?id=<id>
+        [HttpGet]
+        [ActionName("Get")]
+        [Route("product/get/{id?}")]
+        public Lib_Primavera.Model.Artigo Get(string id = null)
+        {
+            return Lib_Primavera.PriIntegration.GetArtigo(id);
         }
 
         // GET: api/product/margin?id=<id>
