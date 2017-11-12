@@ -46,7 +46,7 @@ namespace FirstREST.Lib_Primavera
         }
 
         //Clientes que geram mais faturacao
-        public static List<Model.Custom.TopClientes> TopClientes(int n)
+        public static List<Model.Custom.TopClientes> TopClientes(int n,int y)
         {
             StdBELista objList;
 
@@ -62,7 +62,7 @@ namespace FirstREST.Lib_Primavera
             {
 
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT TOP "+ n +" CabecDoc.Entidade, SUM(CabecDoc.TotalMerc) AS Faturacao FROM LinhasDoc, CabecDoc WHERE LinhasDoc.IdCabecDoc = CabecDoc.Id GROUP BY CabecDoc.Entidade ORDER BY Faturacao DESC"
+                    "SELECT TOP "+ n +" CabecDoc.Entidade, SUM(CabecDoc.TotalMerc) AS Faturacao FROM CabecDoc WHERE YEAR(CabecDoc.Data) = " + y +"  GROUP BY CabecDoc.Entidade ORDER BY Faturacao DESC"
                     );
 
                 while (!objList.NoFim() || n-- == 0)
@@ -84,7 +84,7 @@ namespace FirstREST.Lib_Primavera
         }
 
         //Artigos que geram mais lucro
-        public static List<Model.Custom.TopArtigos> TopArtigos(int n)
+        public static List<Model.Custom.TopArtigos> TopArtigos(int n,int y)
         {
             StdBELista objList;
 
@@ -94,7 +94,7 @@ namespace FirstREST.Lib_Primavera
             {
 
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT TOP " + n + " LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc GROUP BY Artigo,Descricao ORDER BY Price DESC"
+                    "SELECT TOP " + n + " LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc WHERE YEAR(LinhasDoc.Data) = " + y + " GROUP BY Artigo,Descricao ORDER BY Price DESC"
                     );
 
                 while (!objList.NoFim())

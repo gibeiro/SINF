@@ -29,21 +29,21 @@ namespace FirstREST.Controllers
             return "Expenses";
         }
 
-        // GET: api/overview/clients/top
+        // GET: api/overview/clients
         [HttpGet]
         [ActionName("Clients")]
         [Route("api/overview/clients")]
-        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(string n = "5")
+        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(string n = "5",string y = "2016")
         {
-            return Lib_Primavera.PriIntegration.TopClientes(Convert.ToInt32(n));
+            return Lib_Primavera.PriIntegration.TopClientes(Convert.ToInt32(n),Convert.ToInt32(y));
         }
 
         // GET: api/overview/products
         [HttpGet]
         [ActionName("Products")]
-        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products(string n = "5")
+        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products(string n = "5",string y = "2016")
         {
-            return Lib_Primavera.PriIntegration.TopArtigos(Convert.ToInt32(n));
+            return Lib_Primavera.PriIntegration.TopArtigos(Convert.ToInt32(n),Convert.ToInt32(y));
         }
 
         // GET: api/overview/revenue
