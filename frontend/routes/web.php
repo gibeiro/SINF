@@ -30,6 +30,15 @@ Route::get('/accounts', function(){
 Route::get('/product', function(){
     return view('product');
 });
+Route::get('/client', function(){
+    return view('client');
+});
+Route::get('/purchases', function(){
+    return view('purchases');
+});
+Route::get('/sales', function(){
+    return view('sales');
+});
 Route::get('/teste', function(){
     return view('testePrimavera');
 });

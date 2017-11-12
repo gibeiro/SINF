@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/growth',
+        url: 'http://localhost:49822/api/overview/client/info?id=',
 		datatype: 'application/json',
         success: function (data) {
             var table = $('#top_clients');
