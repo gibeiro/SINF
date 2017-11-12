@@ -30,8 +30,8 @@ Route::get('/accounts', function(){
 Route::get('/product', function(){
     return view('product');
 });
-Route::get('/client', function(){
-    return view('client');
+Route::get('/client/{id}', function($id){
+    return view('client',compact('id'));
 });
 Route::get('/purchases', function(){
     return view('purchases');

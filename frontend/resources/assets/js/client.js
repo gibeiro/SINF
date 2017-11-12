@@ -1,10 +1,12 @@
 $(document).ready(function () {
+    //get id of client
+    var id = $('#id').attr('content');
     /**
      * Get info
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/client/info?id=SILVA',
+        url: 'http://localhost:49822/api/client/info?id='+id,
         datatype: 'application/json',
         success: function (data) {
             $('#client_name').append(data.NomeCliente);
@@ -18,7 +20,7 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/client/products?id=SILVA',
+        url: 'http://localhost:49822/api/client/products?id='+id,
         datatype: 'application/json',
         success: function (data) {
             $.each(data,function(index, element) {
@@ -31,7 +33,7 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/client/volume?id=SILVA',
+        url: 'http://localhost:49822/api/client/volume?id='+id,
         datatype: 'application/json',
         success: function (data) {
             volume_chart(data);
