@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using FirstREST.Lib_Primavera.Model;
+using System.Xml;
 
 namespace FirstREST.Controllers
 {
@@ -24,11 +25,21 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("List")]
         [Route("product/list")]
+        public XmlNodeList Get()
+        {
+            return Lib_Primavera.SaftParser.getArtigos();
+        }
+
+        /*
+        // GET: api/product/list
+        [HttpGet]
+        [ActionName("List")]
+        [Route("product/list")]
         public List<Lib_Primavera.Model.Artigo> Get()
         {
             return Lib_Primavera.PriIntegration.ListaArtigos();
         }
-
+        */
         // GET: api/product/get?id=<id>
         [HttpGet]
         [ActionName("Get")]
