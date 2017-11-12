@@ -1,4 +1,38 @@
-var ctx = document.getElementById('myPieChart').getContext('2d');
+/*  /api/product/list
+    /api/product/get?id=codigo
+    /api/product/volume?id=?&y=?*/
+
+$(document).ready(function () {
+    /**
+     * Get product info
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/product/get?id=A0001',
+        datatype: 'application/json',
+        success: function (data) {
+            $('#in_stock').append(data.STKAtual);
+            $('#unit_cost').append(data.PCM);
+            $('#unit_price').append(data.PVP);
+            profit_chart(data);
+        }
+    });
+
+    /**
+     * Get product volume
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/product/volume?id=A0001',
+        datatype: 'application/json',
+        success: function (data) {
+            sales_volume_chart(data);
+            profit_volume_chart(data);
+        }
+    });
+});
+
+/*var ctx = document.getElementById('myPieChart').getContext('2d');
 var myPieChart = new Chart(ctx,{
     type: 'doughnut',
     data: {
@@ -88,101 +122,135 @@ var myPieChart3 = new Chart(ctx,{
             ]
         }]
     }
-});
+});*/
 
-ctx = document.getElementById('myPieChart4').getContext('2d');
-var myPieChart4 = new Chart(ctx,{
-    type: 'doughnut',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Cost',
-            'Price',
-        ],
-        datasets: [{
-            data: [1.00, 2.25],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)'
-            ]
-        }]
-    },
-    options: {
-        centertext: '2.25'
-    }
-});
-
-ctx = document.getElementById('myLineChart').getContext('2d');
-var myLineChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Income Expenses",
-            data: [
-                10,20,30,20,40,50,60
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        title:{
-            display:true,
-            text:'Sales Volume'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+function profit_chart(product) {
+    profit = (product.PVP - product.PCM).toFixed(2);
+    ctx = document.getElementById('myPieChart4').getContext('2d');
+    var myPieChart4 = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Cost',
+                'Price',
+            ],
+            datasets: [{
+                data: [product.PCM, product.PVP],
+                backgroundColor: [
+                    'rgba(240,100,100,0.7)',
+                    'rgba(240,240,100,0.7)'
+                ]
             }]
+        },
+        options: {
+            centertext: profit,
+            cutoutPercentage : 80
         }
-    }
-});
+    });
+}
 
-ctx = document.getElementById('myLineChart2').getContext('2d');
-var myLineChart2 = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Income Expenses",
-            data: [
-                10,20,30,20,40,50,60
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        title:{
-            display:true,
-            text:'Profit Over Time'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
+function sales_volume_chart(volume) {
+    labels=[];
+    data=[];
+    var colors = [
+        'rgba(240,100,100,0.4)',
+        'rgba(240,240,100,0.4)',
+        'rgba(100,100,240,0.4)',
+        'rgba(100,240,100,0.4)',
+        'rgba(100,240,240,0.4)'
+    ];
+    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
+    $.each(volume, function(index,element){
+        labels.push(LABELS[index]);
+        data.push(element.Sales);
+    });
+    ctx = document.getElementById('myLineChart').getContext('2d');
+    var myLineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Sales",
+                data: data,
+                backgroundColor:colors[0]
             }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Sales Volume'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
-    }
-});
+    });
+}
+
+function profit_volume_chart(volume) {
+    labels=[];
+    data=[];
+    var colors = [
+        'rgba(240,100,100,0.4)',
+        'rgba(240,240,100,0.4)',
+        'rgba(100,100,240,0.4)',
+        'rgba(100,240,100,0.4)',
+        'rgba(100,240,240,0.4)'
+    ];
+    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
+    $.each(volume, function(index,element){
+        labels.push(LABELS[index]);
+        data.push(element.Profit.toFixed(2));
+    });
+    ctx = document.getElementById('myLineChart2').getContext('2d');
+    var myLineChart2 = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Income Expenses",
+                data: data,
+                backgroundColor:colors[0]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Profit Over Time'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
 
 Chart.pluginService.register({
     beforeDraw: function (chart) {
