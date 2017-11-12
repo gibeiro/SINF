@@ -16,14 +16,15 @@ namespace FirstREST.Lib_Primavera
         public SaftParser(string path)
         {
             saft = new XmlDocument();
-            saft.Load(path); 
+            saft.Load(path);
         }
 
-        public List<Model.Artigo> getArtigos()
+        public XmlNodeList getArtigos()
         {
-            List<Model.Artigo> artigos = new List<Model.Artigo>();
 
-            return artigos;
+            XmlNode root = saft.DocumentElement;
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(saft.NameTable);
+            return root.SelectNodes("AuditFile/MasterFiles/Product",nsmgr);
         }
 
     }

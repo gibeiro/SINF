@@ -22,7 +22,7 @@ namespace FirstREST
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Lib_Primavera.SaftParser p = new Lib_Primavera.SaftParser("C:\\Users\\user\\Desktop\\SAFT_DEMOSINF\\SAFT_DEMOSINF.xml");
+            Lib_Primavera.SaftParser p = new Lib_Primavera.SaftParser("res\\SAFT_DEMOSINF.xml");
 
         }
     }
