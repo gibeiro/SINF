@@ -30,6 +30,15 @@ namespace FirstREST.Controllers
             }
         }
 
+        // GET: api/client/list
+        [HttpGet]
+        [ActionName("List")]
+        [Route("client/list")]
+        public Cliente List()
+        {
+            return Lib_Primavera.PriIntegration.ListaClientes();
+        }
+
         // GET: api/client/volume?id=<id>
         [HttpGet]
         [ActionName("Volume")]

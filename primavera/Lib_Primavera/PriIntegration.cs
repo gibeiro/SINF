@@ -160,7 +160,45 @@ namespace FirstREST.Lib_Primavera
 
         #region ViewProducts
 
+        public static Lib_Primavera.Model.Artigo GetArtigo(string codArtigo)
+        {
 
+            StdBELista objList;
+            List<Model.Artigo> listArtigos = new List<Model.Artigo>();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+
+                if (PriEngine.Engine.Comercial.Artigos.Existe(codArtigo) == false)
+                {
+                    return null;
+                }
+                else
+                {
+
+                    objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, LinhasDoc.PrecUnit, LinhasDoc.Quantidade FROM LinhasDoc WHERE LinhasDoc.Artigo='" + codArtigo + "'GROUP BY Artigo,Descricao,PrecUnit,Quantidade");
+
+                    while (!objList.NoFim())
+                    {
+                        listArtigos.Add(new Model.Artigo
+                        {
+                            CodArtigo = objList.Valor("Artigo"),
+                            DescArtigo = objList.Valor("Descricao"),
+                            Preco = objList.Valor("PrecUnit")
+                        });
+                        objList.Seguinte();
+
+                    }
+
+                    return listArtigos[0];
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         #endregion
 
@@ -390,46 +428,6 @@ namespace FirstREST.Lib_Primavera
 
         #region Artigo
        
-
-        public static Lib_Primavera.Model.Artigo GetArtigo(string codArtigo)
-        {
-
-            StdBELista objList;
-            List<Model.Artigo> listArtigos = new List<Model.Artigo>();
-
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-
-                if (PriEngine.Engine.Comercial.Artigos.Existe(codArtigo) == false)
-                {
-                    return null;
-                }
-                else
-                {
-
-                    objList = PriEngine.Engine.Consulta("SELECT LinhasDoc.Artigo, LinhasDoc.Descricao, LinhasDoc.PrecUnit, LinhasDoc.Quantidade FROM LinhasDoc WHERE LinhasDoc.Artigo='" + codArtigo + "'GROUP BY Artigo,Descricao,PrecUnit,Quantidade");
-
-                    while (!objList.NoFim())
-                    {
-                        listArtigos.Add(new Model.Artigo
-                        {
-                            CodArtigo = objList.Valor("Artigo"),
-                            DescArtigo = objList.Valor("Descricao"),
-                            Preco = objList.Valor("PrecUnit")
-                        });
-                        objList.Seguinte();
-
-                    }
-
-                    return listArtigos[0];
-                }
-
-            }
-            else
-            {
-                return null;
-            }
-        }
 
         public static List<Model.Artigo> ListaArtigos()
         {
