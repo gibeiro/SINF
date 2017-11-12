@@ -13,7 +13,39 @@ namespace FirstREST.Lib_Primavera
     public class PriIntegration
     {
         #region Overview
-        //Clientes que geram mais faturãcao
+
+        public static List<Model.Custom.TopArtigos> TopArtigosDeCliente(string id, int n)
+        {
+            StdBELista objList;
+
+            List<Model.Custom.TopArtigos> listArtigos = new List<Model.Custom.TopArtigos>();
+
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT TOP 5 LinhasDoc.Artigo, LinhasDoc.Descricao, SUM(LinhasDoc.PrecUnit * LinhasDoc.Quantidade) AS Price FROM LinhasDoc JOIN CabecDoc ON LinhasDoc.IdCabecDoc = CabecDoc.Id WHERE CabecDoc.Entidade = \'" + id + "\' GROUP BY Artigo, Descricao ORDER BY Price DESC"
+                    );
+
+                while (!objList.NoFim())
+                {
+                    listArtigos.Add(new Model.Custom.TopArtigos
+                    {
+                        CodArtigo = objList.Valor("Artigo"),
+                        DescArtigo = objList.Valor("Descricao"),
+                        Faturacao = objList.Valor("Price")
+                    });
+                    objList.Seguinte();
+
+                }
+
+                return listArtigos;
+            }
+            else
+                return null;
+        }
+
+        //Clientes que geram mais faturacao
         public static List<Model.Custom.TopClientes> TopClientes(int n)
         {
             StdBELista objList;

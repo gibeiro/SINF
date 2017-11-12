@@ -10,7 +10,17 @@ namespace FirstREST.Controllers
 {
     public class ClientController : ApiController
     {
-        // GET: api/client/info?id=<id>
+
+        // client's top products
+        [HttpGet]
+        [ActionName("Info")]
+        [Route("client/products/{id?}/{n?}")]
+        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> TopProducts(string id = null, string n = "5")
+        {
+            if (id == null) { return null; }
+            return Lib_Primavera.PriIntegration.TopArtigosDeCliente(id,Convert.ToInt32(n));
+        }
+
         [HttpGet]
         [ActionName("Info")]
         [Route("client/info/{id?}")]
@@ -30,7 +40,6 @@ namespace FirstREST.Controllers
             }
         }
 
-        // GET: api/client/volume?id=<id>
         [HttpGet]
         [ActionName("Volume")]
         [Route("client/volume/{id?}")]
