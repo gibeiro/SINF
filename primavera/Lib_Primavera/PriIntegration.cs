@@ -158,6 +158,12 @@ namespace FirstREST.Lib_Primavera
 
         #endregion ViewCliente;
 
+        #region ViewProducts
+
+
+
+        #endregion
+
         # region Cliente
 
         public static List<Model.Cliente> ListaClientes()
