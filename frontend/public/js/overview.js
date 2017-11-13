@@ -76,7 +76,7 @@ module.exports = __webpack_require__(44);
 /***/ 44:
 /***/ (function(module, exports) {
 
-var GROWTH;
+
 $(document).ready(function () {
     /**
      * Get top clients
@@ -124,14 +124,14 @@ $(document).ready(function () {
         url: 'http://localhost:49822/api/overview/growth?y=2016',
         datatype: 'application/json',
         success: function success(data) {
-            window.GROWTH = data;
+            growth = data;
             growth_chart(data);
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:49822/api/overview/growth?y=2015',
                 datatype: 'application/json',
                 success: function success(data) {
-                    revenue_chart(window.GROWTH, data);
+                    revenue_chart(growth, data);
                 }
             });
         }
@@ -204,18 +204,28 @@ function top_products_chart(top_products) {
     });
 }
 
-ctx = document.getElementById('myPieChart3');
-var myPieChart3 = new Chart(ctx, {
+/*ctx = document.getElementById('myPieChart3');
+var myPieChart3 = new Chart(ctx,{
     type: 'pie',
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Red', 'Yellow', 'Blue', 'Green'],
+        labels: [
+            'Red',
+            'Yellow',
+            'Blue',
+            'Green'
+        ],
         datasets: [{
-            data: [20, 50, 20, 10],
-            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
+            data: [20, 50, 20,10],
+            backgroundColor: [
+                'rgba(240,100,100,0.7)',
+                'rgba(240,240,100,0.7)',
+                'rgba(100,100,240,0.7)',
+                'rgba(100,240,100,0.7)'
+            ]
         }]
     }
-});
+});*/
 
 function growth_chart(data) {
     var labels = [];

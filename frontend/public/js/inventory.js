@@ -76,6 +76,10 @@ module.exports = __webpack_require__(46);
 /***/ 46:
 /***/ (function(module, exports) {
 
+$(document).ready(function () {
+    $('#example').DataTable({ "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>" });
+});
+
 var ctx = document.getElementById('myDonutChart').getContext('2d');
 var myPieChart = new Chart(ctx, {
     type: 'doughnut',

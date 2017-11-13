@@ -27,8 +27,8 @@ Route::get('/inventory', function(){
 Route::get('/accounts', function(){
     return view('accountsPayable');
 });
-Route::get('/product', function(){
-    return view('product');
+Route::get('/product/{id}', function($id){
+    return view('product',compact('id'));
 });
 Route::get('/client/{id}', function($id){
     return view('client',compact('id'));

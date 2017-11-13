@@ -60,51 +60,96 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 47);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 47:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(48);
+module.exports = __webpack_require__(56);
 
 
 /***/ }),
 
-/***/ 48:
+/***/ 56:
 /***/ (function(module, exports) {
+
 
 $(document).ready(function () {
     $('#example').DataTable({ "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>" });
+    /**
+     * Get cost earns and profit
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/growth?y=2016',
+        datatype: 'application/json',
+        success: function success(data) {
+            growth = data;
+            growth_chart(data);
+        }
+    });
 });
 
-var ctx = document.getElementById('myPieChart').getContext('2d');
-var myPieChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Processed', 'Recieved'],
-        datasets: [{
-            data: [70, 30],
-            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)']
-        }]
-    }
-});
+function growth_chart(data) {
+    var labels = [];
 
-ctx = document.getElementById('myPieChart2').getContext('2d');
-var myPieChart2 = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Cause 1', 'Cause 2', 'Cause 3', 'Cause 4'],
-        datasets: [{
-            data: [20, 50, 20, 10],
-            backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
-        }]
-    }
-});
+    var data_cost = [];
+    var data_earn = [];
+    var data_profit = [];
+    var colors = ['rgba(240,100,100,0.4)', 'rgba(240,240,100,0.4)', 'rgba(100,100,240,0.4)', 'rgba(100,240,100,0.4)', 'rgba(100,240,240,0.4)'];
+    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    $.each(data, function (index, element) {
+        labels.push(LABELS[index]);
+        data_cost.push(element.Cost.toFixed(0));
+        data_earn.push(element.Earn.toFixed(0));
+        data_profit.push(element.Profit.toFixed(0));
+    });
+    ctx = document.getElementById('myLineChart').getContext('2d');
+    var myLineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Profit",
+                data: data_profit,
+                backgroundColor: colors[2]
+            }, {
+                label: "Costs",
+                data: data_cost,
+                backgroundColor: colors[0]
+            }, {
+                label: "Earnings",
+                data: data_earn,
+                backgroundColor: colors[1]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Purchases / Budget'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
 
 /***/ })
 

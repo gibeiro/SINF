@@ -2,13 +2,16 @@
     /api/product/get?id=codigo
     /api/product/volume?id=?&y=?*/
 
+
 $(document).ready(function () {
+    //get id of product
+    var id = $('#id').attr('content');
     /**
      * Get product info
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/product/get?id=A0001',
+        url: 'http://localhost:49822/api/product/get?id='+id,
         datatype: 'application/json',
         success: function (data) {
             $('#in_stock').append(data.STKAtual);
@@ -23,7 +26,7 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/product/volume?id=A0001',
+        url: 'http://localhost:49822/api/product/volume?id='+id,
         datatype: 'application/json',
         success: function (data) {
             sales_volume_chart(data);

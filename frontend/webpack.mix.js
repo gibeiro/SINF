@@ -18,4 +18,6 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .js('resources/assets/js/product.js', 'public/js')
 	.js('resources/assets/js/index.js', 'public/js')
     .js('resources/assets/js/client.js', 'public/js')
+    .js('resources/assets/js/purchases.js', 'public/js')
+    .js('resources/assets/js/sales.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');

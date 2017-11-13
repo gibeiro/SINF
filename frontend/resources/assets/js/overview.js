@@ -1,4 +1,4 @@
-var GROWTH;
+
 $(document).ready(function () {
     /**
      * Get top clients
@@ -58,14 +58,14 @@ $(document).ready(function () {
         url: 'http://localhost:49822/api/overview/growth?y=2016',
         datatype: 'application/json',
         success: function (data) {
-            window.GROWTH = data;
+            growth = data;
             growth_chart(data);
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:49822/api/overview/growth?y=2015',
                 datatype: 'application/json',
                 success: function (data) {
-                    revenue_chart(window.GROWTH,data);
+                    revenue_chart(growth,data);
                 }
             })
         }
@@ -152,7 +152,7 @@ function top_products_chart(top_products) {
     });
 }
 
-ctx = document.getElementById('myPieChart3');
+/*ctx = document.getElementById('myPieChart3');
 var myPieChart3 = new Chart(ctx,{
     type: 'pie',
     data: {
@@ -173,7 +173,7 @@ var myPieChart3 = new Chart(ctx,{
             ]
         }]
     }
-});
+});*/
 
 
 function growth_chart(data) {
