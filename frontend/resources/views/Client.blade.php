@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title','Client')
+
 @section('content')
     <meta id="id" content="{{$id}}">
     <div class="jumbotron" style="margin-top: -50px;">

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title','Sales')
+
 @section('content')
     <div class="jumbotron" style="margin-top: -50px;">
         <div class="container">
