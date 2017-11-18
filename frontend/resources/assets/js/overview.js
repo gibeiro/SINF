@@ -248,7 +248,6 @@ function revenue_chart(growth, growth_prev) {
     ctx = document.getElementById('myGaugeChart').getContext('2d');
     rev=0;
     rev_prev=0;
-    rev_dif =0;
     $.each(growth,function (index,element) {
         rev += element.Earn;
     });
@@ -260,17 +259,24 @@ function revenue_chart(growth, growth_prev) {
     percentage = Math.round(rev*100/rev_prev);
     console.log(percentage);
     var config = {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             datasets: [
                 {
-                    labels:['Previous Year','This Year'],
+                    label: "Previous Year",
                     data: [
                         rev_prev,
+                    ],
+                    backgroundColor: [
+                        'rgba(100,100,255,0.8)'
+                    ]
+                },
+                {
+                    label: "This Year",
+                    data: [
                         rev,
                     ],
                     backgroundColor: [
-                        'rgba(100,100,255,0.8)',
                         'rgba(255,100,100,0.8)'
                     ]
                 }
@@ -278,12 +284,24 @@ function revenue_chart(growth, growth_prev) {
         },
         options: {
             responsive: true,
-            legend: {
-                position: 'top',
-            },
             title: {
                 display: true,
                 text: 'Revenue'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             }
         }
     };
