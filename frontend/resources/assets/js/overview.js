@@ -213,7 +213,7 @@ function growth_chart(data) {
                     backgroundColor: colors[0]
                 },
                 {
-                    label: "Earnings",
+                    label: "Net Sales",
                     data: data_earn,
                     backgroundColor: colors[1]
                 }
@@ -257,12 +257,6 @@ function revenue_chart(growth, growth_prev) {
     });
     rev = Math.round(rev);
     rev_prev = Math.round(rev_prev);
-    rev_prev_dif=0;
-    if(rev < rev_prev){
-        rev_dif=rev_prev-rev;
-    }else{
-        rev_prev_dif = rev-rev_prev;
-    }
     percentage = Math.round(rev*100/rev_prev);
     console.log(percentage);
     var config = {
@@ -270,25 +264,14 @@ function revenue_chart(growth, growth_prev) {
         data: {
             datasets: [
                 {
-                    labels:['Earnings','To Go'],
+                    labels:['Previous Year','This Year'],
                     data: [
+                        rev_prev,
                         rev,
-                        rev_dif,
                     ],
                     backgroundColor: [
                         'rgba(100,100,255,0.8)',
                         'rgba(255,100,100,0.8)'
-                    ]
-                },
-                {
-                    labels:['Last Year Earnings', 'Growth'],
-                    data: [
-                        rev_prev,
-                        rev_prev_dif,
-                    ],
-                    backgroundColor: [
-                        'rgba(150,150,150,0.2)',
-                        'rgba(100,255,100,0.8)'
                     ]
                 }
             ]
@@ -301,23 +284,7 @@ function revenue_chart(growth, growth_prev) {
             title: {
                 display: true,
                 text: 'Revenue'
-            },
-            animation: {
-                animateScale: false,
-                animateRotate: true
-            },
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        var dataset = data.datasets[tooltipItem.datasetIndex];
-                        var index = tooltipItem.index;
-                        return dataset.labels[index] + ': ' + dataset.data[index];
-                    }
-                }
-            },
-            rotation: 1 * Math.PI,
-            circumference: 1 * Math.PI,
-            gaugetext: percentage+"%"
+            }
         }
     };
     var myGaugeChart = new Chart(ctx, config);
