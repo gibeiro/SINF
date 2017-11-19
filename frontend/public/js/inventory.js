@@ -101,7 +101,7 @@ var myPieChart2 = new Chart(ctx, {
     type: 'bar',
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Red', 'Yellow', 'Blue', 'Green'],
+        labels: ['Product 1', 'Product 2', 'Product 3', 'Product 4'],
         datasets: [{
             data: [20, 50, 20, 10],
             backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']
@@ -109,8 +109,11 @@ var myPieChart2 = new Chart(ctx, {
     },
     options: {
         responsive: true,
+        legend: {
+            display: false
+        },
         title: {
-            display: true,
+            display: false,
             text: 'Income Expenses'
         },
         tooltips: {
@@ -136,7 +139,7 @@ var myPieChart3 = new Chart(ctx, {
     type: 'pie',
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: ['Red', 'Yellow', 'Blue', 'Green'],
+        labels: ['Product 1', 'Product 2', 'Product 3', 'Product 4'],
         datasets: [{
             data: [20, 50, 20, 10],
             backgroundColor: ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)']

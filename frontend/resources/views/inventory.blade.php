@@ -22,9 +22,9 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
-                    <div style="background-color: #f5f5f5;">
+                    <div style="background-color: #f5f5f5; padding: 10px 18px;">
                         <canvas id="turnOverChart" width="400" height="400" style="padding-right: 10px"></canvas>
-                        <p>Turnover</p>
+                        <p style="margin-top:16px; margin-bottom: 0">Turnover</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
@@ -55,7 +55,7 @@
                 <tbody>
                     <tr>
                         <td>A0001</td>
-                        <td>Prodct 1</td>
+                        <td>Product 1</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -63,7 +63,7 @@
                     </tr>
                     <tr>
                         <td>A0002</td>
-                        <td>Prodct 2</td>
+                        <td>Product 2</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -71,7 +71,7 @@
                     </tr>
                     <tr>
                         <td>A0003</td>
-                        <td>Prodct 3</td>
+                        <td>Product 3</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -79,7 +79,7 @@
                     </tr>
                     <tr>
                         <td>A0004</td>
-                        <td>Prodct 4</td>
+                        <td>Product 4</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -87,7 +87,7 @@
                     </tr>
                     <tr>
                         <td>A0005</td>
-                        <td>Prodct 5</td>
+                        <td>Product 5</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -95,7 +95,7 @@
                     </tr>
                     <tr>
                         <td>A0006</td>
-                        <td>Prodct 6</td>
+                        <td>Product 6</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -103,7 +103,7 @@
                     </tr>
                     <tr>
                         <td>A0007</td>
-                        <td>Prodct 7</td>
+                        <td>Product 7</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -111,7 +111,7 @@
                     </tr>
                     <tr>
                         <td>A0008</td>
-                        <td>Prodct 8</td>
+                        <td>Product 8</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -119,7 +119,7 @@
                     </tr>
                     <tr>
                         <td>A0009</td>
-                        <td>Prodct 9</td>
+                        <td>Product 9</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -127,7 +127,7 @@
                     </tr>
                     <tr>
                         <td>A0010</td>
-                        <td>Prodct 10</td>
+                        <td>Product 10</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>
@@ -135,7 +135,7 @@
                     </tr>
                     <tr>
                         <td>A0011</td>
-                        <td>Prodct 11</td>
+                        <td>Product 11</td>
                         <td>Category</td>
                         <td>61</td>
                         <td>12</td>

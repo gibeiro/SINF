@@ -46,17 +46,12 @@ function growth_chart(data) {
             labels: labels,
             datasets: [
                 {
-                    label: "Profit",
-                    data: data_profit,
-                    backgroundColor: colors[2]
-                },
-                {
-                    label: "Costs",
+                    label: "Purchases",
                     data: data_cost,
                     backgroundColor: colors[0]
                 },
                 {
-                    label: "Earnings",
+                    label: "Budget",
                     data: data_earn,
                     backgroundColor: colors[1]
                 }

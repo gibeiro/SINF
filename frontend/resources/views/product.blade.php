@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-3 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
-                        <canvas id="myPieChart4" width="400" height="400"></canvas>
+                        <canvas id="myPieChart4" width="50" height="50"></canvas>
                         <p>Profit Margin</p>
                     </div>
                 </div>

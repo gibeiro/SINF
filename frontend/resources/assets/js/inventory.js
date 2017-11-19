@@ -36,10 +36,10 @@ var myPieChart2 = new Chart(ctx,{
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
-            'Red',
-            'Yellow',
-            'Blue',
-            'Green'
+            'Product 1',
+            'Product 2',
+            'Product 3',
+            'Product 4'
         ],
         datasets: [{
             data: [20, 50, 20,10],
@@ -53,8 +53,11 @@ var myPieChart2 = new Chart(ctx,{
     },
     options: {
         responsive: true,
+        legend:{
+          display:false
+        },
         title:{
-            display:true,
+            display:false,
             text:'Income Expenses'
         },
         tooltips: {
@@ -81,10 +84,10 @@ var myPieChart3 = new Chart(ctx,{
     data: {
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
-            'Red',
-            'Yellow',
-            'Blue',
-            'Green'
+            'Product 1',
+            'Product 2',
+            'Product 3',
+            'Product 4'
         ],
         datasets: [{
             data: [20, 50, 20,10],
