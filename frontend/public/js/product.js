@@ -60,20 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 49);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 49:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(50);
-
-
-/***/ }),
-
-/***/ 50:
+/***/ 10:
 /***/ (function(module, exports) {
 
 /*  /api/product/list
@@ -91,6 +83,8 @@ $(document).ready(function () {
         url: 'http://localhost:49822/api/product/get?id=' + id,
         datatype: 'application/json',
         success: function success(data) {
+            $('#product_name').append(data.DescArtigo);
+            $('#category').append(data.Categoria);
             $('#in_stock').append(data.STKAtual);
             $('#unit_cost').append(data.PCM);
             $('#unit_price').append(data.PVP);
@@ -284,7 +278,7 @@ function profit_volume_chart(volume) {
         data: {
             labels: labels,
             datasets: [{
-                label: "Income Expenses",
+                label: "Profit",
                 data: data,
                 backgroundColor: colors[0]
             }]
@@ -354,6 +348,14 @@ Chart.pluginService.register({
         }
     }
 });
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(10);
+
 
 /***/ })
 

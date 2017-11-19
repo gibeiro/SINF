@@ -60,20 +60,21 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 43:
+/******/ ([
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(4);
 
 
 /***/ }),
-
-/***/ 44:
+/* 4 */
 /***/ (function(module, exports) {
 
 
@@ -255,7 +256,7 @@ function growth_chart(data) {
                 data: data_cost,
                 backgroundColor: colors[0]
             }, {
-                label: "Earnings",
+                label: "Net Sales",
                 data: data_earn,
                 backgroundColor: colors[1]
             }]
@@ -289,7 +290,6 @@ function revenue_chart(growth, growth_prev) {
     ctx = document.getElementById('myGaugeChart').getContext('2d');
     rev = 0;
     rev_prev = 0;
-    rev_dif = 0;
     $.each(growth, function (index, element) {
         rev += element.Earn;
     });
@@ -298,52 +298,42 @@ function revenue_chart(growth, growth_prev) {
     });
     rev = Math.round(rev);
     rev_prev = Math.round(rev_prev);
-    rev_prev_dif = 0;
-    if (rev < rev_prev) {
-        rev_dif = rev_prev - rev;
-    } else {
-        rev_prev_dif = rev - rev_prev;
-    }
     percentage = Math.round(rev * 100 / rev_prev);
     console.log(percentage);
     var config = {
-        type: 'doughnut',
+        type: 'bar',
         data: {
             datasets: [{
-                labels: ['Earnings', 'To Go'],
-                data: [rev, rev_dif],
-                backgroundColor: ['rgba(100,100,255,0.8)', 'rgba(255,100,100,0.8)']
+                label: "Previous Year",
+                data: [rev_prev],
+                backgroundColor: ['rgba(100,100,255,0.8)']
             }, {
-                labels: ['Last Year Earnings', 'Growth'],
-                data: [rev_prev, rev_prev_dif],
-                backgroundColor: ['rgba(150,150,150,0.2)', 'rgba(100,255,100,0.8)']
+                label: "This Year",
+                data: [rev],
+                backgroundColor: ['rgba(255,100,100,0.8)']
             }]
         },
         options: {
             responsive: true,
-            legend: {
-                position: 'top'
-            },
             title: {
                 display: true,
                 text: 'Revenue'
             },
-            animation: {
-                animateScale: false,
-                animateRotate: true
-            },
             tooltips: {
-                callbacks: {
-                    label: function label(tooltipItem, data) {
-                        var dataset = data.datasets[tooltipItem.datasetIndex];
-                        var index = tooltipItem.index;
-                        return dataset.labels[index] + ': ' + dataset.data[index];
-                    }
-                }
+                mode: 'index',
+                intersect: false
             },
-            rotation: 1 * Math.PI,
-            circumference: 1 * Math.PI,
-            gaugetext: percentage + "%"
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
         }
     };
     var myGaugeChart = new Chart(ctx, config);
@@ -390,5 +380,4 @@ Chart.pluginService.register({
 });
 
 /***/ })
-
-/******/ });
+/******/ ]);

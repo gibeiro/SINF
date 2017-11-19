@@ -5,7 +5,15 @@
 @section('content')
     <div class="jumbotron" style="margin-top: -50px;">
         <div class="container">
-            <h2>Accounts Payable</h2>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <h2>Accounts Payable</h2>
+                </div>
+                <div class="col-md-6 col-xs-12 text-right" style="padding: 50px 10px 20px 0;">
+                    <label>Data de Início: <input type="date" name="date_i" value="2017-01-01"></label>
+                    <label>Data de Fim: <input type="date" name="date_f" value="2017-12-31"></label>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-6 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">

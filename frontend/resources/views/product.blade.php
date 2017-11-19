@@ -6,7 +6,16 @@
     <meta id="id" content="{{$id}}">
     <div class="jumbotron" style="margin-top: -50px;">
         <div class="container">
-            <h2 id="product_name"></h2>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <h2>Categoria: <span style="font-weight: 100"> Hardware</span></h2>
+                    <h2 id="product_name"></h2>
+                </div>
+                <div class="col-md-6 col-xs-12 text-right" style="padding: 50px 10px 20px 0;">
+                    <label>Data de Início: <input type="date" name="date_i" value="2017-01-01"></label>
+                    <label>Data de Fim: <input type="date" name="date_f" value="2017-12-31"></label>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 30px 10px">
@@ -37,6 +46,13 @@
     </div>
     <div class="container">
         <div class="row">
+            <div class="col-md-12 text-right">
+                <span style="margin: 0 0 0 20px;">Sort By: </span>
+                <label><input type="radio" name="gap" value="year"> Ano</label>
+                <label><input type="radio" name="gap" value="month" checked> Mes</label>
+                <label><input type="radio" name="gap" value="week"> Semana</label>
+                <label><input type="radio" name="gap" value="day"> Dia</label>
+            </div>
             <div class="col-md-6 col-xs-12 text-center" style="margin-bottom: 50px;">
                 <canvas id="myLineChart" width="400" height="400"></canvas>
             </div>

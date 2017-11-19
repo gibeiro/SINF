@@ -14,6 +14,8 @@ $(document).ready(function () {
         url: 'http://localhost:49822/api/product/get?id='+id,
         datatype: 'application/json',
         success: function (data) {
+            $('#product_name').append(data.DescArtigo);
+            $('#category').append(data.Categoria);
             $('#in_stock').append(data.STKAtual);
             $('#unit_cost').append(data.PCM);
             $('#unit_price').append(data.PVP);
@@ -225,7 +227,7 @@ function profit_volume_chart(volume) {
         data: {
             labels: labels,
             datasets: [{
-                label: "Income Expenses",
+                label: "Profit",
                 data: data,
                 backgroundColor:colors[0]
             }]
