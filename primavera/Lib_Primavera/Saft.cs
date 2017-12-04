@@ -6,6 +6,7 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Data.SQLite;
 namespace Saft
 {
 	[XmlRoot(ElementName = "CompanyAddress", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
@@ -96,6 +97,26 @@ namespace Saft
 		public string Fax { get; set; }
 		[XmlElement(ElementName = "Website", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 		public string Website { get; set; }
+        public void insertIntoDB(SQLiteConnection conn)
+        {            
+            SQLiteCommand com = conn.CreateCommand();
+            com.CommandText = "insert into customer values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11)";
+
+            com.Parameters.AddWithValue("@1", CustomerID);
+            com.Parameters.AddWithValue("@2", AccountID);
+            com.Parameters.AddWithValue("@3", CustomerTaxID);
+            com.Parameters.AddWithValue("@4", CompanyName);
+            com.Parameters.AddWithValue("@5", BillingAddress.AddressDetail);
+            com.Parameters.AddWithValue("@6", BillingAddress.City);
+            com.Parameters.AddWithValue("@7", BillingAddress.PostalCode);
+            com.Parameters.AddWithValue("@8", BillingAddress.Country);
+            com.Parameters.AddWithValue("@9", Telephone);
+            com.Parameters.AddWithValue("@10", Fax);
+            com.Parameters.AddWithValue("@11", Website);
+
+            try { com.ExecuteNonQuery(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+        }
 	}
 
 	[XmlRoot(ElementName = "TaxTableEntry", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
@@ -133,6 +154,21 @@ namespace Saft
 		public string ProductDescription { get; set; }
 		[XmlElement(ElementName = "ProductNumberCode", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 		public string ProductNumberCode { get; set; }
+        public void insertIntoDB(SQLiteConnection conn)
+        {
+            SQLiteCommand com = new SQLiteCommand(
+               "insert into product values (@1,@2,@3,@4,@5)",
+               conn
+               );
+            com.Parameters.AddWithValue("@1",ProductType);
+            com.Parameters.AddWithValue("@2",ProductCode);
+            com.Parameters.AddWithValue("@3",ProductGroup);
+            com.Parameters.AddWithValue("@4",ProductDescription);
+            com.Parameters.AddWithValue("@5",ProductNumberCode);
+
+            try { com.ExecuteNonQuery(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+        }
 	}
 
 	[XmlRoot(ElementName = "MasterFiles", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
@@ -188,6 +224,29 @@ namespace Saft
 		public OrderReferences OrderReferences { get; set; }
 		[XmlElement(ElementName = "TaxExemptionReason", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 		public string TaxExemptionReason { get; set; }
+        public void insertIntoDB(string InvoiceNo, SQLiteConnection conn)
+        {
+            SQLiteCommand com = conn.CreateCommand();
+            com.CommandText = "insert into line values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14)";
+
+            com.Parameters.AddWithValue("@1", InvoiceNo);
+            com.Parameters.AddWithValue("@2", LineNumber);
+            com.Parameters.AddWithValue("@3", ProductCode);
+            com.Parameters.AddWithValue("@4", Quantity);
+            com.Parameters.AddWithValue("@5", UnitOfMeasure);
+            com.Parameters.AddWithValue("@6", UnitPrice);
+            com.Parameters.AddWithValue("@7", TaxPointDate);
+            com.Parameters.AddWithValue("@8", Description);
+            com.Parameters.AddWithValue("@9", CreditAmount);
+            com.Parameters.AddWithValue("@10", SettlementAmount);
+            com.Parameters.AddWithValue("@11", Tax.TaxType);
+            com.Parameters.AddWithValue("@12", Tax.TaxCountryRegion);
+            com.Parameters.AddWithValue("@13", Tax.TaxCode);
+            com.Parameters.AddWithValue("@14", Tax.TaxPercentage);
+
+            try { com.ExecuteNonQuery(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+        }
 	}
 
 	[XmlRoot(ElementName = "DocumentTotals", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
@@ -228,6 +287,28 @@ namespace Saft
 		public List<Line> Line { get; set; }
 		[XmlElement(ElementName = "DocumentTotals", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 		public DocumentTotals DocumentTotals { get; set; }
+        public void insertIntoDB(SQLiteConnection conn)
+        {
+            SQLiteCommand com = conn.CreateCommand();
+            com.CommandText = "insert into invoice values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13)";
+
+            com.Parameters.AddWithValue("@1", InvoiceNo);
+            com.Parameters.AddWithValue("@2", InvoiceStatus);
+            com.Parameters.AddWithValue("@3", Hash);
+            com.Parameters.AddWithValue("@4", HashControl);
+            com.Parameters.AddWithValue("@5", HashControl);
+            com.Parameters.AddWithValue("@6", InvoiceDate);
+            com.Parameters.AddWithValue("@7", InvoiceType);
+            com.Parameters.AddWithValue("@8", SelfBillingIndicator);
+            com.Parameters.AddWithValue("@9", SystemEntryDate);
+            com.Parameters.AddWithValue("@10", CustomerID);
+            com.Parameters.AddWithValue("@11", DocumentTotals.TaxPayable);
+            com.Parameters.AddWithValue("@12", DocumentTotals.NetTotal);
+            com.Parameters.AddWithValue("@13", DocumentTotals.GrossTotal);
+
+            try { com.ExecuteNonQuery(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+        }
 	}
 
 	[XmlRoot(ElementName = "OrderReferences", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]

@@ -1,12 +1,3 @@
-/* ainda n testei isto soz */
-
-PRAGMA foreign_keys = ON;
-drop table customer;
-drop table tax;
-drop table product;
-drop table invoice;
-drop table line;
-
 create table customer(
 	id text primary key not null,
 	accountid integer,
@@ -24,7 +15,7 @@ create table customer(
 create table product(
 	type text,
 	code text primary key not null,
-	group text,
+	productgroup text,
 	description text,
 	numbercode text
 );
@@ -38,7 +29,7 @@ create table invoice(
 	type text,
 	selfbillingindicator integer,
 	entrydate text,
-	customerid text,
+	customerid text not null,
 	taxpayable real,
 	nettotal real,
 	grosstotal real,
@@ -46,9 +37,9 @@ create table invoice(
 );
 
 create table line(
-	invoicenumber text,
-	number integer,
-	productcode text,
+	invoicenumber text not null,
+	number integer not null,
+	productcode text not null,
 	quantity integer,
 	unitofmeasure text,
 	unitprice real,

@@ -18,39 +18,50 @@ namespace FirstREST.Lib_Primavera
         private static XmlNamespaceManager nsmgr;
         private static XmlSerializer serializer;
 		private static SQLiteConnection conn;
-		private const string DB_PATH = "db/db.sqlite";
-		private const string DB_SCRIPT_PATH = "db/db.sql";
 
-		// nada deste codigo foi testado lmao
-		public static void parseSAFT(string path) {
-			/* creates db */
-			SQLiteConnection.CreateFile(DB_PATH);
+        /* MapPath(PATH) returns the physical address maped to the virtual address PATH */
+        private static readonly string DB_PATH = HttpContext.Current.Server.MapPath("db/db.sqlite");
+		private static readonly string DB_SCRIPT_PATH = HttpContext.Current.Server.MapPath("db/db.sql");
 
-			/* connects to db */
-			conn = new SQLiteConnection("Data Source=" + DB_PATH + ";Version=3;");
-			conn.Open();
+		// >mfw funciona :^)
+		public static void parseSaft(string path) {
+            try {
+                /* creates db */
+                SQLiteConnection.CreateFile(DB_PATH);
 
-			/* reads sql script from file */
-			string script = File.ReadAllText(DB_SCRIPT_PATH);
+                /* connects to db */
+                conn = new SQLiteConnection("Data Source=" + DB_PATH + ";Version=3;foreign keys=true;");
+                conn.Open();
 
-			/* runs sql script (creates all the tables on new db) */
-			SQLiteCommand com = new SQLiteCommand(script,conn);
-			com.ExecuteNonQuery();		
+                /* reads sql script from file */
+                string script = File.ReadAllText(DB_SCRIPT_PATH);
 
-			/* creates deserializer and starts parsing xml into object */
-			serializer = new XmlSerializer(typeof(AuditFile));
+                /* runs sql script (creates all the tables on new db) */
+                SQLiteCommand com = new SQLiteCommand(script, conn);
+                com.ExecuteNonQuery();
 
-			/* reads xml into buffer */
-			string xml = File.ReadAllText(path);
-			var buffer = Encoding.UTF8.GetBytes(xml);
-			using (var stream = new MemoryStream(buffer))
-			{
-				var saft = (AuditFile)serializer.Deserialize(stream);
-				/* TODO deserializar saft em objectos,
-				 * pegar nos objectos e introduzir info nas devidas tabelas
-				 * https://dennymichael.net/2014/05/30/convert-xml-to-csharp-classes/comment-page-1/
-				 */				 
-			}
+                /* creates deserializer and starts parsing xml into object */
+                serializer = new XmlSerializer(typeof(AuditFile));
+
+                /* reads xml into buffer */
+                string xml = File.ReadAllText(HttpContext.Current.Server.MapPath(path));
+                var buffer = Encoding.UTF8.GetBytes(xml);
+                using (MemoryStream stream = new MemoryStream(buffer))
+                {
+                    /* deserialize xml into object */
+                    AuditFile saft = (AuditFile)serializer.Deserialize(stream);
+
+                    /* add customers, products and invoices to db */
+                    foreach (Product p in saft.MasterFiles.Product) p.insertIntoDB(conn);
+                    foreach (Customer c in saft.MasterFiles.Customer) c.insertIntoDB(conn);                    
+                    foreach (Invoice i in saft.SourceDocuments.SalesInvoices.Invoice)
+                    {
+                        i.insertIntoDB(conn);
+                        /* add lines from each invoice to db */
+                        foreach (Line l in i.Line) l.insertIntoDB(i.InvoiceNo, conn);
+                    }
+                }
+            } catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
 		}
 
