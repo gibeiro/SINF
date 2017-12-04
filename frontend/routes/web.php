@@ -42,3 +42,7 @@ Route::get('/sales', function(){
 Route::get('/teste', function(){
     return view('testePrimavera');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
