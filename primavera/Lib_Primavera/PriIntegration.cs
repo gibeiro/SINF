@@ -818,5 +818,159 @@ namespace FirstREST.Lib_Primavera
         }
 
         #endregion DocsVenda
+
+        public static Model.InfoArtigo infoArtigo(string codArtigo){
+            StdBELista obj;
+            Model.InfoArtigo artigo;
+
+            if (
+                !PriEngine.InitializeCompany(
+                FirstREST.Properties.Settings.Default.Company.Trim(),
+                FirstREST.Properties.Settings.Default.User.Trim(),
+                FirstREST.Properties.Settings.Default.Password.Trim())
+                ) return null;
+
+            string query =
+                "SELECT Artigo.Artigo, Artigo.STKActual, Artigo.STKReposicao,"+
+                "Artigo.PCMedio, ArtigoMoeda.PVP1 FROM Artigo,ArtigoMoeda " +
+                "WHERE Artigo.Artigo = '" + codArtigo + "' " +
+                "AND Artigo.Artigo = ArtigoMoeda.Artigo";
+
+            obj = PriEngine.Engine.Consulta(query);
+            artigo = new Model.InfoArtigo
+            {
+                CodArtigo = obj.Valor("Artigo"),
+                PCM = obj.Valor("PCMedio"),
+                PVP = obj.Valor("PVP1"),
+                STKAtual = obj.Valor("STKAtual"),
+                STKReposicao = obj.Valor("STKReposicao")
+            };
+
+            return artigo;
+        }
+
+        public static List<Model.Compra> listaComprasDeArtigo(string codArtigo)
+        {
+            StdBELista obj;
+            Model.Compra compra;
+            List<Model.Compra> lista = new List<Model.Compra>();
+
+            if (
+                !PriEngine.InitializeCompany(
+                FirstREST.Properties.Settings.Default.Company.Trim(),
+                FirstREST.Properties.Settings.Default.User.Trim(),
+                FirstREST.Properties.Settings.Default.Password.Trim())
+                ) return null;
+
+            string query =
+                "SELECT CabecCompras.Entidade,LinhasCompras.Artigo," +
+                "LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.DataDoc " +
+                "FROM CabecCompras,LinhasDoc " +
+                "WHERE LinhasDoc.Artigo = '" + codArtigo + "' " +
+                "AND LinhasCompras.IdCabecCompra = CabecCompras.Id " +
+                "AND CabecCompras.TipoDoc = 'VFA'";
+
+            obj = PriEngine.Engine.Consulta(query);
+
+            while (!obj.NoFim())
+            {
+                compra = new Model.Compra
+                {
+                    Entidade = obj.Valor("Entidade"),
+                    Artigo = obj.Valor("Artigo"),
+                    PrecUnit = obj.Valor("PrecUnit"),
+                    Quantidade = obj.Valor("Quantidade"),
+                    DataDoc = obj.Valor("DataDoc")
+                };
+
+                lista.Add(compra);
+            }
+            
+            return lista;
+        }
+
+        public static List<Model.Compra> listaComprasEncomendadasEmAtraso(string codArtigo)
+        {
+            StdBELista obj;
+            Model.Compra compra;
+            List<Model.Compra> lista = new List<Model.Compra>();
+
+            if (
+                !PriEngine.InitializeCompany(
+                FirstREST.Properties.Settings.Default.Company.Trim(),
+                FirstREST.Properties.Settings.Default.User.Trim(),
+                FirstREST.Properties.Settings.Default.Password.Trim())
+                ) return null;
+
+            string query =
+                "SELECT CabecCompras.Entidade,LinhasCompras.Artigo," +
+                "LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.DataDoc " +
+                "FROM CabecCompras,LinhasDoc,LinhasComprasStatus  " +
+                "WHERE LinhasDoc.Artigo = '" + codArtigo + "' " +
+                "AND CabecCompras.TipoDoc = 'ECF' "+
+                "AND LinhasCompras.IdCabecCompra = CabecCompras.Id  " +
+                "AND LinhasComprasStatus.IdLinhasCompras = LinhasCompras.Id " +
+                "AND LinhasComprasStatus.Quantidade != LinhasComprasStatus.QuantTrans";
+
+            obj = PriEngine.Engine.Consulta(query);
+
+            while (!obj.NoFim())
+            {
+                compra = new Model.Compra
+                {
+                    Entidade = obj.Valor("Entidade"),
+                    Artigo = obj.Valor("Artigo"),
+                    PrecUnit = obj.Valor("PrecUnit"),
+                    Quantidade = obj.Valor("Quantidade"),
+                    DataDoc = obj.Valor("DataDoc")
+                };
+
+                lista.Add(compra);
+            }
+
+            return lista;
+        }
+
+        public static List<Model.Venda> listaVendasEncomendadasEmAtraso(string codArtigo)
+        {
+            StdBELista obj;
+            Model.Venda venda;
+            List<Model.Venda> lista = new List<Model.Venda>();
+
+            if (
+                !PriEngine.InitializeCompany(
+                FirstREST.Properties.Settings.Default.Company.Trim(),
+                FirstREST.Properties.Settings.Default.User.Trim(),
+                FirstREST.Properties.Settings.Default.Password.Trim())
+                ) return null;
+
+            string query =
+                "SELECT CabecCompras.Entidade,LinhasCompras.Artigo," +
+                "LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.DataDoc " +
+                "FROM CabecCompras,LinhasDoc,LinhasDocStatus  " +
+                "WHERE LinhasDoc.Artigo = '" + codArtigo + "' " +
+                "AND CabecDoc.TipoDoc = 'ECL' " +
+                "AND LinhasDoc.IdCabecDoc = CabecDoc.Id " +
+                "AND LinhasDocStatus.IdLinhasDoc = LinhasDoc.Id " +
+                "AND LinhasDocStatus.Quantidade != LinhasDocStatus.QuantTrans";
+
+            obj = PriEngine.Engine.Consulta(query);
+
+            while (!obj.NoFim())
+            {
+                venda = new Model.Venda
+                {
+                    Entidade = obj.Valor("Entidade"),
+                    Artigo = obj.Valor("Artigo"),
+                    PrecUnit = obj.Valor("PrecUnit"),
+                    Quantidade = obj.Valor("Quantidade")
+                };
+
+                lista.Add(venda);
+            }
+
+            return lista;
+        }              
+    
     }
 }
