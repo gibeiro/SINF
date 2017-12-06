@@ -865,9 +865,9 @@ namespace FirstREST.Lib_Primavera
             string query =
                 "SELECT CabecCompras.Entidade,LinhasCompras.Artigo," +
                 "LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.DataDoc " +
-                "FROM CabecCompras,LinhasDoc " +
+                "FROM CabecCompras,LinhasDoc,LinhasCompras " +
                 "WHERE LinhasDoc.Artigo = '" + codArtigo + "' " +
-                "AND LinhasCompras.IdCabecCompra = CabecCompras.Id " +
+                "AND LinhasCompras.IdCabecCompras = CabecCompras.Id " +
                 "AND CabecCompras.TipoDoc = 'VFA'";
 
             obj = PriEngine.Engine.Consulta(query);
@@ -908,7 +908,7 @@ namespace FirstREST.Lib_Primavera
                 "FROM CabecCompras,LinhasDoc,LinhasComprasStatus  " +
                 "WHERE LinhasDoc.Artigo = '" + codArtigo + "' " +
                 "AND CabecCompras.TipoDoc = 'ECF' "+
-                "AND LinhasCompras.IdCabecCompra = CabecCompras.Id  " +
+                "AND LinhasCompras.IdCabecCompras = CabecCompras.Id  " +
                 "AND LinhasComprasStatus.IdLinhasCompras = LinhasCompras.Id " +
                 "AND LinhasComprasStatus.Quantidade != LinhasComprasStatus.QuantTrans";
 
