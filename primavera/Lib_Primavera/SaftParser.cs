@@ -20,13 +20,14 @@ namespace FirstREST.Lib_Primavera
 		private static SQLiteConnection conn;
 
         /* MapPath(PATH) returns the physical address maped to the virtual address PATH */
-        private static readonly string DB_PATH = HttpContext.Current.Server.MapPath("db/db.sqlite");
-		private static readonly string DB_SCRIPT_PATH = HttpContext.Current.Server.MapPath("db/db.sql");
-
+        public static readonly string DB_PATH = HttpContext.Current.Server.MapPath("db/db.sqlite");
+		public static readonly string DB_SCRIPT_PATH = HttpContext.Current.Server.MapPath("db/db.sql");
+        
 		// >mfw funciona :^)
 		public static void parseSaft(string path) {
             try {
-                /* creates db */
+                /* creates db if it doesn't exist */
+                if (!File.Exists(DB_PATH))
                 SQLiteConnection.CreateFile(DB_PATH);
 
                 /* connects to db */

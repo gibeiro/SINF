@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FirstREST.Lib_Primavera;
 
 namespace FirstREST
 {
@@ -21,7 +22,8 @@ namespace FirstREST
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Lib_Primavera.SaftParser.loadSAFT("C:\\Users\\user\\Desktop\\SINF\\primavera\\res\\SAFT_DEMOSINF.xml");
+            SaftParser.parseSaft("res/SAFT_DEMOSINF.xml");
+            //Lib_Primavera.SaftParser.loadSAFT("C:\\Users\\user\\Desktop\\SINF\\primavera\\res\\SAFT_DEMOSINF.xml");
 
         }
     }

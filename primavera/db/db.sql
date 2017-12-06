@@ -1,3 +1,8 @@
+drop table if exists customer;
+drop table if exists product;
+drop table if exists invoice;
+drop table if exists line;
+
 create table customer(
 	id text primary key not null,
 	accountid integer,
