@@ -4,6 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using FirstREST.Database;
+using FirstREST.Lib_Primavera.Model;
+using FirstREST.Lib_Primavera.Model.Custom;
 
 namespace FirstREST.Controllers
 {
@@ -14,44 +17,38 @@ namespace FirstREST.Controllers
 
         // GET: api/overview/growth
         [HttpGet]
-        [ActionName("Growth")]
-        [Route("api/overview/growth/{y?}")]
-        public List<Lib_Primavera.Model.Custom.Growth> Growth(string y = "2016")
+        [ActionName("Growth")]    
+        [Route("overview/growth/{from?}/{to?}")]
+        public List<Growth> Growth(string from, string to)
         {
-            return Lib_Primavera.PriIntegration.GrowthYear(Convert.ToInt32(y));
+            return Query.growth(from,to);
         }
-
-        // GET: api/overview/expenses
-        [HttpGet]
-        [ActionName("Expenses")]
-        public string Expenses()
-        {
-            return "Expenses";
-        }
-
+               
         // GET: api/overview/clients
         [HttpGet]
         [ActionName("Clients")]
-        [Route("api/overview/clients")]
-        public List<Lib_Primavera.Model.Custom.TopClientes> TopClients(string n = "5",string y = "2016")
+        [Route("overview/clients/{n?}")]
+        public List<TopClientes> Clients(int n)
         {
-            return Lib_Primavera.PriIntegration.TopClientes(Convert.ToInt32(n),Convert.ToInt32(y));
+            return Query.topClients(n);
         }
 
         // GET: api/overview/products
         [HttpGet]
         [ActionName("Products")]
-        public IEnumerable<Lib_Primavera.Model.Custom.TopArtigos> Products(string n = "5",string y = "2016")
+        [Route("overview/products/{n?}")]
+        public List<TopArtigos> Products(int n)
         {
-            return Lib_Primavera.PriIntegration.TopArtigos(Convert.ToInt32(n),Convert.ToInt32(y));
-        }
+            return Query.topProducts(n);
+        }       
 
         // GET: api/overview/revenue
         [HttpGet]
         [ActionName("Revenue")]
-        public string Revenue()
+        [Route("overview/revenue/{year?}")]
+        public string Revenue(int year)
         {
-            return "Revenue";
+            return Query.revenue(year); ;
         }
 
     }

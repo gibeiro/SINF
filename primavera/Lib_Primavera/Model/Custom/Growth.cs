@@ -22,5 +22,10 @@ namespace FirstREST.Lib_Primavera.Model.Custom
             get;
             set;
         }
+        public double Day
+        {
+            get;
+            set;
+        }
     }
 }

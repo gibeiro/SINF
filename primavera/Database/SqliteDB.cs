@@ -16,7 +16,6 @@ namespace FirstREST.Database
         public static SQLiteConnection conn;
         public static SQLiteCommand com;
 
-
         /* MapPath(PATH) returns the physical address maped to the virtual address PATH */
         public static readonly string DB_PATH = HttpContext.Current.Server.MapPath("Database/db.sqlite");
         public static readonly string DB_SCRIPT_PATH = HttpContext.Current.Server.MapPath("Database/db.sql");
@@ -52,41 +51,39 @@ namespace FirstREST.Database
         /* loads data from saft into db */
         public static void parseSaft(string path)
         {
-            try
+            
+            /* creates deserializer and starts parsing xml into object */
+            XmlSerializer serializer = new XmlSerializer(typeof(AuditFile));
+
+            /* reads xml into buffer */
+            string xml = File.ReadAllText(HttpContext.Current.Server.MapPath(path));
+            byte[] buffer = Encoding.UTF8.GetBytes(xml);
+
+            /* deletes current records */
+            com.CommandText =
+                "pragma foreign_keys = off;" +
+                "delete from customer;" +
+                "delete from product;" +
+                "delete from invoice;" +
+                "delete from line;" +
+                "pragma foreign_keys = on;";
+            com.ExecuteNonQuery();
+
+            using (MemoryStream stream = new MemoryStream(buffer))
             {
-                /* creates deserializer and starts parsing xml into object */
-                XmlSerializer serializer = new XmlSerializer(typeof(AuditFile));
+                /* deserialize xml into an object */
+                AuditFile saft = (AuditFile)serializer.Deserialize(stream);
 
-                /* reads xml into buffer */
-                string xml = File.ReadAllText(HttpContext.Current.Server.MapPath(path));
-                byte[] buffer = Encoding.UTF8.GetBytes(xml);
-
-                /* deletes current records */
-                com.CommandText =
-                    "delete from customer;" +
-                    "delete from product;" +
-                    "delete from invoice;" +
-                    "delete from line;";
-                com.ExecuteNonQuery();
-
-                using (MemoryStream stream = new MemoryStream(buffer))
+                /* add customers, products and invoices to db */
+                foreach (Product p in saft.MasterFiles.Product) p.insertIntoDB(conn);
+                foreach (Customer c in saft.MasterFiles.Customer) c.insertIntoDB(conn);
+                foreach (Invoice i in saft.SourceDocuments.SalesInvoices.Invoice)
                 {
-                    /* deserialize xml into an object */
-                    AuditFile saft = (AuditFile)serializer.Deserialize(stream);
-
-                    /* add customers, products and invoices to db */
-                    foreach (Product p in saft.MasterFiles.Product) p.insertIntoDB(conn);
-                    foreach (Customer c in saft.MasterFiles.Customer) c.insertIntoDB(conn);
-                    foreach (Invoice i in saft.SourceDocuments.SalesInvoices.Invoice)
-                    {
-                        i.insertIntoDB(conn);
-                        /* add lines from each invoice to db */
-                        foreach (Line l in i.Line) l.insertIntoDB(i.InvoiceNo, conn);
-                    }
+                    i.insertIntoDB(conn);
+                    /* add lines from each invoice to db */
+                    foreach (Line l in i.Line) l.insertIntoDB(i.InvoiceNo, conn);
                 }
             }
-            catch (Exception e) { Console.WriteLine(e.StackTrace); }
-
         }
     }
 }
