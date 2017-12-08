@@ -483,15 +483,19 @@
     <Compile Include="Controllers\PurchasesController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Database\Query.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Lib_Primavera\Model\CabecDoc.cs" />
+    <Compile Include="Lib_Primavera\Model\Compra.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\Growth.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\SalesVol.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopClientes.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopArtigos.cs" />
     <Compile Include="Lib_Primavera\Model\Fornecedor.cs" />
+    <Compile Include="Lib_Primavera\Model\InfoArtigo.cs" />
+    <Compile Include="Lib_Primavera\Model\Venda.cs" />
     <Compile Include="Lib_Primavera\PriIntegration.cs" />
     <Compile Include="Lib_Primavera\Model\Artigo.cs" />
     <Compile Include="Lib_Primavera\Model\Cliente.cs" />
@@ -501,8 +505,8 @@
     <Compile Include="Lib_Primavera\Model\LinhaDocVenda.cs" />
     <Compile Include="Lib_Primavera\Model\RespostaErro.cs" />
     <Compile Include="Lib_Primavera\PriEngine.cs" />
-    <Compile Include="Lib_Primavera\Saft.cs" />
-    <Compile Include="Lib_Primavera\SaftParser.cs" />
+    <Compile Include="Database\Saft.cs" />
+    <Compile Include="Database\SqliteDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -566,7 +570,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="db\db.sql" />
+    <Content Include="Database\db.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
@@ -590,7 +594,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
-    <Content Include="db\db.sqlite" />
+    <Content Include="Database\db.sqlite" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

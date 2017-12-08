@@ -7,7 +7,8 @@ using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Data.SQLite;
-namespace Saft
+
+namespace FirstREST.Database
 {
 	[XmlRoot(ElementName = "CompanyAddress", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 	public class CompanyAddress
@@ -99,7 +100,8 @@ namespace Saft
 		public string Website { get; set; }
         public void insertIntoDB(SQLiteConnection conn)
         {            
-            SQLiteCommand com = conn.CreateCommand();
+            SQLiteCommand com = SqliteDB.com;
+
             com.CommandText = "insert into customer values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11)";
 
             com.Parameters.AddWithValue("@1", CustomerID);
@@ -155,11 +157,11 @@ namespace Saft
 		[XmlElement(ElementName = "ProductNumberCode", Namespace = "urn:OECD:StandardAuditFile-Tax:PT_1.01_01")]
 		public string ProductNumberCode { get; set; }
         public void insertIntoDB(SQLiteConnection conn)
-        {
-            SQLiteCommand com = new SQLiteCommand(
-               "insert into product values (@1,@2,@3,@4,@5)",
-               conn
-               );
+        {           
+            SQLiteCommand com = SqliteDB.com;
+
+            com.CommandText = "insert into product values (@1,@2,@3,@4,@5)";
+
             com.Parameters.AddWithValue("@1",ProductType);
             com.Parameters.AddWithValue("@2",ProductCode);
             com.Parameters.AddWithValue("@3",ProductGroup);
@@ -226,7 +228,8 @@ namespace Saft
 		public string TaxExemptionReason { get; set; }
         public void insertIntoDB(string InvoiceNo, SQLiteConnection conn)
         {
-            SQLiteCommand com = conn.CreateCommand();
+            SQLiteCommand com = SqliteDB.com;
+
             com.CommandText = "insert into line values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13,@14)";
 
             com.Parameters.AddWithValue("@1", InvoiceNo);
@@ -289,7 +292,8 @@ namespace Saft
 		public DocumentTotals DocumentTotals { get; set; }
         public void insertIntoDB(SQLiteConnection conn)
         {
-            SQLiteCommand com = conn.CreateCommand();
+            SQLiteCommand com = SqliteDB.com;
+
             com.CommandText = "insert into invoice values (@1,@2,@3,@4,@5,@6,@7,@8,@9,@10,@11,@12,@13)";
 
             com.Parameters.AddWithValue("@1", InvoiceNo);
