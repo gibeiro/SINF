@@ -269,18 +269,18 @@ namespace FirstREST.Lib_Primavera
             }
         }
 
-        private static Model.Custom.SalesVol SalesVolMonth(string cod, int year, int month)
+        private static Model.Custom.SalesVolume SalesVolMonth(string cod, int year, int month)
         {
             StdBELista objList;
 
-            Model.Custom.SalesVol SalesVol = new Model.Custom.SalesVol();
+            Model.Custom.SalesVolume SalesVol = new Model.Custom.SalesVolume();
 
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
                 objList = PriEngine.Engine.Consulta(
                     "SELECT ISNULL(SUM(T.Quantidade),0) as NSold ,ISNULL(SUM(T.PrecUnit * T.Quantidade),0) AS TEarn, ISNULL(SUM(T.PCM * T.Quantidade),0) AS TCost FROM (SELECT PrecUnit,Quantidade,PCM FROM LinhasDoc WHERE LinhasDoc.Artigo = '" + cod + "' AND YEAR(LinhasDoc.Data) = " + year + " AND MONTH(LinhasDoc.Data) = " + month + ") T");
 
-                SalesVol = new Model.Custom.SalesVol
+                SalesVol = new Model.Custom.SalesVolume
                 {
                     Sales = objList.Valor("NSold"),
                     Profit = objList.Valor("TEarn") - objList.Valor("TCost")
@@ -297,9 +297,9 @@ namespace FirstREST.Lib_Primavera
 
 
 
-        public static List<Model.Custom.SalesVol> SalesVolYear(string cod,int year)
+        public static List<Model.Custom.SalesVolume> SalesVolYear(string cod, int year)
         {
-            List<Model.Custom.SalesVol> salesvol = new List<Model.Custom.SalesVol>();
+            List<Model.Custom.SalesVolume> salesvol = new List<Model.Custom.SalesVolume>();
             for (int i = 1; i <= 12; i++)
             {
                 salesvol.Add(SalesVolMonth(cod,year, i));
@@ -931,11 +931,11 @@ namespace FirstREST.Lib_Primavera
             return lista;
         }
 
-        public static List<Model.Venda> listaVendasEncomendadasEmAtraso(string codArtigo)
+        public static List<Model.Sale> listaVendasEncomendadasEmAtraso(string codArtigo)
         {
             StdBELista obj;
-            Model.Venda venda;
-            List<Model.Venda> lista = new List<Model.Venda>();
+            Model.Sale venda;
+            List<Model.Sale> lista = new List<Model.Sale>();
 
             if (
                 !PriEngine.InitializeCompany(
@@ -958,12 +958,14 @@ namespace FirstREST.Lib_Primavera
 
             while (!obj.NoFim())
             {
-                venda = new Model.Venda
+                venda = new Model.Sale
                 {
+                    /*
                     Entidade = obj.Valor("Entidade"),
                     Artigo = obj.Valor("Artigo"),
                     PrecUnit = obj.Valor("PrecUnit"),
                     Quantidade = obj.Valor("Quantidade")
+                     * */
                 };
 
                 lista.Add(venda);

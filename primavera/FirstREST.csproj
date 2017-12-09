@@ -490,12 +490,12 @@
     <Compile Include="Lib_Primavera\Model\CabecDoc.cs" />
     <Compile Include="Lib_Primavera\Model\Compra.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\Growth.cs" />
-    <Compile Include="Lib_Primavera\Model\Custom\SalesVol.cs" />
+    <Compile Include="Lib_Primavera\Model\Custom\SalesVolume.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopClientes.cs" />
     <Compile Include="Lib_Primavera\Model\Custom\TopArtigos.cs" />
     <Compile Include="Lib_Primavera\Model\Fornecedor.cs" />
     <Compile Include="Lib_Primavera\Model\InfoArtigo.cs" />
-    <Compile Include="Lib_Primavera\Model\Venda.cs" />
+    <Compile Include="Lib_Primavera\Model\Sale.cs" />
     <Compile Include="Lib_Primavera\PriIntegration.cs" />
     <Compile Include="Lib_Primavera\Model\Artigo.cs" />
     <Compile Include="Lib_Primavera\Model\Cliente.cs" />

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace FirstREST.Lib_Primavera.Model.Custom
 {
-    public class SalesVol
+    public class SalesVolume
     {
         public double Sales
         {
@@ -13,6 +13,11 @@ namespace FirstREST.Lib_Primavera.Model.Custom
             set;
         }
         public double Profit
+        {
+            get;
+            set;
+        }
+        public double Day
         {
             get;
             set;

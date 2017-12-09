@@ -15,41 +15,33 @@ namespace FirstREST.Controllers
 
         // ----- Para já está a retornar string mas probably vai ser diferente (IEnumerable probably)
 
-        // GET: api/overview/growth
+        // GET: api/overview/growth?from=&to=
         [HttpGet]
         [ActionName("Growth")]    
         [Route("overview/growth/{from?}/{to?}")]
-        public List<Growth> Growth(string from, string to)
-        {
-            return Query.growth(from,to);
-        }
+        public List<Growth> Growth(string from = "2016-01-01", string to = "2017-01-01") 
+        { return Query.growth(from, to); }
                
-        // GET: api/overview/clients
+        // GET: api/overview/clients?limit=
         [HttpGet]
         [ActionName("Clients")]
-        [Route("overview/clients/{n?}")]
-        public List<TopClientes> Clients(int n)
-        {
-            return Query.topClients(n);
-        }
+        [Route("overview/clients/{limit?}")]
+        public List<TopClientes> Clients(string limit = "10")
+        { return Query.topClients(int.Parse(limit)); }
 
-        // GET: api/overview/products
+        // GET: api/overview/products?limit=
         [HttpGet]
         [ActionName("Products")]
-        [Route("overview/products/{n?}")]
-        public List<TopArtigos> Products(int n)
-        {
-            return Query.topProducts(n);
-        }       
+        [Route("overview/products/{limit?}")]
+        public List<TopArtigos> Products(string limit = "10")
+        { return Query.topProducts(int.Parse(limit)); }       
 
-        // GET: api/overview/revenue
+        // GET: api/overview/revenue?year=
         [HttpGet]
         [ActionName("Revenue")]
         [Route("overview/revenue/{year?}")]
-        public string Revenue(int year)
-        {
-            return Query.revenue(year); ;
-        }
+        public Revenue Revenue(string year = "2016")
+        { return Query.revenue(int.Parse(year)); }
 
     }
 }

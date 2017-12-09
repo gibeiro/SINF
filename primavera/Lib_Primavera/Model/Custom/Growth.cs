@@ -22,7 +22,7 @@ namespace FirstREST.Lib_Primavera.Model.Custom
             get;
             set;
         }
-        public double Day
+        public int Day
         {
             get;
             set;
