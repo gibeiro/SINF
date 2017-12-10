@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SQLite;
 using FirstREST.Lib_Primavera;
-using FirstREST.Lib_Primavera.Model;
-using FirstREST.Lib_Primavera.Model.Custom;
+using Newtonsoft.Json;
 
 
 namespace FirstREST.Database
@@ -14,122 +14,346 @@ namespace FirstREST.Database
     {
         private static SQLiteDataReader reader;
 
+        /* done */
         #region overview
-        public static List<Growth> growth(string from, string to)
-        {
-            List<Growth> growth = new List<Growth>();
+        public static List<object> overviewGrowth(string from, string to){
+            List<object> growth = new List<object>();
             SqliteDB.com.CommandText =
-                "select nettotal, cast(julianday(date) - julianday(@1) as integer) as day " +
-                "from invoice "+
-                "where date between @2 and @3 "+
-                "group by day "+
-                "order by day asc ";
+                @"select nettotal, cast(julianday(date) - julianday(@1) as integer) as day
+                from invoice
+                where date between @2 and @3
+                group by day
+                order by day asc ";
             SqliteDB.com.Parameters.AddWithValue("@1", from);
             SqliteDB.com.Parameters.AddWithValue("@2", from);
             SqliteDB.com.Parameters.AddWithValue("@3", to);
-            reader = SqliteDB.com.ExecuteReader();
-            //try {  }
-            //catch (SQLiteException e) { }
 
-            while (reader.Read())
-            {
-                growth.Add(new Growth { 
-                    Earn = Convert.ToDouble(reader["nettotal"]),
-                    Day = Convert.ToInt32(reader["day"])
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }            
+
+            while (reader.Read()) 
+                growth.Add(new {
+                    profit = reader["nettotal"],
+                    day = reader["day"]
                 });
-            } reader.Close();           
-
+            reader.Close();
+            
             return growth;
         }
-        public static List<TopClientes> topClients(int limit){
-            List<TopClientes> clients = new List<TopClientes>();
+        public static List<object> overviewClients(int limit){
+            List<object> clients = new List<object>();
 
             SqliteDB.com.CommandText =
-                "select companyname, gross " +
-                "from customer join (" +
-                "select customerid, sum(grosstotal) as gross " +
-                "from invoice " +
-                "group by customerid" +
-                ") on id = customerid " +
-                "order by gross desc " +
-                "limit @1";
+                @"select companyname, gross
+                from customer join (
+                select customerid, sum(grosstotal) as gross
+                from invoice
+                group by customerid
+                ) on id = customerid
+                order by gross desc
+                limit @1";
             SqliteDB.com.Parameters.AddWithValue("@1",limit);
-            reader = SqliteDB.com.ExecuteReader();
-            //try {  }
-            //catch (SQLiteException e) { }
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
             while (reader.Read())
-            {
-                clients.Add(new TopClientes
-                {
-                    CodCliente = Convert.ToString(reader["companyname"]),
-                    Faturacao = Convert.ToDouble(reader["gross"])
+                clients.Add(new {
+                    name = reader["companyname"],
+                    gross = reader["gross"]
                 });
-            } reader.Close();           
+            reader.Close();           
 
             return clients;
         }
-        public static List<TopArtigos> topProducts(int limit)
+        public static List<object> overviewProducts(int limit)
         {
-            List<TopArtigos> products = new List<TopArtigos>();
+            List<object> products = new List<object>();
 
             SqliteDB.com.CommandText =
-                "select productcode, quantity*unitprice as gross " +
-                "from line " +
-                "group by productcode " +
-                "order by gross desc " +
-                "limit @1";
+                @"select productcode, quantity*unitprice as gross
+                from line
+                group by productcode
+                order by gross desc
+                limit @1";
             SqliteDB.com.Parameters.AddWithValue("@1", limit);
-            reader = SqliteDB.com.ExecuteReader();
-            //try {  }
-            //catch (SQLiteException e) { }
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }          
 
             while (reader.Read())
             {
-                products.Add(new TopArtigos
-                {
-                    CodArtigo = Convert.ToString(reader["productcode"]),
-                    Faturacao = Convert.ToDouble(reader["gross"])
+                products.Add(new {
+                    name = reader["productcode"],
+                    gross = reader["gross"]
                 });
             } reader.Close(); 
 
             return products;
         }
-        public static Revenue revenue(int year) {
-            Revenue revenue = new Revenue();
+        public static object overviewRevenue(int year) {            
             SqliteDB.com.CommandText =
-               "select sum(grosstotal) as gross," +
-               "strftime('%Y',date) as year " +
-               "from invoice " +
-               "where year <= @1 " +
-               "group by year " +
-               "order by year desc " +
-               "limit 2";
+               @"select sum(grosstotal) as gross,
+               strftime('%Y',date) as year
+               from invoice
+               where year <= @1
+               group by year
+               order by year desc
+               limit 2";
             SqliteDB.com.Parameters.AddWithValue("@1", year.ToString());
-            reader = SqliteDB.com.ExecuteReader();
-            //try { }
-            //catch (SQLiteException e) { }
 
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            dynamic revenue = new ExpandoObject();
             reader.Read();
-            revenue.Current = Convert.ToDouble(reader["gross"]);
+            revenue.current = reader["gross"];
             reader.Read();
-            revenue.Previous = Convert.ToDouble(reader["gross"]);
-            reader.Close(); 
+            revenue.previous = reader["gross"];
+            reader.Close();
 
             return revenue;
         }
         #endregion overview
 
-        #region purchases
-        #endregion purchases
-
-        #region sales       
-        public static List<SalesVolume> volume(string from, string to)
+        /* done */
+        #region product
+        public static List<object> productVolume(string id, string from, string to)
         {
-            List<SalesVolume> volume = new List<SalesVolume>();
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select sum(unitprice*quantity) as gross,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from line join invoice on invoice.number = invoicenumber
+                where date between @2 and @3
+                and productcode = @4
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", from);
+            SqliteDB.com.Parameters.AddWithValue("@3", to);
+            SqliteDB.com.Parameters.AddWithValue("@4", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    gross = reader["gross"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static List<object> productSales(string id, string from, string to)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select count(*) as sales,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from line join invoice on invoice.number = invoicenumber
+                where date between @2 and @3
+                and productcode = @4
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", from);
+            SqliteDB.com.Parameters.AddWithValue("@3", to);
+            SqliteDB.com.Parameters.AddWithValue("@4", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    sales = reader["sales"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static List<object> productPrice(string id, string from, string to)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select unitprice,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from line join invoice on invoice.number = invoicenumber
+                where date between @2 and @3
+                and productcode = @4
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", from);
+            SqliteDB.com.Parameters.AddWithValue("@3", to);
+            SqliteDB.com.Parameters.AddWithValue("@4", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    price = reader["unitprice"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static object productInfo(string id)
+        {
+            dynamic info = new ExpandoObject(); ;
+            SqliteDB.com.CommandText =
+                @"select * from product,(
+                select unitprice
+                from line join invoice on invoicenumber = invoice.number
+                and productcode = @1
+                order by date desc
+                limit 1) where code = @2";
+            SqliteDB.com.Parameters.AddWithValue("@1", id);
+            SqliteDB.com.Parameters.AddWithValue("@2", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            reader.Read();
+            info.price = reader["unitprice"];
+            info.type = reader["type"];
+            info.id = reader["code"];
+            info.group = reader["productgroup"];
+            info.description = reader["description"];
+            info.code = reader["numbercode"];
+            reader.Close();
+
+            return info;
+        }
+        #endregion product
+
+        /* done */
+        #region customer
+        public static object customerInfo(string id)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText = "select * from customer where id = @1";
+            SqliteDB.com.Parameters.AddWithValue("@1", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            dynamic customer = new ExpandoObject();
+            reader.Read();
+            customer.id = reader["id"];
+            customer.account = reader["accountid"];
+            customer.taxid = reader["customertaxid"];
+            customer.name = reader["companyname"];
+            customer.address = reader["address"];
+            customer.city = reader["city"];
+            customer.postalcode = reader["postalcode"];
+            customer.country = reader["country"];
+            customer.telephone = reader["telephone"];
+            customer.fax = reader["fax"];
+            customer.website = reader["website"];
+            reader.Close();
+
+            return customer;
+        }
+        public static List<object> customerVolume(string id, string from, string to)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select grosstotal,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from customer join invoice on id = customerid
+                where customerid = @3
+                and date between @1 and @2
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+            SqliteDB.com.Parameters.AddWithValue("@3", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    gross = reader["grosstotal"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static List<object> customerSales(string id, string from, string to)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select count(*) as sales,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from customer join invoice on id = customerid
+                where customerid = @3
+                and date between @1 and @2
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+            SqliteDB.com.Parameters.AddWithValue("@3", id);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    sales = reader["sales"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static List<object> customerProducts(string id, int limit)
+        {
+            List<object> products = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select sum(unitprice*quantity) as gross, productcode
+                from line join invoice on invoice.number = invoicenumber
+                where customerid = @1
+                group by productcode
+                order by gross desc
+                limit @2";
+            SqliteDB.com.Parameters.AddWithValue("@1", id);
+            SqliteDB.com.Parameters.AddWithValue("@2", limit);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                products.Add(new
+                {
+                    gross = reader["gross"],
+                    product = reader["productcode"]
+                });
+            reader.Close();
+
+            return products;
+        }
+        #endregion customer
+
+        /* done */
+        #region sales
+        public static List<object> salesVolume(string from, string to)
+        {
+            List<object> volume = new List<object>();
 
             SqliteDB.com.CommandText =
-                "select count(*) as sales, sum(grosstotal) as profit," +
+                "select count(*) as sales, sum(grosstotal) as gross," +
                 "cast(julianday(date) - julianday(@1) as integer) as day " +
                 "from invoice " +
                 "where date between @2 and @3 " +
@@ -139,93 +363,65 @@ namespace FirstREST.Database
             SqliteDB.com.Parameters.AddWithValue("@1", from);
             SqliteDB.com.Parameters.AddWithValue("@2", from);
             SqliteDB.com.Parameters.AddWithValue("@3", to);
-            reader = SqliteDB.com.ExecuteReader();
-            //try {  }
-            //catch (SQLiteException e) { }
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
             while (reader.Read())
-            {
-                volume.Add(new SalesVolume
+                volume.Add(new
                 {
-                    Sales = Convert.ToInt32(reader["sales"]),
-                    Profit = Convert.ToDouble(reader["profit"]),
-                    Day = Convert.ToInt16(reader["day"])
+                    sales = reader["sales"],
+                    gross = reader["gross"],
+                    day = reader["day"]
                 });
-            } reader.Close();    
+            reader.Close();
 
             return volume;
         }
-        public static List<Sale> sales(int limit)
+        public static List<object> salesLatest(int limit)
         {
-            List<Sale> sales = new List<Sale>();
+            List<object> sales = new List<object>();
 
             SqliteDB.com.CommandText =
                 "select customerid, type, grosstotal, date, status " +
                 "from invoice order by date desc limit @1";
-            SqliteDB.com.Parameters.AddWithValue("@1",limit);
-            reader = SqliteDB.com.ExecuteReader();
-            //try {  }
-            //catch (SQLiteException e) { }
+            SqliteDB.com.Parameters.AddWithValue("@1", limit);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
             while (reader.Read())
-            {
-                sales.Add(new Sale
+                sales.Add(new
                 {
-                    Customer = Convert.ToString(reader["customerid"]),
-                    Type = Convert.ToString(reader["type"]),
-                    Amount = Convert.ToDouble(reader["grosstotal"]),
-                    Date = Convert.ToString(reader["date"]),
-                    Delivered = Convert.ToString(reader["status"])
+                    customer = reader["customerid"],
+                    type = reader["type"],
+                    gross = reader["grosstotal"],
+                    date = reader["date"],
+                    status = reader["status"]
                 });
-            } reader.Close();  
+            reader.Close();
 
             return sales;
         }
         #endregion sales
-   
-        public static Cliente getCustomer(string id)
-        {
-            SqliteDB.com.CommandText = "select * from customer where id = @1";
-            SqliteDB.com.Parameters.AddWithValue("@1",id);
-            reader = SqliteDB.com.ExecuteReader();
-            reader.Read();
-            Cliente cliente = new Cliente{ 
-            CodCliente = (String)reader["id"],
-            NomeCliente = (String)reader["companyname"],
-            NumContribuinte = (String)reader["customertaxid"],
-            Morada = (String)reader["address"],
-            Email = (String)reader["email"]
-            };
-            reader.Close();
-            return cliente;
+
+        /* todo - requires pri_integration queries*/
+        #region purchases
+        public static List<object> purchasesVolume(string from, string to){
+            List<object> volume = new List<object>();            
+            /* some primavera query here */
+            return volume;
         }
-        public static List<Cliente> getCustomers(int limit = 10, int offset = 0)
-        {
-            List<Cliente> customers = new List<Cliente>();
-            SqliteDB.com.CommandText = "select * from customer limit @1 offset @2";
-            SqliteDB.com.Parameters.AddWithValue("@1", limit);
-            SqliteDB.com.Parameters.AddWithValue("@1", offset);
-            reader = SqliteDB.com.ExecuteReader();
-            while (reader.Read())
-            {
-                customers.Add(new Cliente
-                {
-                    CodCliente = (String)reader["id"],
-                    NomeCliente = (String)reader["companyname"],
-                    NumContribuinte = (String)reader["customertaxid"],
-                    Morada = (String)reader["address"],
-                    Email = (String)reader["email"]
-                });
-            } reader.Close(); 
-            return customers;
+        public static List<object> purchasesLatest(int limit){
+            List<object> purchases = new List<object>();
+            /* some primavera query there */
+            return purchases;
         }
-        public static List<CabecDoc> getClientPurchases(string id)
-        {
-            return null;
-        }
-        public static List<TopArtigos> getClientTopProducts(string id, int n)
-        {
-            return null;
-        }
+        #endregion purchases
+
+        /* todo - requires pri_integration queries*/
+        #region inventory
+        #endregion
+        
     }        
 }

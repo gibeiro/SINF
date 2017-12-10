@@ -4,58 +4,103 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using FirstREST.Lib_Primavera.Model;
 using System.Xml;
+using FirstREST.Database;
 
 namespace FirstREST.Controllers
 {
     public class ProductController : ApiController
     {
-
-        // GET: api/product/volume?id=<id>
+       
         [HttpGet]
         [ActionName("Volume")]
-        [Route("product/volume/{id?}")]
-        public List<Lib_Primavera.Model.Custom.SalesVolume> Volume(string id = null,string y = "2016")
-        {
-            return Lib_Primavera.PriIntegration.SalesVolYear(id, Int32.Parse(y));
-        }
-
-        // GET: api/product/list
-        [HttpGet]
-        [ActionName("List")]
-        [Route("product/list")]
-        public List<Lib_Primavera.Model.Artigo> Get()
-        {
-            return Lib_Primavera.PriIntegration.ListaArtigos();
-        }
-
+        [Route("product/volume/{id}/{from?}/{to?}")]
         /*
-        // GET: api/product/list
-        [HttpGet]
-        [ActionName("List")]
-        [Route("product/list")]
-        public List<Lib_Primavera.Model.Artigo> Get()
+           GET:    api/product/volume?id=A0001&from=2016-01-01&to=2017-01-01
+           JSON:
+                   [
+                       {"gross":2249.991,"day":0},
+                       {"gross":3000.0,"day":3},
+                       {"gross":2000.0,"day":5}, ...
+                   ]
+       */
+        public IHttpActionResult Volume(
+            string id = null, 
+            string from = "2016-01-01", 
+            string to = "2017-01-01"
+            )
         {
-            return Lib_Primavera.PriIntegration.ListaArtigos();
-        }
-        */
-        // GET: api/product/get?id=<id>
-        [HttpGet]
-        [ActionName("Get")]
-        [Route("product/get/{id?}")]
-        public Lib_Primavera.Model.Artigo Get(string id = null)
-        {
-            return Lib_Primavera.PriIntegration.GetArtigo(id);
+            if (String.IsNullOrEmpty(id)) return BadRequest();
+            else return Json(Query.productVolume(id, from, to));
         }
 
-        // GET: api/product/margin?id=<id>
+        
         [HttpGet]
-        [ActionName("Margin")]
-        [Route("product/margin/{id?}")]
-        public string Margin(int? id = null)
+        [ActionName("Sales")]
+        [Route("product/sales/{id}/{from?}/{to?}")]
+        /*
+            GET:    api/product/sales?id=A0001&from=2016-01-01&to=2017-01-01
+            JSON:
+                [
+                    {"sales":1,"day":0},
+                    {"sales":1,"day":3},
+                    {"sales":1,"day":5}, ...
+                ]
+        */
+        public IHttpActionResult Sales(
+            string id = null,
+            string from = "2016-01-01",
+            string to = "2017-01-01"
+            )
         {
-            return "Margin: id: " + id;
+            if (String.IsNullOrEmpty(id)) return BadRequest();
+            else return Json(Query.productSales(id, from, to));
         }
+
+        
+        [HttpGet]
+        [ActionName("Info")]
+        [Route("product/info/{id}")]
+        /*
+            GET:    api/product/info?id=A0001
+            JSON:
+                    {
+                        "price":1000.0,
+                        "type":"P",
+                        "id":"A0001",
+                        "group":"Computadores",
+                        "description":"Pentium D925 Dual Core",
+                        "code":"5601234901248"
+                    }
+        */
+        public IHttpActionResult Info(string id = null)
+        {
+            if (String.IsNullOrEmpty(id)) return BadRequest();
+            else return Json(Query.productInfo(id));
+        }
+
+        
+        [HttpGet]
+        [ActionName("Price")]
+        [Route("product/price/{id}/{from?}/{to?}")]
+        /*
+        GET:    api/product/price?id=A0001&from=2016-01-01&to=2017-01-01
+        JSON:
+                [
+                    {"price":749.997,"day":0},
+                    {"price":1000.0,"day":3},
+                    {"price":1000.0,"day":5}, ...
+                ]
+        */
+        public IHttpActionResult Price(
+            string id = null,
+            string from = "2016-01-01",
+            string to = "2017-01-01"
+            )
+        {
+            if (String.IsNullOrEmpty(id)) return BadRequest();
+            else return Json(Query.productPrice(id, from, to));
+        }
+       
     }
 }

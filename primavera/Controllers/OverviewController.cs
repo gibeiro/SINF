@@ -4,9 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using FirstREST.Database;
-using FirstREST.Lib_Primavera.Model;
-using FirstREST.Lib_Primavera.Model.Custom;
 
 namespace FirstREST.Controllers
 {
@@ -19,29 +18,29 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Growth")]    
         [Route("overview/growth/{from?}/{to?}")]
-        public List<Growth> Growth(string from = "2016-01-01", string to = "2017-01-01") 
-        { return Query.growth(from, to); }
+        public IHttpActionResult Growth(string from = "2016-01-01", string to = "2017-01-01") 
+        { return Json(Query.overviewGrowth(from, to)); }
                
         // GET: api/overview/clients?limit=
         [HttpGet]
         [ActionName("Clients")]
         [Route("overview/clients/{limit?}")]
-        public List<TopClientes> Clients(string limit = "10")
-        { return Query.topClients(int.Parse(limit)); }
+        public IHttpActionResult Clients(string limit = "10")
+        { return Json(Query.overviewClients(int.Parse(limit))); }
 
         // GET: api/overview/products?limit=
         [HttpGet]
         [ActionName("Products")]
         [Route("overview/products/{limit?}")]
-        public List<TopArtigos> Products(string limit = "10")
-        { return Query.topProducts(int.Parse(limit)); }       
+        public IHttpActionResult Products(string limit = "10")
+        { return Json(Query.overviewProducts(int.Parse(limit))); }       
 
         // GET: api/overview/revenue?year=
         [HttpGet]
         [ActionName("Revenue")]
         [Route("overview/revenue/{year?}")]
-        public Revenue Revenue(string year = "2016")
-        { return Query.revenue(int.Parse(year)); }
+        public IHttpActionResult Revenue(string year = "2016")
+        { return Json(Query.overviewRevenue(int.Parse(year))); }
 
     }
 }

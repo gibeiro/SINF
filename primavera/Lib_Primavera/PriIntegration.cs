@@ -12,6 +12,7 @@ namespace FirstREST.Lib_Primavera
 {
     public class PriIntegration
     {
+        /*
         #region Overview
 
         public static List<Model.Custom.TopArtigos> TopArtigosDeCliente(string id, int n)
@@ -818,7 +819,7 @@ namespace FirstREST.Lib_Primavera
         }
 
         #endregion DocsVenda
-
+        
         public static Model.InfoArtigo infoArtigo(string codArtigo){
             StdBELista obj;
             Model.InfoArtigo artigo;
@@ -960,12 +961,12 @@ namespace FirstREST.Lib_Primavera
             {
                 venda = new Model.Sale
                 {
-                    /*
+                    
                     Entidade = obj.Valor("Entidade"),
                     Artigo = obj.Valor("Artigo"),
                     PrecUnit = obj.Valor("PrecUnit"),
                     Quantidade = obj.Valor("Quantidade")
-                     * */
+                     
                 };
 
                 lista.Add(venda);
@@ -973,6 +974,6 @@ namespace FirstREST.Lib_Primavera
 
             return lista;
         }              
-    
+    */
     }
 }

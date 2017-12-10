@@ -24,7 +24,6 @@ namespace FirstREST
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             SqliteDB.init();
-            //SqliteDB.parseSaft("Database/SAFT_DEMOSINF.xml");
         }
     }
 }

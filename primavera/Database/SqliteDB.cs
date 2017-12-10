@@ -45,6 +45,8 @@ namespace FirstREST.Database
                 /* executes sql script */
                 try { com.ExecuteNonQuery(); }
                 catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+                parseSaft("Database/SAFT_DEMOSINF.xml");
             }
         }
 

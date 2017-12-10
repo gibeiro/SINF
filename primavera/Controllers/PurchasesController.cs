@@ -4,34 +4,24 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using FirstREST.Database;
 
 namespace FirstREST.Controllers
 {
     public class PurchasesController : ApiController
     {
-        // GET: api/purchases/history
+        // GET: api/sales/latest?limit=
         [HttpGet]
-        [ActionName("History")]
-        public string History()
-        {
-            return "History";
-        }
+        [ActionName("Latest")]
+        [Route("purchases/latest/{limit?}")]
+        public IHttpActionResult Latest(string limit = "10")
+        { return Json(Query.purchasesLatest(int.Parse(limit))); }
 
-        // GET: api/purchases/distribution
+        // GET: api/sales/volume?from=&to=
         [HttpGet]
-        [ActionName("Distribution")]
-        public string Distribution()
-        {
-            return "Distribution";
-        }
-
-        // GET: api/purchases/budget?timeframe=month&nframes=10
-        [HttpGet]
-        [ActionName("Budget")]
-        [Route("purchases/budget/{timeframe?}/{nframes?}")]
-        public string Budget(string timeframe = null, int? nframes = null)
-        {
-            return "Budget: timeframe: " + timeframe + "; nframes: " + nframes;
-        }
+        [ActionName("Volume")]
+        [Route("purchases/volume/{from?}/{to?}")]
+        public IHttpActionResult Volume(string from = "2016-01-01", string to = "2017-01-01")
+        { return Json(Query.purchasesVolume(from, to)); }
     }
 }
