@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+/* RIP disto para já */
+
 namespace FirstREST.Controllers
 {
     public class InventoryController : ApiController

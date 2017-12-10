@@ -6,6 +6,11 @@ using System.Net.Http;
 using System.Web.Http;
 using FirstREST.Database;
 
+/*  Alguns nomes e paths mudaram. -> ver em baixo os exemplos
+ *  "Delayed Shipments", "Invoices vd Shipments" e "To Be Delivered"
+ *  para já ficam de lado porque precisam de queries ao primavera. 
+ */
+
 namespace FirstREST.Controllers
 {
     public class SalesController : ApiController
@@ -29,14 +34,36 @@ namespace FirstREST.Controllers
            GET:     api/sales/volume?from=2016-01-01&to=2017-01-01
            JSON:
                    [
-                       {"sales":5,"gross":35302.15,"day":0},
-                       {"sales":3,"gross":15138.99,"day":1},
-                       {"sales":3,"gross":3302.4700000000003,"day":2},
-                       {"sales":5,"gross":18814.3,"day":3},
-                       {"sales":4,"gross":11263.44,"day":4},...
+                       {"sales":5,"day":0},
+                       {"sales":3,"day":1},
+                       {"sales":3,"day":2},
+                       {"sales":5,"day":3},
+                       {"sales":4,"day":4},...
                    ]
        */
-        public IHttpActionResult Volume(string from = "2016-01-01", string to = "2017-01-01")
+        public IHttpActionResult Volume(
+            string from = "2016-01-01",
+            string to = "2017-01-01")
         { return Json(Query.salesVolume(from, to)); }
+
+
+        [HttpGet]
+        [ActionName("Revenue")]
+        [Route("sales/revenue/{from?}/{to?}")]
+        /* 
+           GET:     api/sales/revenue?from=2016-01-01&to=2017-01-01
+           JSON:
+                   [
+                       {"gross":35302.15,"day":0},
+                       {"gross":15138.99,"day":1},
+                       {"gross":3302.47,"day":2},
+                       {"gross":18814.3,"day":3},
+                       {"gross":11263.44,"day":4}, ...
+                   ]
+       */
+        public IHttpActionResult Revenue(
+            string from = "2016-01-01",
+            string to = "2017-01-01")
+        { return Json(Query.salesRevenue(from, to)); }
     }
 }

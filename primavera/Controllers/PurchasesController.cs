@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using FirstREST.Database;
 
+/* RIP disto para já */
+
 namespace FirstREST.Controllers
 {
     public class PurchasesController : ApiController

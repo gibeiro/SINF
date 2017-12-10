@@ -6,6 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using FirstREST.Database;
 
+/* Alguns nomes e paths mudaram mas
+ * em termos de features continua tudo igual. 
+ */
 namespace FirstREST.Controllers
 {
     public class CustomerController : ApiController

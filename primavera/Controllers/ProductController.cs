@@ -7,6 +7,17 @@ using System.Web.Http;
 using System.Xml;
 using FirstREST.Database;
 
+/*  "In Stock", "Unit Cost" e "Profit Margin"
+ *  para já ficam de lado porque precisam de
+ *  queries ao Primavera.
+ *  "Unit Price" está incluido em /product/info.
+ *  "Profit Over Time" está em /product/volume. -> compensava mudar o nome do pattern
+ *  "Sales Volume" está em /product/sales. -> compensava mudar o nome do pattern
+ *  Agora há uma pattern nova no recurso
+ *  /product/prices que retorna o PVP do produto
+ *  para todos os dias entre duas datas. -> era meter isso num line graph
+ */
+
 namespace FirstREST.Controllers
 {
     public class ProductController : ApiController
