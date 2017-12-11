@@ -24,7 +24,7 @@ namespace FirstREST.Lib_Primavera
                     "FROM CabecCompras,LinhasCompras "+
                     "WHERE LinhasCompras.IdCabecCompras = CabecCompras.Id AND (CabecCompras.TipoDoc = 'VFA' OR CabecCompras.TipoDoc = 'ECF')"
                 );
-
+                 
                 while (!objList.NoFim())
                 {
                     var entidade = objList.Valor("Entidade");
@@ -39,6 +39,33 @@ namespace FirstREST.Lib_Primavera
         }
 
         #endregion purchases
+
+        #region inventory
+
+        public static void listProductsInv()
+        {
+            StdBELista objList;
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT Artigo.Artigo,Artigo.STKActual,Artigo.STKReposicao,Artigo.PCMedio,ArtigoMoeda.PVP1 "+
+                    "FROM Artigo,ArtigoMoeda "+
+                    "WHERE Artigo.Artigo = ArtigoMoeda.Artigo"
+                );
+
+                while (!objList.NoFim())
+                {
+                    var artigo = objList.Valor("Artigo");
+                    var stkatual = objList.Valor("STKActual");
+                    var stkrep = objList.Valor("STKReposicao");
+                    var pcm = objList.Valor("PCMedio");
+                    var pvp = objList.Valor("PVP1");
+                    //inserir isto na db
+                }
+            }
+        }
+
+        #endregion inventory
         /*
         #region Overview
 
