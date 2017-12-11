@@ -12,6 +12,33 @@ namespace FirstREST.Lib_Primavera
 {
     public class PriIntegration
     {
+
+        #region purchases
+
+        public static void listPurchases(){
+            StdBELista objList;
+            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
+            {
+                objList = PriEngine.Engine.Consulta(
+                    "SELECT CabecCompras.Entidade,LinhasCompras.Artigo,LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.TipoDoc,CabecCompras.DataDoc "+
+                    "FROM CabecCompras,LinhasCompras "+
+                    "WHERE LinhasCompras.IdCabecCompras = CabecCompras.Id AND (CabecCompras.TipoDoc = 'VFA' OR CabecCompras.TipoDoc = 'ECF')"
+                );
+
+                while (!objList.NoFim())
+                {
+                    var entidade = objList.Valor("Entidade");
+                    var artigo = objList.Valor("Artigo");
+                    var precUnit = objList.Valor("PrecUnit");
+                    var quant = objList.Valor("Quantidade");
+                    var tipo = objList.Valor("TipoDoc");
+                    var data = objList.Valor("DataDoc");
+                    //inserir isto na db
+                }
+            }
+        }
+
+        #endregion purchases
         /*
         #region Overview
 
