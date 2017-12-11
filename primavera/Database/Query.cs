@@ -19,14 +19,13 @@ namespace FirstREST.Database
         public static List<object> overviewGrowth(string from, string to){
             List<object> growth = new List<object>();
             SqliteDB.com.CommandText =
-                @"select nettotal, cast(julianday(date) - julianday(@1) as integer) as day
+                @"select nettotal, cast(julianday(date) - julianday(@1) as integer) as day, date
                 from invoice
-                where date between @2 and @3
+                where date between @1 and @2
                 group by day
                 order by day asc ";
             SqliteDB.com.Parameters.AddWithValue("@1", from);
-            SqliteDB.com.Parameters.AddWithValue("@2", from);
-            SqliteDB.com.Parameters.AddWithValue("@3", to);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
 
             try { reader = SqliteDB.com.ExecuteReader(); }
             catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }            
@@ -34,7 +33,8 @@ namespace FirstREST.Database
             while (reader.Read()) 
                 growth.Add(new {
                     profit = reader["nettotal"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
             
@@ -122,17 +122,16 @@ namespace FirstREST.Database
         {
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
-                @"select sum(unitprice*quantity) as gross,
+                @"select sum(unitprice*quantity) as gross, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from line join invoice on invoice.number = invoicenumber
-                where date between @2 and @3
-                and productcode = @4
+                where date between @1 and @2
+                and productcode = @3
                 group by day
                 order by day asc";
             SqliteDB.com.Parameters.AddWithValue("@1", from);
-            SqliteDB.com.Parameters.AddWithValue("@2", from);
-            SqliteDB.com.Parameters.AddWithValue("@3", to);
-            SqliteDB.com.Parameters.AddWithValue("@4", id);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+            SqliteDB.com.Parameters.AddWithValue("@3", id);
 
             try { reader = SqliteDB.com.ExecuteReader(); }
             catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
@@ -141,7 +140,8 @@ namespace FirstREST.Database
                 volume.Add(new
                 {
                     gross = reader["gross"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
 
@@ -151,17 +151,16 @@ namespace FirstREST.Database
         {
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
-                @"select count(*) as sales,
+                @"select count(*) as sales, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from line join invoice on invoice.number = invoicenumber
-                where date between @2 and @3
-                and productcode = @4
+                where date between @1 and @2
+                and productcode = @3
                 group by day
                 order by day asc";
             SqliteDB.com.Parameters.AddWithValue("@1", from);
-            SqliteDB.com.Parameters.AddWithValue("@2", from);
-            SqliteDB.com.Parameters.AddWithValue("@3", to);
-            SqliteDB.com.Parameters.AddWithValue("@4", id);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+            SqliteDB.com.Parameters.AddWithValue("@3", id);
 
             try { reader = SqliteDB.com.ExecuteReader(); }
             catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
@@ -170,7 +169,8 @@ namespace FirstREST.Database
                 volume.Add(new
                 {
                     sales = reader["sales"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
 
@@ -180,17 +180,16 @@ namespace FirstREST.Database
         {
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
-                @"select unitprice,
+                @"select unitprice, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from line join invoice on invoice.number = invoicenumber
-                where date between @2 and @3
-                and productcode = @4
+                where date between @1 and @2
+                and productcode = @3
                 group by day
                 order by day asc";
             SqliteDB.com.Parameters.AddWithValue("@1", from);
-            SqliteDB.com.Parameters.AddWithValue("@2", from);
-            SqliteDB.com.Parameters.AddWithValue("@3", to);
-            SqliteDB.com.Parameters.AddWithValue("@4", id);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+            SqliteDB.com.Parameters.AddWithValue("@3", id);
 
             try { reader = SqliteDB.com.ExecuteReader(); }
             catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
@@ -199,7 +198,8 @@ namespace FirstREST.Database
                 volume.Add(new
                 {
                     price = reader["unitprice"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"],
                 });
             reader.Close();
 
@@ -266,7 +266,7 @@ namespace FirstREST.Database
         {
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
-                @"select grosstotal,
+                @"select grosstotal, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from customer join invoice on id = customerid
                 where customerid = @3
@@ -284,7 +284,8 @@ namespace FirstREST.Database
                 volume.Add(new
                 {
                     gross = reader["grosstotal"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
 
@@ -294,7 +295,7 @@ namespace FirstREST.Database
         {
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
-                @"select count(*) as sales,
+                @"select count(*) as sales, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from customer join invoice on id = customerid
                 where customerid = @3
@@ -312,7 +313,8 @@ namespace FirstREST.Database
                 volume.Add(new
                 {
                     sales = reader["sales"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    day = reader["date"]
                 });
             reader.Close();
 
@@ -369,7 +371,8 @@ namespace FirstREST.Database
             while (reader.Read())
                 volume.Add(new {
                     sales = reader["sales"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
 
@@ -380,7 +383,7 @@ namespace FirstREST.Database
             List<object> revenue = new List<object>();
 
             SqliteDB.com.CommandText =
-                @"select sum(grosstotal) as gross,
+                @"select sum(grosstotal) as gross, date,
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from invoice
                 where date between @2 and @3
@@ -396,9 +399,9 @@ namespace FirstREST.Database
             while (reader.Read())
                 revenue.Add(new
                 {
-                    sales = reader["sales"],
                     gross = reader["gross"],
-                    day = reader["day"]
+                    day = reader["day"],
+                    date = reader["date"]
                 });
             reader.Close();
 
