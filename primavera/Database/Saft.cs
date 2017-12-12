@@ -160,7 +160,9 @@ namespace FirstREST.Database
         {           
             SQLiteCommand com = SqliteDB.com;
 
-            com.CommandText = "insert into product values (@1,@2,@3,@4,@5)";
+            com.CommandText =
+                @"insert into product (type,code,productgroup,description,numbercode) 
+                values (@1,@2,@3,@4,@5)";
 
             com.Parameters.AddWithValue("@1",ProductType);
             com.Parameters.AddWithValue("@2",ProductCode);

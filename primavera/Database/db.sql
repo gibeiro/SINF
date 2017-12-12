@@ -70,5 +70,6 @@ create table purchase(
 	ammount integer,
 	type text,
 	date text,
+	productcode text,
 	foreign key (productcode) references product(code)
 );

@@ -8,6 +8,7 @@ using Interop.StdBE900;
 using Interop.GcpBE900;
 using ADODB;
 using System.Data.SQLite;
+using FirstREST.Database;
 
 namespace FirstREST.Lib_Primavera
 {
@@ -16,34 +17,41 @@ namespace FirstREST.Lib_Primavera
 
         #region purchases
 
-        public static void listPurchases(SQLiteConnection conn)
+        public static void listPurchases()
         {
-            SQLiteCommand update = new SQLiteCommand("INSERT INTO purchase(supplier,unitprice,ammount,type,date,productcode) VALUES (?,?,?,?,?,?)", conn);
+            Database.SqliteDB.com.CommandText = 
+            @"pragma foreign_keys = off;
+            insert into purchase values (@1,@2,@3,@4,@5,@6);
+            pragma foreign_keys = on;";
+            
             StdBELista objList;
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-                objList = PriEngine.Engine.Consulta(
-                    "SELECT CabecCompras.Entidade,LinhasCompras.Artigo,LinhasCompras.PrecUnit,LinhasCompras.Quantidade,CabecCompras.TipoDoc,CabecCompras.DataDoc "+
-                    "FROM CabecCompras,LinhasCompras "+
-                    "WHERE LinhasCompras.IdCabecCompras = CabecCompras.Id AND (CabecCompras.TipoDoc = 'VFA' OR CabecCompras.TipoDoc = 'ECF')"
-                );
+            if (!PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim())) return;
+            
+            objList = PriEngine.Engine.Consulta(
+                @"SELECT CabecCompras.Entidade,LinhasCompras.Artigo,LinhasCompras.PrecUnit,
+                cast(LinhasCompras.Quantidade as integer) as Quantidade,CabecCompras.TipoDoc,CabecCompras.DataDoc
+                FROM CabecCompras,LinhasCompras
+                WHERE LinhasCompras.IdCabecCompras = CabecCompras.Id AND (CabecCompras.TipoDoc = 'VFA' OR CabecCompras.TipoDoc = 'ECF')"
+            );
                  
-                while (!objList.NoFim())
-                {
-                    var entidade = objList.Valor("Entidade");
-                    var artigo = objList.Valor("Artigo");
-                    var precUnit = objList.Valor("PrecUnit");
-                    var quant = objList.Valor("Quantidade");
-                    var tipo = objList.Valor("TipoDoc");
-                    var data = objList.Valor("DataDoc");
-                    update.Parameters.Add(entidade);
-                    update.Parameters.Add(precUnit);
-                    update.Parameters.Add(quant);
-                    update.Parameters.Add(tipo);
-                    update.Parameters.Add(data);
-                    update.Parameters.Add(artigo);
-                    update.ExecuteNonQuery();
-                }
+            while (!objList.NoFim())
+            {
+                string entidade = objList.Valor("Entidade");
+                string artigo = objList.Valor("Artigo");
+                double precUnit = objList.Valor("PrecUnit");
+                int quant = objList.Valor("Quantidade");
+                string tipo = objList.Valor("TipoDoc");
+                DateTime data = objList.Valor("DataDoc");
+                Database.SqliteDB.com.Parameters.AddWithValue("@1", entidade);
+                Database.SqliteDB.com.Parameters.AddWithValue("@2", precUnit);
+                Database.SqliteDB.com.Parameters.AddWithValue("@3", quant);
+                Database.SqliteDB.com.Parameters.AddWithValue("@4", tipo);
+                Database.SqliteDB.com.Parameters.AddWithValue("@5", data.Date.ToString());
+                Database.SqliteDB.com.Parameters.AddWithValue("@6", artigo);
+                Database.SqliteDB.com.ExecuteNonQuery();
+                objList.Seguinte();
+
+                
             }
         }
 
@@ -51,31 +59,32 @@ namespace FirstREST.Lib_Primavera
 
         #region inventory
 
-        public static void listProductsInv(SQLiteConnection conn)
+        public static void listProductsInv()
         {
-            SQLiteCommand update = new SQLiteCommand("UPDATE product SET stock=?,pcm=?,pvp=? WHERE code=?",conn);
+            SqliteDB.com.CommandText = "update product set stock=@1,pcm=@2,pvp=@3 where code=@4";
             StdBELista objList;
-            if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
-            {
-                objList = PriEngine.Engine.Consulta(
-                    "SELECT Artigo.Artigo,Artigo.STKActual,Artigo.PCMedio,ArtigoMoeda.PVP1 "+
-                    "FROM Artigo,ArtigoMoeda "+
-                    "WHERE Artigo.Artigo = ArtigoMoeda.Artigo"
-                );
+            if (!PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim())) return;
+            
+            objList = PriEngine.Engine.Consulta(
+                @"SELECT Artigo.Artigo,cast(Artigo.STKActual as integer) as STKActual,Artigo.PCMedio,ArtigoMoeda.PVP1
+                FROM Artigo,ArtigoMoeda
+                WHERE Artigo.Artigo = ArtigoMoeda.Artigo"
+            );
 
-                while (!objList.NoFim())
-                {
-                    var artigo = objList.Valor("Artigo");
-                    var stkatual = objList.Valor("STKActual");
-                    var pcm = objList.Valor("PCMedio");
-                    var pvp = objList.Valor("PVP1");
-                    update.Parameters.Add(stkatual);
-                    update.Parameters.Add(pcm);
-                    update.Parameters.Add(pvp);
-                    update.Parameters.Add(artigo);
-                    update.ExecuteNonQuery();
-                }
+            while (!objList.NoFim())
+            {
+                string artigo = objList.Valor("Artigo");
+                int stkatual = objList.Valor("STKActual");
+                double pcm = objList.Valor("PCMedio");
+                double pvp = objList.Valor("PVP1");
+                SqliteDB.com.Parameters.AddWithValue("@1",stkatual);
+                SqliteDB.com.Parameters.AddWithValue("@2", pcm);
+                SqliteDB.com.Parameters.AddWithValue("@3", pvp);
+                SqliteDB.com.Parameters.AddWithValue("@4", artigo);
+                SqliteDB.com.ExecuteNonQuery();
+                objList.Seguinte();
             }
+            
         }
 
         #endregion inventory

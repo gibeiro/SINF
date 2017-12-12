@@ -64,12 +64,13 @@ namespace FirstREST.Database
 
             /* deletes current records */
             com.CommandText =
-                "pragma foreign_keys = off;" +
-                "delete from customer;" +
-                "delete from product;" +
-                "delete from invoice;" +
-                "delete from line;" +
-                "pragma foreign_keys = on;";
+                @"pragma foreign_keys = off;
+                delete from customer;
+                delete from product;
+                delete from invoice;
+                delete from line;
+                delete from purchase;
+                pragma foreign_keys = on;";
             com.ExecuteNonQuery();
 
             using (MemoryStream stream = new MemoryStream(buffer))
@@ -89,41 +90,9 @@ namespace FirstREST.Database
             }
         }
 
-        public static void parsePrimavera()
-        {
-            Lib_Primavera.PriIntegration.listProductsInv(conn);
-            Lib_Primavera.PriIntegration.listPurchases(conn);
+        public static void parsePrimavera(){
+           Lib_Primavera.PriIntegration.listProductsInv();
+           Lib_Primavera.PriIntegration.listPurchases();
         }
     }
 }
-/*
-public static void loadSAFT(string path)
-{
-    XmlDocument saft = new XmlDocument();
-    saft.Load(path);
-    root = saft.DocumentElement;
-    nsmgr = new XmlNamespaceManager(saft.NameTable);
-    serializer = new XmlSerializer(typeof(String));
-    nsmgr.AddNamespace("a", "urn:OECD:StandardAuditFile-Tax:PT_1.01_01");
-    nsmgr.AddNamespace("doc", "urn:schemas-basda-org:schema-extensions:documentation");
-    nsmgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    nsmgr.AddNamespace("schemaLocation", "urn:OECD:StandardAuditFile-Tax:PT_1.01_01 ../schemas/SAF-T.xsd");
-}
-
-public static List<Model.Cliente> getClientes()
-{
-    List<Model.Cliente> ret = new List<Model.Cliente>();
-    XmlNodeList clientes = root.SelectNodes("//a:MasterFiles/a:Customer",nsmgr);
-    foreach (XmlNode cliente in clientes)
-    {
-        ret.Add(new Model.Cliente
-        {
-            CodCliente = cliente.SelectSingleNode("a:CustomerID",nsmgr).InnerText,
-            NomeCliente = cliente.SelectSingleNode("a:CompanyName", nsmgr).InnerText,
-            NumContribuinte = cliente.SelectSingleNode("a:CustomerTaxID", nsmgr).InnerText,
-            Morada = cliente.SelectSingleNode("a:BillingAddress/a:AddressDetail", nsmgr).InnerText
-        });
-    }
-    return ret;
-}
-*/
