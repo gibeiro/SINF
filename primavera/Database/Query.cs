@@ -249,6 +249,9 @@ namespace FirstREST.Database
             info.group = reader["productgroup"];
             info.description = reader["description"];
             info.code = reader["numbercode"];
+            info.stk = reader["stock"];
+            info.pcm = reader["pcm"];
+            info.pvp = reader["pvp"];
             reader.Close();
 
             return info;
