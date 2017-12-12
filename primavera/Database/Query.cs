@@ -453,7 +453,7 @@ namespace FirstREST.Database
 
         /* todo - requires pri_integration queries*/
         #region purchases
-        public static List<object> purchasesExpense(string from, string to){
+        public static List<object> purchasesExpenditure(string from, string to){
             List<object> volume = new List<object>();
             SqliteDB.com.CommandText =
                 @"select sum(unitprice*ammount) as cost, date,

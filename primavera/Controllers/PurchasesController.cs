@@ -30,9 +30,9 @@ namespace FirstREST.Controllers
         // GET: api/sales/expense?from=&to=
         // expense(€) per day between "from" and "to"
         [HttpGet]
-        [ActionName("Exepense")]
-        [Route("purchases/expense/{from?}/{to?}")]
-        public IHttpActionResult Expense(string from = "2016-01-01", string to = "2017-01-01")
-        { return Json(Query.purchasesExpense(from, to)); }
+        [ActionName("Expenditure")]
+        [Route("purchases/expenditure/{from?}/{to?}")]
+        public IHttpActionResult Expenditure(string from = "2016-01-01", string to = "2017-01-01")
+        { return Json(Query.purchasesExpenditure(from, to)); }
     }
 }
