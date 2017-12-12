@@ -230,20 +230,13 @@ namespace FirstREST.Database
         {
             dynamic info = new ExpandoObject(); ;
             SqliteDB.com.CommandText =
-                @"select * from product,(
-                select unitprice
-                from line join invoice on invoicenumber = invoice.number
-                and productcode = @1
-                order by date desc
-                limit 1) where code = @2";
+                @"select * from product where code = @1";
             SqliteDB.com.Parameters.AddWithValue("@1", id);
-            SqliteDB.com.Parameters.AddWithValue("@2", id);
 
             try { reader = SqliteDB.com.ExecuteReader(); }
             catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
             reader.Read();
-            info.price = reader["unitprice"];
             info.type = reader["type"];
             info.id = reader["code"];
             info.group = reader["productgroup"];
@@ -460,14 +453,80 @@ namespace FirstREST.Database
 
         /* todo - requires pri_integration queries*/
         #region purchases
-        public static List<object> purchasesVolume(string from, string to){
-            List<object> volume = new List<object>();            
-            /* some primavera query here */
+        public static List<object> purchasesExpense(string from, string to){
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select sum(unitprice*ammount) as cost, date,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from purchase
+                where date between @1 and @2
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new {
+                    cost = reader["cost"],
+                    date = reader["date"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
+            return volume;
+        }
+        public static List<object> purchasesVolume(string from, string to)
+        {
+            List<object> volume = new List<object>();
+            SqliteDB.com.CommandText =
+                @"select count(*) as purchases, date,
+                cast(julianday(date) - julianday(@1) as integer) as day
+                from purchase
+                where date between @1 and @2
+                group by day
+                order by day asc";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                volume.Add(new
+                {
+                    cost = reader["cost"],
+                    date = reader["date"],
+                    day = reader["day"]
+                });
+            reader.Close();
+
             return volume;
         }
         public static List<object> purchasesLatest(int limit){
             List<object> purchases = new List<object>();
-            /* some primavera query there */
+            SqliteDB.com.CommandText =
+                @"select unitprice*ammount as cost, ammount, code, description
+                from purchase join product
+                on productcode = code
+                order by date desc 
+                limit @1";
+            SqliteDB.com.Parameters.AddWithValue("@1", limit);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                purchases.Add(new {
+                    totalcost = reader["cost"],
+                    quantity = reader["ammount"],
+                    productname = reader["description"],
+                    productcode = reader["code"],
+                });
+            reader.Close();
+
             return purchases;
         }
         #endregion purchases

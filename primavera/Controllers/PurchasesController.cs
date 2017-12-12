@@ -20,10 +20,19 @@ namespace FirstREST.Controllers
         { return Json(Query.purchasesLatest(int.Parse(limit))); }
 
         // GET: api/sales/volume?from=&to=
+        // nr. purchases per day between "from" and "to"
         [HttpGet]
         [ActionName("Volume")]
         [Route("purchases/volume/{from?}/{to?}")]
         public IHttpActionResult Volume(string from = "2016-01-01", string to = "2017-01-01")
         { return Json(Query.purchasesVolume(from, to)); }
+
+        // GET: api/sales/expense?from=&to=
+        // expense(€) per day between "from" and "to"
+        [HttpGet]
+        [ActionName("Exepense")]
+        [Route("purchases/expense/{from?}/{to?}")]
+        public IHttpActionResult Volume(string from = "2016-01-01", string to = "2017-01-01")
+        { return Json(Query.purchasesExpense(from, to)); }
     }
 }
