@@ -46,7 +46,7 @@ namespace FirstREST.Lib_Primavera
                 Database.SqliteDB.com.Parameters.AddWithValue("@2", precUnit);
                 Database.SqliteDB.com.Parameters.AddWithValue("@3", quant);
                 Database.SqliteDB.com.Parameters.AddWithValue("@4", tipo);
-                Database.SqliteDB.com.Parameters.AddWithValue("@5", data.Date.ToString());
+                Database.SqliteDB.com.Parameters.AddWithValue("@5", data.ToString("yyyy-MM-dd"));
                 Database.SqliteDB.com.Parameters.AddWithValue("@6", artigo);
                 Database.SqliteDB.com.ExecuteNonQuery();
                 objList.Seguinte();
