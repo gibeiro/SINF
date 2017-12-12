@@ -8,5 +8,6 @@
     "/js/inventory.js": "/js/inventory.js",
     "/js/index.js": "/js/index.js",
     "/js/client.js": "/js/client.js",
+    "/js/aux_functions.js": "/js/aux_functions.js",
     "/js/accounts.js": "/js/accounts.js"
 }

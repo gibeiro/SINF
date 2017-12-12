@@ -76,14 +76,16 @@ module.exports = __webpack_require__(37);
 /***/ 37:
 /***/ (function(module, exports) {
 
-
+var growth_chart_data;
 $(document).ready(function () {
+    var date_i = $('#date_i').val();
+    var date_f = $('#date_f').val();
     /**
      * Get top clients
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/clients/5',
+        url: 'http://localhost:49822/api/overview/clients?limit=5',
         datatype: 'application/json',
         success: function success(data) {
             var list = $('#top_clients');
@@ -102,7 +104,7 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/products/5',
+        url: 'http://localhost:49822/api/overview/products?limit=5',
         datatype: 'application/json',
         success: function success(data) {
             var list = $('#top_products');
@@ -121,17 +123,18 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/growth?y=2016',
+        url: 'http://localhost:49822/api/overview/growth?from=' + date_i + '&to=' + date_f,
         datatype: 'application/json',
         success: function success(data) {
-            growth = data;
+            growth_chart_data = save_processed_data(data);
+            console.log(growth_chart_data);
             growth_chart(data);
         }
     });
 
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/revenue?year=2015',
+        url: 'http://localhost:49822/api/overview/revenue?year=' + date_f.split('-')[0],
         datatype: 'application/json',
         success: function success(data) {
             revenue_chart(data.current, data.previous);

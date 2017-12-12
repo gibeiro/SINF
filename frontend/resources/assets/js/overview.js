@@ -60,7 +60,8 @@ $(document).ready(function () {
         url: 'http://localhost:49822/api/overview/growth?from=' + date_i + '&to=' + date_f,
         datatype: 'application/json',
         success: function (data) {
-            growth_chart_data = data;
+            growth_chart_data = save_processed_data(data);
+            console.log(growth_chart_data);
             growth_chart(data);
         }
     });
