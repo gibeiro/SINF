@@ -497,7 +497,7 @@ namespace FirstREST.Database
             while (reader.Read())
                 volume.Add(new
                 {
-                    cost = reader["cost"],
+                    cost = reader["purchases"],
                     date = reader["date"],
                     day = reader["day"]
                 });
