@@ -7,6 +7,7 @@ using Interop.StdPlatBS900;
 using Interop.StdBE900;
 using Interop.GcpBE900;
 using ADODB;
+using System.Data.SQLite;
 
 namespace FirstREST.Lib_Primavera
 {
@@ -15,7 +16,9 @@ namespace FirstREST.Lib_Primavera
 
         #region purchases
 
-        public static void listPurchases(){
+        public static void listPurchases(SQLiteConnection conn)
+        {
+            SQLiteCommand update = new SQLiteCommand("INSERT INTO purchase(supplier,unitprice,ammount,type,date,productcode) VALUES (?,?,?,?,?,?)", conn);
             StdBELista objList;
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
@@ -33,7 +36,13 @@ namespace FirstREST.Lib_Primavera
                     var quant = objList.Valor("Quantidade");
                     var tipo = objList.Valor("TipoDoc");
                     var data = objList.Valor("DataDoc");
-                    //inserir isto na db
+                    update.Parameters.Add(entidade);
+                    update.Parameters.Add(precUnit);
+                    update.Parameters.Add(quant);
+                    update.Parameters.Add(tipo);
+                    update.Parameters.Add(data);
+                    update.Parameters.Add(artigo);
+                    update.ExecuteNonQuery();
                 }
             }
         }
@@ -42,13 +51,14 @@ namespace FirstREST.Lib_Primavera
 
         #region inventory
 
-        public static void listProductsInv()
+        public static void listProductsInv(SQLiteConnection conn)
         {
+            SQLiteCommand update = new SQLiteCommand("UPDATE product SET stock=?,pcm=?,pvp=? WHERE code=?",conn);
             StdBELista objList;
             if (PriEngine.InitializeCompany(FirstREST.Properties.Settings.Default.Company.Trim(), FirstREST.Properties.Settings.Default.User.Trim(), FirstREST.Properties.Settings.Default.Password.Trim()) == true)
             {
                 objList = PriEngine.Engine.Consulta(
-                    "SELECT Artigo.Artigo,Artigo.STKActual,Artigo.STKReposicao,Artigo.PCMedio,ArtigoMoeda.PVP1 "+
+                    "SELECT Artigo.Artigo,Artigo.STKActual,Artigo.PCMedio,ArtigoMoeda.PVP1 "+
                     "FROM Artigo,ArtigoMoeda "+
                     "WHERE Artigo.Artigo = ArtigoMoeda.Artigo"
                 );
@@ -57,10 +67,13 @@ namespace FirstREST.Lib_Primavera
                 {
                     var artigo = objList.Valor("Artigo");
                     var stkatual = objList.Valor("STKActual");
-                    var stkrep = objList.Valor("STKReposicao");
                     var pcm = objList.Valor("PCMedio");
                     var pvp = objList.Valor("PVP1");
-                    //inserir isto na db
+                    update.Parameters.Add(stkatual);
+                    update.Parameters.Add(pcm);
+                    update.Parameters.Add(pvp);
+                    update.Parameters.Add(artigo);
+                    update.ExecuteNonQuery();
                 }
             }
         }

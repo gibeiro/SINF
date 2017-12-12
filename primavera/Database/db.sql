@@ -22,7 +22,10 @@ create table product(
 	code text primary key not null,
 	productgroup text,
 	description text,
-	numbercode text
+	numbercode text,
+	stock integer,
+	pcm real,
+	pvp real
 );
 create table invoice(
 	number text primary key not null,
@@ -59,4 +62,13 @@ create table line(
 	foreign key (productcode) references product(code),
 	foreign key (invoicenumber) references invoice(number),
 	primary key(invoicenumber,number)
+);
+
+create table purchase(
+	supplier text,
+	unitprice real,
+	ammount integer,
+	type text,
+	date text,
+	foreign key (productcode) references product(code)
 );

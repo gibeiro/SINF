@@ -47,6 +47,7 @@ namespace FirstREST.Database
                 catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
 
                 parseSaft("Database/SAFT_DEMOSINF.xml");
+                parsePrimavera();
             }
         }
 
@@ -86,6 +87,12 @@ namespace FirstREST.Database
                     foreach (Line l in i.Line) l.insertIntoDB(i.InvoiceNo, conn);
                 }
             }
+        }
+
+        public static void parsePrimavera()
+        {
+            Lib_Primavera.PriIntegration.listProductsInv(conn);
+            Lib_Primavera.PriIntegration.listPurchases(conn);
         }
     }
 }

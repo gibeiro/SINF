@@ -314,7 +314,7 @@ namespace FirstREST.Database
                 {
                     sales = reader["sales"],
                     day = reader["day"],
-                    day = reader["date"]
+                    date = reader["date"]
                 });
             reader.Close();
 
