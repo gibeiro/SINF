@@ -91,7 +91,7 @@ $(document).ready(function () {
 
             $.each(data, function (index, element) {
                 if (index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.CodCliente + "</li>");
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
 
             top_clients_chart(data);
@@ -110,7 +110,7 @@ $(document).ready(function () {
 
             $.each(data, function (index, element) {
                 if (index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.DescArtigo + "</li>");
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
 
             top_products_chart(data);
@@ -126,14 +126,15 @@ $(document).ready(function () {
         success: function success(data) {
             growth = data;
             growth_chart(data);
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:49822/api/overview/growth?y=2015',
-                datatype: 'application/json',
-                success: function success(data) {
-                    revenue_chart(growth, data);
-                }
-            });
+        }
+    });
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/revenue?year=2015',
+        datatype: 'application/json',
+        success: function success(data) {
+            revenue_chart(data.current, data.previous);
         }
     });
 });
@@ -144,8 +145,8 @@ function top_clients_chart(clients) {
     colors = ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)', 'rgba(100,240,240,0.7)'];
     $.each(clients, function (index, element) {
         if (index > 4) return;
-        labels.push(element.CodCliente);
-        data.push(element.Faturacao.toFixed(0));
+        labels.push(element.name);
+        data.push(element.gross.toFixed(0));
     });
     var ctx = document.getElementById('myPieChart').getContext('2d');
     var myPieChart = new Chart(ctx, {
@@ -177,8 +178,8 @@ function top_products_chart(top_products) {
     colors = ['rgba(240,100,100,0.7)', 'rgba(240,240,100,0.7)', 'rgba(100,100,240,0.7)', 'rgba(100,240,100,0.7)', 'rgba(100,240,240,0.7)'];
     $.each(top_products, function (index, element) {
         if (index > 4) return;
-        labels.push(element.DescArtigo);
-        data.push(element.Faturacao.toFixed(0));
+        labels.push(element.name);
+        data.push(element.gross.toFixed(0));
     });
     ctx = document.getElementById('myPieChart2').getContext('2d');
     var myPieChart2 = new Chart(ctx, {
@@ -285,16 +286,8 @@ function growth_chart(data) {
     });
 }
 
-function revenue_chart(growth, growth_prev) {
+function revenue_chart(rev, rev_prev) {
     ctx = document.getElementById('myGaugeChart').getContext('2d');
-    rev = 0;
-    rev_prev = 0;
-    $.each(growth, function (index, element) {
-        rev += element.Earn;
-    });
-    $.each(growth_prev, function (index, element) {
-        rev_prev += element.Earn;
-    });
     rev = Math.round(rev);
     rev_prev = Math.round(rev_prev);
     percentage = Math.round(rev * 100 / rev_prev);

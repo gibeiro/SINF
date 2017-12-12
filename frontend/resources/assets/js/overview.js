@@ -1,11 +1,13 @@
-
+var growth_chart_data;
 $(document).ready(function () {
+    var date_i = $('#date_i').val();
+    var date_f = $('#date_f').val();
     /**
      * Get top clients
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/clients/5',
+        url: 'http://localhost:49822/api/overview/clients?limit=5',
         datatype: 'application/json',
         success: function (data) {
             var list = $('#top_clients');
@@ -19,7 +21,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.CodCliente + "</li>");
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
 
             top_clients_chart(data);
@@ -30,7 +32,7 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/products/5',
+        url: 'http://localhost:49822/api/overview/products?limit=5',
         datatype: 'application/json',
         success: function (data) {
             var list = $('#top_products');
@@ -44,7 +46,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.DescArtigo + "</li>");
+                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
 
             top_products_chart(data);
@@ -55,19 +57,20 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/overview/growth?y=2016',
+        url: 'http://localhost:49822/api/overview/growth?from=' + date_i + '&to=' + date_f,
         datatype: 'application/json',
         success: function (data) {
-            growth = data;
+            growth_chart_data = data;
             growth_chart(data);
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:49822/api/overview/growth?y=2015',
-                datatype: 'application/json',
-                success: function (data) {
-                    revenue_chart(growth,data);
-                }
-            })
+        }
+    });
+
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/overview/revenue?year=' + date_f.split('-')[0],
+        datatype: 'application/json',
+        success: function (data) {
+            revenue_chart(data.current,data.previous);
         }
     });
 });
@@ -85,8 +88,8 @@ function top_clients_chart(clients){
     ];
     $.each(clients, function(index, element){
         if(index > 4) return;
-        labels.push(element.CodCliente);
-        data.push(element.Faturacao.toFixed(0));
+        labels.push(element.name);
+        data.push(element.gross.toFixed(0));
     });
     var ctx = document.getElementById('myPieChart').getContext('2d');
     var myPieChart = new Chart(ctx,{
@@ -125,8 +128,8 @@ function top_products_chart(top_products) {
     ];
     $.each(top_products, function (index, element) {
         if (index > 4) return;
-        labels.push(element.DescArtigo);
-        data.push(element.Faturacao.toFixed(0));
+        labels.push(element.name);
+        data.push(element.gross.toFixed(0));
     });
     ctx = document.getElementById('myPieChart2').getContext('2d');
     var myPieChart2 = new Chart(ctx, {
@@ -244,16 +247,8 @@ function growth_chart(data) {
     });
 }
 
-function revenue_chart(growth, growth_prev) {
+function revenue_chart(rev, rev_prev) {
     ctx = document.getElementById('myGaugeChart').getContext('2d');
-    rev=0;
-    rev_prev=0;
-    $.each(growth,function (index,element) {
-        rev += element.Earn;
-    });
-    $.each(growth_prev,function (index,element){
-        rev_prev += element.Earn;
-    });
     rev = Math.round(rev);
     rev_prev = Math.round(rev_prev);
     percentage = Math.round(rev*100/rev_prev);
