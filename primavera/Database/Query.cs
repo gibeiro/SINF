@@ -32,7 +32,28 @@ namespace FirstREST.Database
 
             while (reader.Read()) 
                 growth.Add(new {
-                    profit = reader["nettotal"],
+                    netsale = reader["nettotal"],
+                    day = reader["day"],
+                    date = reader["date"]
+                });
+            reader.Close();
+
+            SqliteDB.com.CommandText =
+                @"select ammount*unitprice as nettotal, cast(julianday(date) - julianday(@1) as integer) as day, date
+                from purchase
+                where date between @1 and @2 and type = 'VFA' 
+                group by day
+                order by day asc ";
+            SqliteDB.com.Parameters.AddWithValue("@1", from);
+            SqliteDB.com.Parameters.AddWithValue("@2", to);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                growth.Add(new
+                {
+                    spent = reader["nettotal"],
                     day = reader["day"],
                     date = reader["date"]
                 });
