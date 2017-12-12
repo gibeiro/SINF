@@ -32,7 +32,7 @@ namespace FirstREST.Controllers
         [HttpGet]
         [ActionName("Exepense")]
         [Route("purchases/expense/{from?}/{to?}")]
-        public IHttpActionResult Volume(string from = "2016-01-01", string to = "2017-01-01")
+        public IHttpActionResult Expense(string from = "2016-01-01", string to = "2017-01-01")
         { return Json(Query.purchasesExpense(from, to)); }
     }
 }
