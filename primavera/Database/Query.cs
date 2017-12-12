@@ -38,7 +38,7 @@ namespace FirstREST.Database
                 });
             reader.Close();
 
-            SqliteDB.com.CommandText =
+            /*SqliteDB.com.CommandText =
                 @"select ammount*unitprice as nettotal, cast(julianday(date) - julianday(@1) as integer) as day, date
                 from purchase
                 where date between @1 and @2 and type = 'VFA' 
@@ -57,7 +57,7 @@ namespace FirstREST.Database
                     day = reader["day"],
                     date = reader["date"]
                 });
-            reader.Close();
+            reader.Close();*/
             
             return growth;
         }
