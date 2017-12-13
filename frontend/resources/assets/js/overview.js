@@ -135,12 +135,56 @@ $(document).ready(function () {
 			case 'year':
 				break;
 			case 'month':
-				growth_chart(growth_by_month(growth_chart_data), 'month');
+                var data_temp = growth_by_month(growth_chart_data);
+                var type='month';
+                var labels = [];
+
+                var data_cost = [];
+                var data_earn = [];
+                var data_profit = [];
+                var colors = [
+                    'rgba(240,100,100,0.4)',
+                    'rgba(240,240,100,0.4)',
+                    'rgba(100,100,240,0.4)',
+                    'rgba(100,240,100,0.4)',
+                    'rgba(100,240,240,0.4)'
+                ];
+
+                $.each(data_temp, function(index,element){
+                    if (type == 'day') labels.push(element.date);
+                    if (type == 'month') labels.push(element.label);
+                    data_earn.push(element.netsale.toFixed(0));
+                });
+
+                removeData(myLineChart);
+                addData(myLineChart,labels,data_earn);
 				break;
 			case 'week':
 				break;
 			case 'day':
-				growth_chart(growth_chart_data, 'day');
+                var data_temp = growth_chart_data;
+                var type='day';
+                var labels = [];
+
+                var data_cost = [];
+                var data_earn = [];
+                var data_profit = [];
+                var colors = [
+                    'rgba(240,100,100,0.4)',
+                    'rgba(240,240,100,0.4)',
+                    'rgba(100,100,240,0.4)',
+                    'rgba(100,240,100,0.4)',
+                    'rgba(100,240,240,0.4)'
+                ];
+
+                $.each(data_temp, function(index,element){
+                    if (type == 'day') labels.push(element.date);
+                    if (type == 'month') labels.push(element.label);
+                    data_earn.push(element.netsale.toFixed(0));
+                });
+
+                removeData(myLineChart);
+                addData(myLineChart,labels,data_earn);
 				break;
 		}
 	});
