@@ -11,8 +11,8 @@
                     <h2 id="client_name"></h2>
                 </div>
                 <div class="col-md-6 col-xs-12 text-right" style="padding: 50px 10px 20px 0;">
-                    <label>Data de Início: <input type="date" name="date_i" value="2017-01-01"></label>
-                    <label>Data de Fim: <input type="date" name="date_f" value="2017-12-31"></label>
+                    <label>Data de Início: <input type="date" id="date_i" value="2016-01-01"></label>
+                    <label>Data de Fim: <input type="date" id="date_f" value="2016-12-31"></label>
                 </div>
             </div>
             <div class="row" style="margin-top: 30px;">
