@@ -184,7 +184,9 @@ function removeData(chart) {
     while(chart.data.labels.length != 0){
         chart.data.labels.pop();
     }
-    chart.data.datasets[0].data.pop();
+    while(chart.data.datasets[0].data.length != 0) {
+        chart.data.datasets[0].data.pop();
+    }
     chart.update();
 }
 
@@ -193,7 +195,10 @@ function addData(chart, labels, data) {
     {
         chart.data.labels.push(labels[i]);
     }
-    chart.data.datasets[0].data.push(data);
+    for(var i=0;i<data.length;i++)
+    {
+        chart.data.datasets[0].data.push(data[i]);
+    }
     chart.update();
 }
 
