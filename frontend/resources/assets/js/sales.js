@@ -9,7 +9,6 @@ Date.prototype.ymd = function() {
     return '' + this.getFullYear() +"-"+ (mm>9 ? '' : '0') + mm +"-"+ (dd>9 ? '' : '0') + dd;
 };
 
-
 function save_processed_revenue_data(data){
     var growth_data = [];
     var currentDay = 0;
@@ -30,14 +29,13 @@ function save_processed_revenue_data(data){
 }
 
 function revenue_by_month(data){
-    console.log("GROWTH_BY_MONTH");
     LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
     var months=[];
     var currentElement=-1;
     $.each(data,function(index,element){
         var parts = element.date.split('-');
         if(newElement(months,parts[1]-1, parts[0])) {
-            months.push({month: parts[1]-1, year: parts[0], netsale: element.gross, label: LABELS[parts[1]-1]});
+            months.push({month: parts[1]-1, year: parts[0], gross: element.gross, label: LABELS[parts[1]-1]});
             currentElement++;
         }else{
             months[currentElement].gross += element.gross;
@@ -67,7 +65,6 @@ function save_processed_volume_data(data){
 }
 
 function volume_by_month(data){
-    console.log("GROWTH_BY_MONTH");
     LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
     var months=[];
     var currentElement=-1;
