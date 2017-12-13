@@ -65,7 +65,7 @@ namespace FirstREST.Database
             List<object> clients = new List<object>();
 
             SqliteDB.com.CommandText =
-                @"select companyname, gross
+                @"select companyname, gross, id
                 from customer join (
                 select customerid, sum(grosstotal) as gross
                 from invoice
@@ -81,7 +81,8 @@ namespace FirstREST.Database
             while (reader.Read())
                 clients.Add(new {
                     name = reader["companyname"],
-                    gross = reader["gross"]
+                    gross = reader["gross"],
+                    id = reader["id"]
                 });
             reader.Close();           
 
