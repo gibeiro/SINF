@@ -142,6 +142,7 @@ $(document).ready(function () {
 			case 'week':
 				break;
 			case 'day':
+				growth_chart(growth_chart_data);
 				break;
 		}
 	});
@@ -245,7 +246,7 @@ function growth_chart(data) {
     ];
 	
     $.each(data, function(index,element){
-        labels.push(element.label);
+        labels.push(element.date);
         data_earn.push(element.netsale.toFixed(0));
     });
     ctx = document.getElementById('myLineChart').getContext('2d');
