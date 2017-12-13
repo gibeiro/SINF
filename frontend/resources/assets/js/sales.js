@@ -285,6 +285,16 @@ function categories_chart(data) {
                     'rgba(240,240,100,0.7)'
                 ]
             }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                display: false,
+                position: 'bottom',
+            },
+            title: {
+                display: false
+            }
         }
     });
 }
