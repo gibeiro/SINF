@@ -45,6 +45,9 @@
                             </a>
 
                             <ul class="dropdown-menu">
+
+                                @guest
+                                @else
                                 <li>
                                     <a href="{{ url('/overview') }}">
                                         Overview
@@ -59,6 +62,7 @@
                                         Purchases
                                     </a>
                                 </li>
+                                @endguest
                             </ul>
                         </li>
                     </ul>
