@@ -429,7 +429,7 @@ namespace FirstREST.Database
             List<object> sales = new List<object>();
 
             SqliteDB.com.CommandText =
-                @"select customerid, type, grosstotal, date, status
+                @"select customerid, type, grosstotal, date, status 
                 from invoice order by date desc limit @1";
             SqliteDB.com.Parameters.AddWithValue("@1", limit);
 
@@ -533,6 +533,126 @@ namespace FirstREST.Database
 
         /* todo - requires pri_integration queries*/
         #region inventory
+
+        public static List<object> inventoryProducts() {
+            List<object> products = new List<object>();
+
+            SqliteDB.com.CommandText =
+                @"select a.code, description, productgroup,
+                a.stock, ifnull(orders,0) as to_receive,
+                a.stock + ifnull(orders,0) as total from 
+                (select stock, code from product) as a 
+                left join 
+                (select sum(ammount) as orders, productcode 
+                from purchase where type = 'ECF' group by productcode) as b 
+                on a.code = b.productcode, product 
+                where a.code = product.code";
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                products.Add(new
+                {
+                    to_receive = reader["to_receive"],
+                    total = reader["total"],
+                    stock = reader["a.stock"],
+                    code = reader["a.code"],
+                    name = reader["description"],
+                    category = reader["productgroup"]
+                });
+            reader.Close();
+
+            return products;
+        }
+        public static List<object> inventoryGroups() {
+            List<object> groups = new List<object>();
+
+            SqliteDB.com.CommandText =
+                @"select productgroup,
+                sum(a.stock + ifnull(b.orders,0)) as total from 
+                (select stock, code from product) as a 
+                left join 
+                (select sum(ammount) as orders, productcode 
+                from purchase where type = 'ECF' group by productcode) as b 
+                on a.code = b.productcode, product 
+                where a.code = product.code 
+                group by product.productgroup 
+                order by total desc";
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                groups.Add(new
+                {
+                    group = reader["productgroup"],
+                    total = reader["total"]
+                });
+            reader.Close();
+
+            return groups;
+        }
+        public static object inventoryInfo() {
+            dynamic info = new ExpandoObject();
+
+            SqliteDB.com.CommandText = @"select sum(stock) as in_hand from product";
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            reader.Read();
+            info.in_hand = reader["in_hand"];
+            reader.Close();
+
+            SqliteDB.com.CommandText =
+                @"select sum(orders) as to_receive from 
+                (select sum(ammount) as orders from purchase 
+                where type = 'ECF' group by productcode)";
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            reader.Read();
+            info.to_receive = reader["to_receive"];
+            reader.Close();
+
+            return info;
+        }
+
+        public static List<object> inventoryLowStock(int limit = 10)
+        {
+            List<object> products = new List<object>();
+
+            SqliteDB.com.CommandText =
+                @"select a.code, description,
+                a.stock, ifnull(orders,0) as to_receive,
+                a.stock + ifnull(orders,0) as total from 
+                (select stock, code from product) as a 
+                left join 
+                (select sum(ammount) as orders, productcode 
+                from purchase where type = 'ECF' group by productcode) as b 
+                on a.code = b.productcode, product 
+                where a.code = product.code 
+                and total is not null 
+                order by total asc 
+                limit @1";
+            SqliteDB.com.Parameters.AddWithValue("@1", limit);
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                products.Add(new
+                {
+                    code = reader["a.code"],
+                    name = reader["description"],
+                    in_hand = reader["a.stock"],
+                    to_receive = reader["to_receive"],
+                    total = reader["total"]
+                });
+            reader.Close();
+
+            return products;
+        }
         #endregion
         
     }        
