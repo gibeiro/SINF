@@ -172,23 +172,12 @@ $(document).ready(function () {
                     if (type == 'month') labels.push(element.label);
                     data_earn.push(element.netsale.toFixed(0));
                 });
-                var dataset = [
-                    {
-                        label: "Profit",
-                        data: data_profit,
-                        backgroundColor: colors[2]
-                    },
-                    {
-                        label: "Costs",
-                        data: data_cost,
-                        backgroundColor: colors[0]
-                    },
+                var dataset =
                     {
                         label: "Net Sales",
                         data: data_earn,
                         backgroundColor: colors[1]
-                    }
-                ];
+                    };
 
                 removeData(myLineChart);
                 addData(myLineChart,labels,dataset);
@@ -198,7 +187,7 @@ $(document).ready(function () {
 });
 
 function removeData(chart) {
-    while(chart.data.labels.empty()){
+    while(chart.data.labels.length != 0){
         chart.data.labels.pop();
     }
     chart.datasets.pop();
