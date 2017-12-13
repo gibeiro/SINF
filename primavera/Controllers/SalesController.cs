@@ -20,6 +20,7 @@ namespace FirstREST.Controllers
         [ActionName("Latest")]
         [Route("sales/latest/{limit?}")]
         /*
+            Lista das últimas vendas realizadas (lista).
             GET:     api/sales/latest?limit=1
             JSON:    [{"customer":"J.M.F.","type":"FT","gross":2637.6,"date":"2016-10-07","status":"N"}]
         */
@@ -31,6 +32,7 @@ namespace FirstREST.Controllers
         [ActionName("Volume")]
         [Route("sales/volume/{from?}/{to?}")]
         /* 
+           Numero de vendas por dia (line chart).
            GET:     api/sales/volume?from=2016-01-01&to=2017-01-01
            JSON:
                    [
@@ -51,6 +53,7 @@ namespace FirstREST.Controllers
         [ActionName("Revenue")]
         [Route("sales/revenue/{from?}/{to?}")]
         /* 
+           Faturação das vendas por dia (line chart).
            GET:     api/sales/revenue?from=2016-01-01&to=2017-01-01
            JSON:
                    [
@@ -65,5 +68,16 @@ namespace FirstREST.Controllers
             string from = "2016-01-01",
             string to = "2017-01-01")
         { return Json(Query.salesRevenue(from, to)); }
+
+        [HttpGet]
+        [ActionName("Categories")]
+        [Route("sales/categories")]
+        /*
+            Lista de faturação para todas as categorias de produtos (pie chart).
+            GET:     api/sales/categories
+            JSON:    [{"category":"Acessï¿½rios","gross":10.48},...]
+        */
+        public IHttpActionResult Categories(string limit = "10")
+        { return Json(Query.salesCategories()); }
     }
 }

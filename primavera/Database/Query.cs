@@ -367,6 +367,29 @@ namespace FirstREST.Database
 
         /* done */
         #region sales
+       
+        public static List<object> salesCategories()
+        {
+            List<object> categories = new List<object>();
+
+            SqliteDB.com.CommandText =
+                @"select productgroup, sum(quantity*unitprice) as gross
+                from product join line on code = productcode
+                group by productgroup";
+
+            try { reader = SqliteDB.com.ExecuteReader(); }
+            catch (SQLiteException e) { Console.WriteLine(e.StackTrace); }
+
+            while (reader.Read())
+                categories.Add(new
+                {
+                    category = reader["productgroup"],
+                    gross = reader["gross"]
+                });
+            reader.Close();
+
+            return categories;
+        }
         public static List<object> salesVolume(string from, string to)
         {
             List<object> volume = new List<object>();
