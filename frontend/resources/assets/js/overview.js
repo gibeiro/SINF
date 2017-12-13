@@ -77,10 +77,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
-            });
-            $('#top_clients li').on('click',function(){
-                location.href($('meta[name=base_url]').content() + "/client/"  + this.html());
+                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').content() + "/product/" + element.name + ">"+ element.name +"</a></li>");
             });
             top_clients_chart(data);
         }
@@ -104,10 +101,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
-            });
-            $('#top_products li').on('click',function(){
-                location.href($('meta[name=base_url]').content() + "/product/"+this.html());
+                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').content() + "/product/" + element.name + ">"+ element.name +"</a></li>");
             });
             top_products_chart(data);
         }
