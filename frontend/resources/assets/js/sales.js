@@ -171,7 +171,7 @@ function volume_chart(data, type) {
         if (type == 'month') labels.push(element.label);
         data_earn.push(element.sales.toFixed(0));
     });
-    ctx = document.getElementById('myLineChart').getContext('2d');
+    ctx = document.getElementById('volumeChart').getContext('2d');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -227,7 +227,7 @@ function revenue_chart(data, type) {
         if (type == 'month') labels.push(element.label);
         data_earn.push(element.gross.toFixed(0));
     });
-    ctx = document.getElementById('myLineChart').getContext('2d');
+    ctx = document.getElementById('revenueChart').getContext('2d');
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {

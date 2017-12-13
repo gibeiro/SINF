@@ -18,18 +18,17 @@
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 0px 53px">
                         <canvas id="myPieChart" width="400" height="400"></canvas>
-                        <p style="margin-top: 10px"><span style="color: indianred">&euro;</span> Invoices vs Shipments</p>
+                        <p style="margin-top: 10px"><span style="color: indianred">&euro;</span> Categories</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 30px 10px">
-                        <h1 id="to_be_delivered" style="margin: 62px 10px">24</h1>
-                        <p style="margin-top: 10px"><span style="color: lightgreen">&euro;</span> To Be Delivered</p>
+                        <canvas id="volumeChart" width="400" height="200"></canvas>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 20px;">
-                        <canvas id="myLineChart" width="400" height="200"></canvas>
+                        <canvas id="revenueChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
