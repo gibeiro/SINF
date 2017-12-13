@@ -15,18 +15,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
+                <div class="col-md-12 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 0px 53px">
                         <canvas id="myPieChart" width="400" height="400"></canvas>
                         <p style="margin-top: 10px"><span style="color: indianred">&euro;</span> Categories</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
+                <div class="col-md-6 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 30px 10px">
                         <canvas id="volumeChart" width="400" height="200"></canvas>
                     </div>
                 </div>
-                <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
+                <div class="col-md-6 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5; padding: 20px;">
                         <canvas id="revenueChart" width="400" height="200"></canvas>
                     </div>
