@@ -172,15 +172,9 @@ $(document).ready(function () {
                     if (type == 'month') labels.push(element.label);
                     data_earn.push(element.netsale.toFixed(0));
                 });
-                var dataset =
-                    {
-                        label: "Net Sales",
-                        data: data_earn,
-                        backgroundColor: colors[1]
-                    };
 
                 removeData(myLineChart);
-                addData(myLineChart,labels,dataset);
+                addData(myLineChart,labels,data_earn);
             }
         });
     })
@@ -190,7 +184,7 @@ function removeData(chart) {
     while(chart.data.labels.length != 0){
         chart.data.labels.pop();
     }
-    chart.datasets.pop();
+    chart.data.datasets[0].data.pop();
     chart.update();
 }
 
@@ -199,7 +193,7 @@ function addData(chart, labels, data) {
     {
         chart.data.labels.push(labels[i]);
     }
-    chart.datasets.push(data);
+    chart.data.datasets[0].data.push(data);
     chart.update();
 }
 
@@ -309,16 +303,6 @@ function growth_chart(data, type) {
         data: {
             labels: labels,
             datasets: [
-                {
-                    label: "Profit",
-                    data: data_profit,
-                    backgroundColor: colors[2]
-                },
-                {
-                    label: "Costs",
-                    data: data_cost,
-                    backgroundColor: colors[0]
-                },
                 {
                     label: "Net Sales",
                     data: data_earn,
