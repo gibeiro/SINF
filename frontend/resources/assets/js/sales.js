@@ -268,10 +268,10 @@ function revenue_chart(data, type) {
 function categories_chart(data) {
     ctx = document.getElementById('myPieChart').getContext('2d');
     var labels = [];
-    var data = [];
+    var _data = [];
     $.each(data,function(index,element){
         labels.push(element.category);
-        data.push(element.gross);
+        _data.push(element.gross);
     });
     var myPieChart4 = new Chart(ctx, {
         type: 'pie',
@@ -279,7 +279,7 @@ function categories_chart(data) {
             // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: labels,
             datasets: [{
-                data: data,
+                data: _data,
                 backgroundColor: [
                     'rgba(240,100,100,0.7)',
                     'rgba(240,240,100,0.7)'
