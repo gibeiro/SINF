@@ -173,7 +173,7 @@ $(document).ready(function () {
                     data_earn.push(element.netsale.toFixed(0));
                 });
 
-                myLineChart.date = {
+                myLineChart.data = {
                     labels: labels,
                     datasets: [
                         {
@@ -353,8 +353,6 @@ function revenue_chart(rev, rev_prev) {
     ctx = document.getElementById('myGaugeChart').getContext('2d');
     rev = Math.round(rev);
     rev_prev = Math.round(rev_prev);
-    percentage = Math.round(rev*100/rev_prev);
-    console.log(percentage);
     var config = {
         type: 'bar',
         data: {
