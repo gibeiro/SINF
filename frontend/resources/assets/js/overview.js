@@ -1,5 +1,5 @@
 var growth_chart_data;
-
+var myLineChart;
 //just something to be here to get on your nerves
 Date.prototype.ymd = function() {
     var mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -152,17 +152,49 @@ $(document).ready(function () {
             datatype: 'application/json',
             success: function (data) {
                 growth_chart_data = save_processed_data(data);
-                growth_chart(growth_by_month(growth_chart_data), 'month');
-                //growth_chart(growth_chart_data);
-            }
-        });
+                var data_temp = growth_by_month(growth_chart_data);
+                var type='month';
+                var labels = [];
 
-        $.ajax({
-            type: 'GET',
-            url: 'http://localhost:49822/api/overview/revenue?year=' + date_f.split('-')[0],
-            datatype: 'application/json',
-            success: function (data) {
-                revenue_chart(data.current,data.previous);
+                var data_cost = [];
+                var data_earn = [];
+                var data_profit = [];
+                var colors = [
+                    'rgba(240,100,100,0.4)',
+                    'rgba(240,240,100,0.4)',
+                    'rgba(100,100,240,0.4)',
+                    'rgba(100,240,100,0.4)',
+                    'rgba(100,240,240,0.4)'
+                ];
+
+                $.each(data_temp, function(index,element){
+                    if (type == 'day') labels.push(element.date);
+                    if (type == 'month') labels.push(element.label);
+                    data_earn.push(element.netsale.toFixed(0));
+                });
+
+                myLineChart.date = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Profit",
+                            data: data_profit,
+                            backgroundColor: colors[2]
+                        },
+                        {
+                            label: "Costs",
+                            data: data_cost,
+                            backgroundColor: colors[0]
+                        },
+                        {
+                            label: "Net Sales",
+                            data: data_earn,
+                            backgroundColor: colors[1]
+                        }
+                    ]
+                };
+
+                myLineChart.update();
             }
         });
     })
@@ -270,7 +302,7 @@ function growth_chart(data, type) {
         data_earn.push(element.netsale.toFixed(0));
     });
     ctx = document.getElementById('myLineChart').getContext('2d');
-    var myLineChart = new Chart(ctx, {
+    myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
