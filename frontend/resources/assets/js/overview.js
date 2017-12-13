@@ -146,6 +146,8 @@ $(document).ready(function () {
 	});
 
 	$('input[type=date]').on('change',function(){
+	    var date_i = $('#date_i').val();
+	    var date_f= $('#date_f').val();
         $.ajax({
             type: 'GET',
             url: 'http://localhost:49822/api/overview/growth?from=' + date_i + '&to=' + date_f,
