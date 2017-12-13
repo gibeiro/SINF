@@ -94,11 +94,6 @@ function newElement(array, month, year){
 }
 
 $(document).ready(function () {
-    $('#example').DataTable(
-        {"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>"}
-    );
     /**
      * Get cost earns and profit
      */
@@ -117,7 +112,7 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             volume_chart_data = save_processed_volume_data(data);
-            volume_graph(volume_by_month(volume_chart_data));
+            volume_chart(volume_by_month(volume_chart_data));
         }
     });
 
@@ -127,7 +122,7 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             revenue_chart_data = save_processed_revenue_data(data);
-            revenue_graph(revenue_by_month(revenue_chart_data));
+            revenue_chart(revenue_by_month(revenue_chart_data));
         }
     });
 
@@ -304,4 +299,9 @@ function last_sales_table(data){
             '<th>' + element.status + '</th>\n' +
             '</tr>');
     });
+    $('#example').DataTable(
+        {"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>"}
+    );
 }
