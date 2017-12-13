@@ -1,106 +1,158 @@
 $(document).ready(function() {
+	
+    var date_i = $('#date_i').val();
+    var date_f = $('#date_f').val();
+	
+	/**
+     * Get product sales
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/inventory/products',
+        datatype: 'application/json',
+        success: function (data) {
+			inHandToBeReceived(data);
+			fillTable(data);
+        }
+    });
+	
+	/**
+     * Get product groups
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/inventory/groups',
+        datatype: 'application/json',
+        success: function (data) {
+			productGroups(data);
+        }
+    });
+	
+	/**
+     * Get low stocks
+     */
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:49822/api/inventory/lowstock',
+        datatype: 'application/json',
+        success: function (data) {
+			lowStock(data);
+        }
+    });
+	
+} );
+
+function inHandToBeReceived(data){
+	
+	var inHand = 0;
+	var toBeReceived = 0;
+	
+	for (var i = 0; i < data.length; i++){
+		inHand += data[i].stock;
+		toBeReceived += data[i].to_receive;
+	}
+	
+	var percent = (toBeReceived / inHand).toFixed(2);
+	
+	var ctx = document.getElementById('myDonutChart').getContext('2d');
+	var myPieChart = new Chart(ctx,{
+		type: 'doughnut',
+		data: {
+			// These labels appear in the legend and in the tooltips when hovering different arcs
+			labels: [
+				'Items in hand',
+				'To be recieved'
+			],
+			datasets: [{
+				data: [inHand, toBeReceived],
+				backgroundColor: [
+					'rgba(240,100,100,0.7)',
+					'rgba(240,240,100,0.7)',
+					'rgba(100,100,240,0.7)',
+					'rgba(100,240,100,0.7)'
+				]
+			}]
+		},
+		options: {
+			centertext: percent + '%'
+		}
+	});
+}
+
+function lowStock(data){
+	for (var  i = 0; i < data.length; i++){		
+		$('#top_products').append("<li>" + data[i].code + " | " + data[i].total + "</li>");
+	}	
+}
+
+var productGroups = function(groupdata){
+	
+	var labels = [];
+	var groups = [];
+	
+	for (var i = 0; i < groupdata.length; i++){
+		labels.push(groupdata[i].group);
+		groups.push(groupdata[i].total);
+	}
+	ctx = document.getElementById('myPieChart3').getContext('2d');
+	var myPieChart3 = new Chart(ctx,{
+		type: 'pie',
+		data: {
+			// These labels appear in the legend and in the tooltips when hovering different arcs
+			labels:labels,
+			
+			datasets: [{
+				data: groups,
+				backgroundColor: [
+					'rgba(240,120,100,0.7)',
+					'rgba(200,240,100,0.7)',
+					'rgba(100,100,200,0.7)',
+					'rgba(100,240,100,0.7)',
+					'rgba(240,100,100,0.7)',
+					'rgba(220,240,100,0.7)',
+					'rgba(00,100,240,0.7)',
+					'rgba(240,100,100,0.7)',
+					'rgba(240,240,100,0.7)',
+					'rgba(100,100,240,0.7)',
+					'rgba(40,100,100,0.7)',
+					'rgba(100,100,240,0.7)',
+					'rgba(240,100,100,0.7)'
+				]
+			}]
+		},
+        options: {
+            responsive: true,
+            legend: {
+                display: false,
+                position: 'bottom',
+            },
+            title: {
+                display: false
+            }
+        }
+	});
+		
+}
+
+function fillTable (data){
+	
+    $.each(data, function(index,element){
+        $('#example tbody').append('<tr>\n' +
+            '<td>' + element.code + '</td>\n' +
+            '<td>' + element.name + '</td>\n' +
+            '<td>' + element.category + '</td>\n' +
+            '<td>' + element.stock + '</td>\n' +
+            '<td>' + element.to_receive + '</td>\n' +
+			'<td>' + element.total + '</td>\n' +
+            '</tr>');
+    });
     $('#example').DataTable(
-            {"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+        {"dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>"}
     );
-} );
-
-var ctx = document.getElementById('myDonutChart').getContext('2d');
-var myPieChart = new Chart(ctx,{
-    type: 'doughnut',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Items in hand',
-            'To be recieved'
-        ],
-        datasets: [{
-            data: [70, 30],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)',
-                'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    },
-    options: {
-        centertext: '100'
-    }
-});
-
-ctx = document.getElementById('turnOverChart').getContext('2d');
-var myPieChart2 = new Chart(ctx,{
-    type: 'bar',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Product 1',
-            'Product 2',
-            'Product 3',
-            'Product 4'
-        ],
-        datasets: [{
-            data: [20, 50, 20,10],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)',
-                'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        legend:{
-          display:false
-        },
-        title:{
-            display:false,
-            text:'Income Expenses'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-
-ctx = document.getElementById('myPieChart3').getContext('2d');
-var myPieChart3 = new Chart(ctx,{
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Product 1',
-            'Product 2',
-            'Product 3',
-            'Product 4'
-        ],
-        datasets: [{
-            data: [20, 50, 20,10],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)',
-                'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    }
-});
-
+	
+}
 
 
 Chart.pluginService.register({
