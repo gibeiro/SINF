@@ -117,7 +117,7 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             growth_chart_data = save_processed_data(data);
-			growth_chart(growth_by_month(growth_chart_data));
+			growth_chart(growth_by_month(growth_chart_data), 'month');
             //growth_chart(growth_chart_data);
         }
     });
@@ -137,12 +137,12 @@ $(document).ready(function () {
 			case 'year':
 				break;
 			case 'month':
-				growth_chart(growth_by_month(growth_chart_data));
+				growth_chart(growth_by_month(growth_chart_data), 'month');
 				break;
 			case 'week':
 				break;
 			case 'day':
-				growth_chart(growth_chart_data);
+				growth_chart(growth_chart_data, 'day');
 				break;
 		}
 	});
@@ -230,7 +230,7 @@ function top_products_chart(top_products) {
 }
 
 
-function growth_chart(data) {
+function growth_chart(data, type) {
 	
     var labels = [];
 
@@ -246,7 +246,8 @@ function growth_chart(data) {
     ];
 	
     $.each(data, function(index,element){
-        labels.push(element.date);
+        if (type == 'day') labels.push(element.date);
+		if (type == 'month') labels.push(element.label);
         data_earn.push(element.netsale.toFixed(0));
     });
     ctx = document.getElementById('myLineChart').getContext('2d');
