@@ -109,7 +109,7 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             volume_chart_data = save_processed_volume_data(data);
-            volume_chart(volume_by_month(volume_chart_data));
+            volume_chart(volume_by_month(volume_chart_data),'month');
         }
     });
 
@@ -119,7 +119,7 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             revenue_chart_data = save_processed_revenue_data(data);
-            revenue_chart(revenue_by_month(revenue_chart_data));
+            revenue_chart(revenue_by_month(revenue_chart_data),'month');
         }
     });
 
