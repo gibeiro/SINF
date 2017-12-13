@@ -172,34 +172,47 @@ $(document).ready(function () {
                     if (type == 'month') labels.push(element.label);
                     data_earn.push(element.netsale.toFixed(0));
                 });
+                var dataset = [
+                    {
+                        label: "Profit",
+                        data: data_profit,
+                        backgroundColor: colors[2]
+                    },
+                    {
+                        label: "Costs",
+                        data: data_cost,
+                        backgroundColor: colors[0]
+                    },
+                    {
+                        label: "Net Sales",
+                        data: data_earn,
+                        backgroundColor: colors[1]
+                    }
+                ];
 
-                myLineChart.data = {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: "Profit",
-                            data: data_profit,
-                            backgroundColor: colors[2]
-                        },
-                        {
-                            label: "Costs",
-                            data: data_cost,
-                            backgroundColor: colors[0]
-                        },
-                        {
-                            label: "Net Sales",
-                            data: data_earn,
-                            backgroundColor: colors[1]
-                        }
-                    ]
-                };
-
-                myLineChart.update();
+                removeData(myLineChart);
+                addData(myLineChart,labels,dataset);
             }
         });
     })
 });
 
+function removeData(chart) {
+    while(chart.data.labels.empty()){
+        chart.data.labels.pop();
+    }
+    chart.datasets.pop();
+    chart.update();
+}
+
+function addData(chart, labels, data) {
+    for(var i=0;i<labels.length;i++)
+    {
+        chart.data.labels.push(labels[i]);
+    }
+    chart.datasets.push(data);
+    chart.update();
+}
 
 function top_clients_chart(clients){
     var labels= [];
