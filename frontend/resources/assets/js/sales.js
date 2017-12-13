@@ -298,10 +298,10 @@ function last_sales_table(data){
     $.each(data, function(index,element){
         $('#example tbody').append('<tr>\n' +
             '<th>' + element.customer + '</th>\n' +
-            '<th>\' + element.type + \'</th>\n' +
-            '<th>\' + element.gross + \'</th>\n' +
-            '<th>\' + element.date + \'</th>\n' +
-            '<th>\' + element.status + \'</th>\n' +
+            '<th>' + element.type + '</th>\n' +
+            '<th>' + element.gross + '</th>\n' +
+            '<th>' + element.date + '</th>\n' +
+            '<th>' + element.status + '</th>\n' +
             '</tr>');
     });
 }
