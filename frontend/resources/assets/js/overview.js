@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').attr('content') + "/client/" + element.name + "'>"+ element.name +"</a></li>");
+                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').attr('content') + "/client/" + element.id + "'>"+ element.name +"</a></li>");
             });
             top_clients_chart(data);
         }
