@@ -14,19 +14,17 @@ function save_processed_data(data){
     var currentDay = 0;
 	var date_parts = $('#date_i').val().split('-');
     var first_date = new Date(date_parts[0],date_parts[1]-1,date_parts[2]);
-	
     for(var i=0 ; i<data.length ; i++){
-		console.log(data[i]);
 		while(currentDay!=data[i].day){
-			var date = new Date();
+			var date = new Date(date_parts[0],date_parts[1]-1,date_parts[2]);
             date.setDate(first_date.getDate()+currentDay);
+			console.log(date);
             growth_data.push({day:currentDay, netsale:0, date: date.ymd()});
             currentDay++;
         }
         growth_data.push(data[i]);
         currentDay++;
     }
-	console.log(growth_data);
     return growth_data;
 }
 
