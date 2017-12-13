@@ -49,13 +49,13 @@
                                     <a href="{{ url('/overview') }}">
                                         Overview
                                     </a>
-                                    <a href="{{ route('/sales') }}">
+                                    <a href="{{ url('/sales') }}">
                                         Sales
                                     </a>
-                                    <a href="{{ route('/inventory') }}">
+                                    <a href="{{ url('/inventory') }}">
                                         Inventory
                                     </a>
-                                    <a href="{{ route('/purchases') }}">
+                                    <a href="{{ url('/purchases') }}">
                                         Purchases
                                     </a>
                                 </li>
