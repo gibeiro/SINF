@@ -6,13 +6,13 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/client/info?id='+id,
+        url: 'http://localhost:49822/api/customer/info?id='+id,
         datatype: 'application/json',
         success: function (data) {
-            $('#client_name').append(data.NomeCliente);
-            $('#nif').append(data.NumContribuinte);
-            $('#address').append(data.Morada);
-            $('#client_code').append(data.CodCliente);
+            $('#client_name').append(data.name);
+            $('#nif').append(data.taxid);
+            $('#address').append(data.address);
+            $('#client_code').append(data.id);
         }
     });
     /**
@@ -20,11 +20,11 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/client/products?id='+id,
+        url: 'http://localhost:49822/api/customer/products?id='+id+'&limit=5',
         datatype: 'application/json',
         success: function (data) {
             $.each(data,function(index, element) {
-                $('#top_products').append("<li>" + element.DescArtigo + "</li>")
+                $('#top_products').append("<li>" + element.product + "</li>")
             });
         }
     });

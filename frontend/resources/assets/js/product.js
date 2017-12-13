@@ -11,14 +11,14 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/product/get?id='+id,
+        url: 'http://localhost:49822/api/product/info?id='+id,
         datatype: 'application/json',
         success: function (data) {
-            $('#product_name').append(data.DescArtigo);
-            $('#category').append(data.Categoria);
-            $('#in_stock').append(data.STKAtual);
-            $('#unit_cost').append(data.PCM);
-            $('#unit_price').append(data.PVP);
+            $('#product_name').append(data.description);
+            $('#category').append(data.group);
+            $('#in_stock').append(data.stk);
+            $('#unit_cost').append(data.pcm);
+            $('#unit_price').append(data.pvp);
             profit_chart(data);
         }
     });
@@ -28,11 +28,11 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:49822/api/product/volume?id='+id,
+        url: 'http://localhost:49822/api/product/volume?id='+id+'&from=2016-01-01&to=2016-12-31',
         datatype: 'application/json',
         success: function (data) {
             sales_volume_chart(data);
-            profit_volume_chart(data);
+            //profit_volume_chart(data);
         }
     });
 });
@@ -130,7 +130,7 @@ var myPieChart3 = new Chart(ctx,{
 });*/
 
 function profit_chart(product) {
-    profit = (product.PVP - product.PCM).toFixed(2);
+    profit = (product.pvp - product.pcm).toFixed(2);
     ctx = document.getElementById('myPieChart4').getContext('2d');
     var myPieChart4 = new Chart(ctx, {
         type: 'doughnut',
@@ -141,7 +141,7 @@ function profit_chart(product) {
                 'Price',
             ],
             datasets: [{
-                data: [product.PCM, product.PVP],
+                data: [product.pcm, product.pvp],
                 backgroundColor: [
                     'rgba(240,100,100,0.7)',
                     'rgba(240,240,100,0.7)'
@@ -168,7 +168,7 @@ function sales_volume_chart(volume) {
     LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
     $.each(volume, function(index,element){
         labels.push(LABELS[index]);
-        data.push(element.Sales);
+        data.push(element.gross);
     });
     ctx = document.getElementById('myLineChart').getContext('2d');
     var myLineChart = new Chart(ctx, {

@@ -1,4 +1,62 @@
 var growth_chart_data;
+
+//just something to be here to get on your nerves
+Date.prototype.ymd = function() {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return '' + this.getFullYear() +"-"+ (mm>9 ? '' : '0') + mm +"-"+ (dd>9 ? '' : '0') + dd;
+};
+
+
+function save_processed_data(data){
+    var growth_data = [];
+    var currentDay = 0;
+	var date_parts = $('#date_i').val().split('-');
+    var first_date = new Date(date_parts[0],date_parts[1]-1,date_parts[2]);
+	
+    for(var i=0 ; i<data.length ; i++){
+		console.log(data[i]);
+		while(currentDay!=data[i].day){
+			var date = new Date();
+            date.setDate(first_date.getDate()+currentDay);
+            growth_data.push({day:currentDay, netsale:0, date: date.ymd()});
+            currentDay++;
+        }
+        growth_data.push(data[i]);
+        currentDay++;
+    }
+	console.log(growth_data);
+    return growth_data;
+}
+
+function growth_by_month(data){
+	console.log("GROWTH_BY_MONTH");
+    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
+    var months=[];
+    var currentElement=-1;
+    $.each(data,function(index,element){
+        var parts = element.date.split('-');
+        if(newElement(months,parts[1]-1, parts[0])) {
+            months.push({month: parts[1]-1, year: parts[0], netsale: element.netsale, label: LABELS[parts[1]-1]});
+            currentElement++;
+        }else{
+            months[currentElement].netsale += element.netsale;
+        }
+    });
+	console.log(months);
+    return months;
+}
+
+function newElement(array, month, year){
+    for(var i=0;i<array.length;i++){
+        if(array[i].month == month && array[i].year == year){
+            return false;
+        }
+    }
+    return true;
+}
+
 $(document).ready(function () {
     var date_i = $('#date_i').val();
     var date_f = $('#date_f').val();
@@ -61,8 +119,8 @@ $(document).ready(function () {
         datatype: 'application/json',
         success: function (data) {
             growth_chart_data = save_processed_data(data);
-            console.log(growth_chart_data);
-            growth_chart(data);
+			growth_chart(growth_by_month(growth_chart_data));
+            //growth_chart(growth_chart_data);
         }
     });
 
@@ -74,6 +132,22 @@ $(document).ready(function () {
             revenue_chart(data.current,data.previous);
         }
     });
+	
+	$('input[type=radio]').on('change',function(){
+	//val can be:  year, month, week, day
+		switch($('input[type=radio]:checked').val()){
+			case 'year':
+				break;
+			case 'month':
+				growth_chart(growth_by_month(growth_chart_data));
+				break;
+			case 'week':
+				break;
+			case 'day':
+				break;
+		}
+	});
+	
 });
 
 
@@ -156,31 +230,9 @@ function top_products_chart(top_products) {
     });
 }
 
-/*ctx = document.getElementById('myPieChart3');
-var myPieChart3 = new Chart(ctx,{
-    type: 'pie',
-    data: {
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-            'Red',
-            'Yellow',
-            'Blue',
-            'Green'
-        ],
-        datasets: [{
-            data: [20, 50, 20,10],
-            backgroundColor: [
-                'rgba(240,100,100,0.7)',
-                'rgba(240,240,100,0.7)',
-                'rgba(100,100,240,0.7)',
-                'rgba(100,240,100,0.7)'
-            ]
-        }]
-    }
-});*/
-
 
 function growth_chart(data) {
+	
     var labels = [];
 
     var data_cost = [];
@@ -193,12 +245,10 @@ function growth_chart(data) {
         'rgba(100,240,100,0.4)',
         'rgba(100,240,240,0.4)'
     ];
-    LABELS = ["January", "February", "March", "April", "May", "June", "July", "August","September","October","November","December"];
+	
     $.each(data, function(index,element){
-        labels.push(LABELS[index]);
-        data_cost.push(element.Cost.toFixed(0));
-        data_earn.push(element.Earn.toFixed(0));
-        data_profit.push(element.Profit.toFixed(0));
+        labels.push(element.label);
+        data_earn.push(element.netsale.toFixed(0));
     });
     ctx = document.getElementById('myLineChart').getContext('2d');
     var myLineChart = new Chart(ctx, {
