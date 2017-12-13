@@ -395,10 +395,10 @@ namespace FirstREST.Database
             List<object> volume = new List<object>();
 
             SqliteDB.com.CommandText =
-                @"select count(*) as sales,
+                @"select count(*) as sales, date, 
                 cast(julianday(date) - julianday(@1) as integer) as day
                 from invoice
-                where date between @2 and @3
+                where date between @1 and @2
                 group by day
                 order by day asc";
 
