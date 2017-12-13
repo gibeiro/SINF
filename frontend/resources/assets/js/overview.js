@@ -79,7 +79,7 @@ $(document).ready(function () {
                 if(index > 4) return;
                 list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
-            list.on('click',function(){
+            $('#top_clients li').on('click',function(){
                 location.href($('meta[name=base_url]').content() + "/client/"  + this.html());
             });
             top_clients_chart(data);
@@ -106,7 +106,7 @@ $(document).ready(function () {
                 if(index > 4) return;
                 list.append("<li style='background-color: " + colors[index] + ";'>" + element.name + "</li>");
             });
-            list.on('click',function(){
+            $('#top_products li').on('click',function(){
                 location.href($('meta[name=base_url]').content() + "/product/"+this.html());
             });
             top_products_chart(data);
