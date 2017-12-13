@@ -36,7 +36,7 @@
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
                     <div style="background-color: #f5f5f5;">
                         <canvas id="myPieChart3" width="400" height="400"></canvas>
-                        <p>Relative number of products</p>
+                        <p>Product Categories</p>
                     </div>
                 </div>
             </div>
