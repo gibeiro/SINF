@@ -10,8 +10,8 @@
                     <h2>Inventory</h2>
                 </div>
                 <div class="col-md-6 col-xs-12 text-right" style="padding: 50px 10px 20px 0;">
-                    <label>Data de Início: <input type="date" name="date_i" value="2017-01-01"></label>
-                    <label>Data de Fim: <input type="date" name="date_f" value="2017-12-31"></label>
+                    <label>Data de Início: <input type="date" id="date_i" value="2016-01-01"></label>
+                    <label>Data de Fim: <input type="date" id="date_f" value="2016-12-31"></label>
                 </div>
             </div>
             <div class="row">
@@ -21,10 +21,16 @@
                         <p>Items</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
-                    <div style="background-color: #f5f5f5; padding: 10px 18px;">
-                        <canvas id="turnOverChart" width="400" height="400" style="padding-right: 10px"></canvas>
-                        <p style="margin-top:16px; margin-bottom: 0">Turnover</p>
+                <div class="col-md-4 col-xs-6 text-center" style="padding-right: 10px; padding-bottom: 10px">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>Low Stock Products</h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <ol id="top_products" style="margin:0; padding:0 40px; ">
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4 col-xs-12 text-center" style="padding-right: 10px; padding-bottom: 10px">
@@ -53,94 +59,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>A0001</td>
-                        <td>Product 1</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0002</td>
-                        <td>Product 2</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0003</td>
-                        <td>Product 3</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0004</td>
-                        <td>Product 4</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0005</td>
-                        <td>Product 5</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0006</td>
-                        <td>Product 6</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0007</td>
-                        <td>Product 7</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0008</td>
-                        <td>Product 8</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0009</td>
-                        <td>Product 9</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0010</td>
-                        <td>Product 10</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
-                    <tr>
-                        <td>A0011</td>
-                        <td>Product 11</td>
-                        <td>Category</td>
-                        <td>61</td>
-                        <td>12</td>
-                        <td>73</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
