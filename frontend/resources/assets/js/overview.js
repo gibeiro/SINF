@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             $.each(data, function(index, element){
                 if(index > 4) return;
-                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').attr('content') + "/product/" + element.name + "'>"+ element.name +"</a></li>");
+                list.append("<li style='background-color: " + colors[index] + ";'><a href='"+$('meta[name=base_url]').attr('content') + "/client/" + element.name + "'>"+ element.name +"</a></li>");
             });
             top_clients_chart(data);
         }
@@ -144,7 +144,28 @@ $(document).ready(function () {
 				break;
 		}
 	});
-	
+
+	$('input[type=date]').on('change',function(){
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:49822/api/overview/growth?from=' + date_i + '&to=' + date_f,
+            datatype: 'application/json',
+            success: function (data) {
+                growth_chart_data = save_processed_data(data);
+                growth_chart(growth_by_month(growth_chart_data), 'month');
+                //growth_chart(growth_chart_data);
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:49822/api/overview/revenue?year=' + date_f.split('-')[0],
+            datatype: 'application/json',
+            success: function (data) {
+                revenue_chart(data.current,data.previous);
+            }
+        });
+    })
 });
 
 
