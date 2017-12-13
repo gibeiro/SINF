@@ -39,7 +39,28 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                                Views <span class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ url('/overview') }}">
+                                        Overview
+                                    </a>
+                                    <a href="{{ route('/sales') }}">
+                                        Sales
+                                    </a>
+                                    <a href="{{ route('/inventory') }}">
+                                        Inventory
+                                    </a>
+                                    <a href="{{ route('/purchases') }}">
+                                        Purchases
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
