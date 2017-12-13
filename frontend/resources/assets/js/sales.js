@@ -280,7 +280,7 @@ function categories_chart(data) {
     $.each(data,function(index,element){
         labels.push(element.category);
         _data.push(element.gross.toFixed(0));
-        backgroundColors.push(index%5);
+        backgroundColors.push(colors[index%5]);
     });
     var myPieChart4 = new Chart(ctx, {
         type: 'pie',
